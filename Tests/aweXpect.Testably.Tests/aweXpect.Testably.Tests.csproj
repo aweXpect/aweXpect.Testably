@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\Source\aweXpect.Testably\aweXpect.Testably.csproj"/>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="aweXpect"/>
+	</ItemGroup>
+
+</Project>
