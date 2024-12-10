@@ -1,4 +1,5 @@
-﻿using System.IO.Abstractions;
+﻿using System.IO;
+using System.IO.Abstractions;
 using Testably.Abstractions.Testing;
 
 namespace aweXpect.Testably.Tests;
@@ -22,7 +23,7 @@ public partial class HaveDirectory
 				.WithMessage($"""
 				              Expected sut to
 				              have directory '{path}' which files should be empty,
-				              but files was [foo\bar.txt]
+				              but files was [foo{Path.DirectorySeparatorChar}bar.txt]
 				              """);
 		}
 
