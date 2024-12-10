@@ -6,6 +6,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="aweXpect.Core"/>
+		<PackageReference Include="Testably.Abstractions.Interface"/>
 	</ItemGroup>
 
 </Project>
