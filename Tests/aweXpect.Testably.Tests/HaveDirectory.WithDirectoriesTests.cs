@@ -17,7 +17,7 @@ public partial class HaveDirectory
 				.WithSubdirectory("directory2"));
 
 			async Task Act()
-				=> await That(sut).Should().HaveDirectory(path).WithDirectories(f => _ = f.HaveExactly(3).Items);
+				=> await That(sut).Should().HaveDirectory(path).WithDirectories(f => f.HaveExactly(3).Items());
 
 			await That(Act).Should().ThrowException()
 				.WithMessage($"""
@@ -37,7 +37,7 @@ public partial class HaveDirectory
 				.WithSubdirectory("directory2"));
 
 			async Task Act()
-				=> await That(sut).Should().HaveDirectory(path).WithDirectories(f => _ = f.HaveExactly(2).Items);
+				=> await That(sut).Should().HaveDirectory(path).WithDirectories(f => f.HaveExactly(2).Items());
 
 			await That(Act).Should().NotThrow();
 		}

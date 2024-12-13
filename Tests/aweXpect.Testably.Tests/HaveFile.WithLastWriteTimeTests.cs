@@ -54,7 +54,7 @@ public partial class HaveFile
 		public async Task WhenLastWriteTimeDiffersWithinTolerance_WithLocalTime_ShouldSucceed()
 		{
 			MockFileSystem sut = new();
-			DateTime expectedTime = CurrentTime().ToLocalTime();
+			DateTime expectedTime = CurrentTime();
 			DateTime actualTime = expectedTime.AddSeconds(1);
 			string path = "foo.txt";
 			sut.File.WriteAllText(path, "");
@@ -80,6 +80,21 @@ public partial class HaveFile
 			async Task Act()
 				=> await That(sut).Should().HaveFile(path).WithLastWriteTime(expectedTime)
 					.Within(TimeSpan.FromSeconds(2));
+
+			await That(Act).Should().NotThrow();
+		}
+
+		[Fact]
+		public async Task WhenLastWriteTimeIsUnspecified_ShouldSucceed()
+		{
+			MockFileSystem sut = new();
+			DateTime expectedTime = new(2020, 2, 1, 12, 0, 0, DateTimeKind.Unspecified);
+			string path = "foo.txt";
+			sut.File.WriteAllText(path, "");
+			sut.File.SetLastWriteTime(path, expectedTime);
+
+			async Task Act()
+				=> await That(sut).Should().HaveFile(path).WithLastWriteTime(expectedTime);
 
 			await That(Act).Should().NotThrow();
 		}
