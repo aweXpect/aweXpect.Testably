@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.IO.Abstractions;
 using aweXpect.Core;
 using aweXpect.Core.Constraints;
@@ -62,9 +61,7 @@ public class FileResult<TFileSystem>(
 		return new TimeToleranceResult<TFileSystem, FileResult<TFileSystem>>(
 			_expectationBuilder.And(" ").AddConstraint(it
 				=> new HasTimeConstraint(it, path,
-					f => expected.Kind == DateTimeKind.Local
-						? f.CreationTime
-						: f.CreationTimeUtc, tolerance,
+					f => f.CreationTime, tolerance,
 					expected, "creation time")),
 			this, tolerance);
 	}
@@ -83,9 +80,7 @@ public class FileResult<TFileSystem>(
 		return new TimeToleranceResult<TFileSystem, FileResult<TFileSystem>>(
 			_expectationBuilder.And(" ").AddConstraint(it
 				=> new HasTimeConstraint(it, path,
-					f => expected.Kind == DateTimeKind.Local
-						? f.LastAccessTime
-						: f.LastAccessTimeUtc, tolerance,
+					f => f.LastAccessTime, tolerance,
 					expected, "last access time")),
 			this, tolerance);
 	}
@@ -104,9 +99,7 @@ public class FileResult<TFileSystem>(
 		return new TimeToleranceResult<TFileSystem, FileResult<TFileSystem>>(
 			_expectationBuilder.And(" ").AddConstraint(it
 				=> new HasTimeConstraint(it, path,
-					f => expected.Kind == DateTimeKind.Local
-						? f.LastWriteTime
-						: f.LastWriteTimeUtc, tolerance,
+					f => f.LastWriteTime, tolerance,
 					expected, "last write time")),
 			this, tolerance);
 	}
@@ -125,6 +118,16 @@ public class FileResult<TFileSystem>(
 		{
 			IFileInfo? fileInfo = actual.FileInfo.New(path);
 			DateTime time = timeAccessor(fileInfo);
+			if (expected.Kind == DateTimeKind.Utc && time.Kind == DateTimeKind.Local)
+			{
+				time = time.ToUniversalTime();
+			}
+
+			if (expected.Kind == DateTimeKind.Local && time.Kind == DateTimeKind.Utc)
+			{
+				time = time.ToLocalTime();
+			}
+
 			if (IsWithinTolerance(tolerance.Tolerance, time - expected))
 			{
 				return new ConstraintResult.Success<TFileSystem>(actual, ToString());

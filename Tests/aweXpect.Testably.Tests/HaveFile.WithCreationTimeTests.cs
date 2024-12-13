@@ -84,6 +84,21 @@ public partial class HaveFile
 			await That(Act).Should().NotThrow();
 		}
 
+		[Fact]
+		public async Task WhenCreationTimeIsUnspecified_ShouldSucceed()
+		{
+			MockFileSystem sut = new();
+			DateTime expectedTime = new(2020, 2, 1, 12, 0, 0, DateTimeKind.Unspecified);
+			string path = "foo.txt";
+			sut.File.WriteAllText(path, "");
+			sut.File.SetCreationTime(path, expectedTime);
+
+			async Task Act()
+				=> await That(sut).Should().HaveFile(path).WithCreationTime(expectedTime);
+
+			await That(Act).Should().NotThrow();
+		}
+
 
 		[Fact]
 		public async Task WhenCreationTimeMatches_WithLocalTime_ShouldSucceed()
