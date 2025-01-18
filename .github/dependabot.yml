@@ -31,3 +31,6 @@ updates:
       xunit:
         patterns:
           - "xunit*"
+      aweXpect:
+        patterns:
+          - "aweXpect*"
