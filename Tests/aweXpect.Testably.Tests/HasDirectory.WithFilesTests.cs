@@ -4,7 +4,7 @@ using Testably.Abstractions.Testing;
 
 namespace aweXpect.Testably.Tests;
 
-public partial class HaveDirectory
+public partial class HasDirectory
 {
 	public class WithFilesTests
 	{
@@ -17,13 +17,15 @@ public partial class HaveDirectory
 				.WithFile("bar.txt").Which(f => f.HasStringContent("some-content")));
 
 			async Task Act()
-				=> await That(sut).Should().HaveDirectory(path).WithFiles(f => f.BeEmpty());
+				=> await That(sut).HasDirectory(path).WithFiles(f => f.IsEmpty());
 
-			await That(Act).Should().ThrowException()
+			await That(Act).ThrowsException()
 				.WithMessage($"""
 				              Expected sut to
 				              have directory '{path}' which files should be empty,
-				              but files was [foo{Path.DirectorySeparatorChar}bar.txt]
+				              but files was [
+				                foo{Path.DirectorySeparatorChar}bar.txt
+				              ]
 				              """);
 		}
 
@@ -35,9 +37,9 @@ public partial class HaveDirectory
 			sut.Initialize().WithSubdirectory(path);
 
 			async Task Act()
-				=> await That(sut).Should().HaveDirectory(path).WithFiles(f => f.BeEmpty());
+				=> await That(sut).HasDirectory(path).WithFiles(f => f.IsEmpty());
 
-			await That(Act).Should().NotThrow();
+			await That(Act).DoesNotThrow();
 		}
 
 		[Fact]
@@ -49,10 +51,10 @@ public partial class HaveDirectory
 				.WithFile("bar.txt").Which(f => f.HasStringContent("some-content")));
 
 			async Task Act()
-				=> await That(sut).Should().HaveDirectory(path)
-					.WithFiles(f => f.HaveAll(x => x.HaveContent("SOME-CONTENT")));
+				=> await That(sut).HasDirectory(path)
+					.WithFiles(f => f.All().Are(x => x.HasContent("SOME-CONTENT")));
 
-			await That(Act).Should().ThrowException()
+			await That(Act).ThrowsException()
 				.WithMessage($"""
 				              Expected sut to
 				              have directory '{path}' which files should have all items have Content equal to "SOME-CONTENT",
@@ -69,10 +71,10 @@ public partial class HaveDirectory
 				.WithFile("bar.txt").Which(f => f.HasStringContent("some-content")));
 
 			async Task Act()
-				=> await That(sut).Should().HaveDirectory(path)
-					.WithFiles(f => f.HaveAll(x => x.HaveContent("SOME-CONTENT").IgnoringCase()));
+				=> await That(sut).HasDirectory(path)
+					.WithFiles(f => f.All().Are(x => x.HasContent("SOME-CONTENT").IgnoringCase()));
 
-			await That(Act).Should().NotThrow();
+			await That(Act).DoesNotThrow();
 		}
 	}
 }

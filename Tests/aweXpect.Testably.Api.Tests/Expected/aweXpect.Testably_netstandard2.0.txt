@@ -2,22 +2,15 @@
 [assembly: System.Runtime.Versioning.TargetFramework(".NETStandard,Version=v2.0", FrameworkDisplayName=".NET Standard 2.0")]
 namespace aweXpect.Testably
 {
-    public static class DirectoryInfoExtensions
-    {
-        public static aweXpect.Core.IThat<System.IO.Abstractions.IDirectoryInfo> Should(this aweXpect.Core.IExpectSubject<System.IO.Abstractions.IDirectoryInfo> subject) { }
-    }
     public static class FileInfoExtensions
     {
-        public static aweXpect.Results.StringEqualityTypeResult<System.IO.Abstractions.IFileInfo, aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo>> HaveContent(this aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo> source, string? expected) { }
-        public static aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo> Should(this aweXpect.Core.IExpectSubject<System.IO.Abstractions.IFileInfo> subject) { }
+        public static aweXpect.Results.StringEqualityTypeResult<System.IO.Abstractions.IFileInfo, aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo>> HasContent(this aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo> source, string? expected) { }
     }
     public static class FileSystemExtensions
     {
-        public static aweXpect.Testably.Results.DirectoryResult<TFileSystem> HaveDirectory<TFileSystem>(this aweXpect.Core.IThat<TFileSystem> subject, string path)
+        public static aweXpect.Testably.Results.DirectoryResult<TFileSystem> HasDirectory<TFileSystem>(this aweXpect.Core.IThat<TFileSystem> subject, string path)
             where TFileSystem : System.IO.Abstractions.IFileSystem { }
-        public static aweXpect.Testably.Results.FileResult<TFileSystem> HaveFile<TFileSystem>(this aweXpect.Core.IThat<TFileSystem> subject, string path)
-            where TFileSystem : System.IO.Abstractions.IFileSystem { }
-        public static aweXpect.Core.IThat<TFileSystem> Should<TFileSystem>(this aweXpect.Core.IExpectSubject<TFileSystem> subject)
+        public static aweXpect.Testably.Results.FileResult<TFileSystem> HasFile<TFileSystem>(this aweXpect.Core.IThat<TFileSystem> subject, string path)
             where TFileSystem : System.IO.Abstractions.IFileSystem { }
     }
 }
@@ -34,7 +27,7 @@ namespace aweXpect.Testably.Results
         where TFileSystem : System.IO.Abstractions.IFileSystem
     {
         public FileResult(aweXpect.Core.ExpectationBuilder expectationBuilder, aweXpect.Core.IThat<TFileSystem> subject, string path) { }
-        public aweXpect.Results.StringEqualityTypeResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> WhichContent(System.Action<aweXpect.Core.IExpectSubject<string?>> expectations) { }
+        public aweXpect.Results.StringEqualityTypeResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> WhichContent(System.Action<aweXpect.Core.IThat<string?>> expectations) { }
         public aweXpect.Results.StringEqualityTypeResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> WithContent(string expected) { }
         public aweXpect.Results.TimeToleranceResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> WithCreationTime(System.DateTime expected) { }
         public aweXpect.Results.TimeToleranceResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> WithLastAccessTime(System.DateTime expected) { }
