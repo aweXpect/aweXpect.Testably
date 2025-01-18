@@ -136,10 +136,6 @@ jobs:
                 with:
                     name: Packages
                     path: Artifacts/Packages
-            -   name: Install nuget
-                uses: nuget/setup-nuget@v2
-                with:
-                    nuget-version: 'latest'
             -   name: Publish
                 run: |
                     echo "Found the following packages to push:"
