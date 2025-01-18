@@ -10,10 +10,10 @@ public static partial class FileSystemExtensions
 	/// <summary>
 	///     Verifies that the <see cref="IFileSystem" /> has a directory at the given <paramref name="path" />.
 	/// </summary>
-	public static DirectoryResult<TFileSystem> HaveDirectory<TFileSystem>(
+	public static DirectoryResult<TFileSystem> HasDirectory<TFileSystem>(
 		this IThat<TFileSystem> subject, string path)
 		where TFileSystem : IFileSystem
-		=> new(subject.ExpectationBuilder.AddConstraint(it
+		=> new(subject.ThatIs().ExpectationBuilder.AddConstraint(it
 				=> new HasDirectoryConstraint<TFileSystem>(it, path)),
 			subject,
 			path);

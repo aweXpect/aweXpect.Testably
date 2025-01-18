@@ -3,7 +3,7 @@ using Testably.Abstractions.Testing;
 
 namespace aweXpect.Testably.Tests;
 
-public partial class HaveDirectory
+public partial class HasDirectory
 {
 	public class WithDirectoriesTests
 	{
@@ -17,9 +17,9 @@ public partial class HaveDirectory
 				.WithSubdirectory("directory2"));
 
 			async Task Act()
-				=> await That(sut).Should().HaveDirectory(path).WithDirectories(f => f.HaveExactly(3).Items());
+				=> await That(sut).HasDirectory(path).WithDirectories(f => f.Has().Exactly(3).Items());
 
-			await That(Act).Should().ThrowException()
+			await That(Act).ThrowsException()
 				.WithMessage($"""
 				              Expected sut to
 				              have directory '{path}' which subdirectories should have exactly 3 items,
@@ -37,9 +37,9 @@ public partial class HaveDirectory
 				.WithSubdirectory("directory2"));
 
 			async Task Act()
-				=> await That(sut).Should().HaveDirectory(path).WithDirectories(f => f.HaveExactly(2).Items());
+				=> await That(sut).HasDirectory(path).WithDirectories(f => f.Has().Exactly(2).Items());
 
-			await That(Act).Should().NotThrow();
+			await That(Act).DoesNotThrow();
 		}
 	}
 }
