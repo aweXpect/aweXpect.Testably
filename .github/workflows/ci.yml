@@ -128,7 +128,7 @@ jobs:
     
     push:
         name: "Push"
-        runs-on: windows-latest
+        runs-on: macos-latest
         needs: [ pack ]
         steps:
             -   name: Download packages
