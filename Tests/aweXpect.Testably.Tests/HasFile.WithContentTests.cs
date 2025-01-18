@@ -3,9 +3,9 @@ using Testably.Abstractions.Testing;
 
 namespace aweXpect.Testably.Tests;
 
-public partial class HaveFile
+public partial class HasFile
 {
-	public class WhichContentTests
+	public class WithContentTests
 	{
 		[Fact]
 		public async Task WhenContentIsDifferent_ShouldFail()
@@ -16,13 +16,17 @@ public partial class HaveFile
 			sut.File.WriteAllText(path, "baz");
 
 			async Task Act()
-				=> await That(sut).Should().HaveFile(path).WhichContent(c => c.Should().BeEmpty());
+				=> await That(sut).HasFile(path).WithContent("bar");
 
-			await That(Act).Should().ThrowException()
+			await That(Act).ThrowsException()
 				.WithMessage($"""
 				              Expected sut to
-				              have file '{path}' which content should be empty,
-				              but content was "baz"
+				              have file '{path}' with content "bar",
+				              but it was "baz" which differs at index 2:
+				                   ↓ (actual)
+				                "baz"
+				                "bar"
+				                   ↑ (expected)
 				              """);
 		}
 
@@ -30,14 +34,15 @@ public partial class HaveFile
 		public async Task WhenContentMatches_ShouldSucceed()
 		{
 			string path = "foo.txt";
+			string content = "bar";
 			IFileSystem sut = new MockFileSystem();
 			// ReSharper disable once MethodHasAsyncOverload
-			sut.File.WriteAllText(path, "");
+			sut.File.WriteAllText(path, content);
 
 			async Task Act()
-				=> await That(sut).Should().HaveFile(path).WhichContent(c => c.Should().BeEmpty());
+				=> await That(sut).HasFile(path).WithContent(content);
 
-			await That(Act).Should().NotThrow();
+			await That(Act).DoesNotThrow();
 		}
 	}
 }

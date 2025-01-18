@@ -3,12 +3,15 @@ using aweXpect.Core;
 
 namespace aweXpect.Testably;
 
-internal class Subject<T>(ExpectationBuilder expectationBuilder) : IExpectSubject<T>, IThat<T>
+internal static class Subject
 {
-	/// <inheritdoc />
-	public IThat<T> Should(Action<ExpectationBuilder> builderOptions)
-		=> this;
-
-	/// <inheritdoc />
-	public ExpectationBuilder ExpectationBuilder { get; } = expectationBuilder;
+	public static IThatIs<T> ThatIs<T>(this IThat<T> that)
+	{
+		if (that is IThatIs<T> thatIs)
+		{
+			return thatIs;
+		}
+		
+		throw new NotSupportedException($"The type {that.GetType()} is not supported.");
+	}
 }

@@ -13,12 +13,12 @@ public static partial class FileInfoExtensions
 	///     Verifies that the string content of the <see cref="IFileInfo" /> is equal to
 	///     the <paramref name="expected" /> value.
 	/// </summary>
-	public static StringEqualityTypeResult<IFileInfo, IThat<IFileInfo>> HaveContent(this IThat<IFileInfo> source,
+	public static StringEqualityTypeResult<IFileInfo, IThat<IFileInfo>> HasContent(this IThat<IFileInfo> source,
 		string? expected)
 	{
 		StringEqualityOptions options = new();
 		return new StringEqualityTypeResult<IFileInfo, IThat<IFileInfo>>(
-			source.ExpectationBuilder.AddConstraint(it
+			source.ThatIs().ExpectationBuilder.AddConstraint(it
 				=> new HasContentValueConstraint(
 					it, "have", expected, options)),
 			source,

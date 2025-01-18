@@ -31,7 +31,7 @@ public class DirectoryResult<TFileSystem>(
 					f => f.Directory.EnumerateFiles(path).Select(p => f.FileInfo.New(p)), "files "),
 				(property, expectation) => $" which {property}should {expectation}")
 			.AddExpectations(e
-				=> expectations(new Subject<IEnumerable<IFileInfo>>(e)));
+				=> expectations(new ThatSubject<IEnumerable<IFileInfo>>(e)));
 		return this;
 	}
 
@@ -47,7 +47,7 @@ public class DirectoryResult<TFileSystem>(
 					f => f.Directory.EnumerateDirectories(path).Select(p => f.DirectoryInfo.New(p)), "subdirectories "),
 				(property, expectation) => $" which {property}should {expectation}")
 			.AddExpectations(e
-				=> expectations(new Subject<IEnumerable<IDirectoryInfo>>(e)));
+				=> expectations(new ThatSubject<IEnumerable<IDirectoryInfo>>(e)));
 		return this;
 	}
 }

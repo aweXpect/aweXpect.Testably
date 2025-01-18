@@ -10,10 +10,10 @@ public static partial class FileSystemExtensions
 	/// <summary>
 	///     Verifies that the <see cref="IFileSystem" /> has a file at the given <paramref name="path" />.
 	/// </summary>
-	public static FileResult<TFileSystem> HaveFile<TFileSystem>(
+	public static FileResult<TFileSystem> HasFile<TFileSystem>(
 		this IThat<TFileSystem> subject, string path)
 		where TFileSystem : IFileSystem
-		=> new(subject.ExpectationBuilder.AddConstraint(it
+		=> new(subject.ThatIs().ExpectationBuilder.AddConstraint(it
 				=> new HasFileConstraint<TFileSystem>(it, path)),
 			subject,
 			path);
