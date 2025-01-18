@@ -103,6 +103,59 @@ jobs:
                 env:
                     GithubToken: ${{ secrets.GITHUB_TOKEN }}
     
+    pack:
+        name: "Pack"
+        runs-on: ubuntu-latest
+        env:
+            DOTNET_NOLOGO: true
+        steps:
+            -   uses: actions/checkout@v4
+                with:
+                    fetch-depth: 0
+            -   name: Setup .NET SDKs
+                uses: actions/setup-dotnet@v4
+                with:
+                    dotnet-version: |
+                        8.0.x
+            -   name: Pack nuget packages
+                run: ./build.sh Pack
+            -   name: Upload packages
+                if: always()
+                uses: actions/upload-artifact@v4
+                with:
+                    path: Artifacts/Packages
+                    name: Packages
+    
+    push:
+        name: "Push"
+        runs-on: ubuntu-latest
+        environment: production
+        needs: [ pack ]
+        permissions:
+            contents: write
+        steps:
+            -   name: Download packages
+                uses: actions/download-artifact@v4
+                with:
+                    name: Packages
+                    path: Artifacts/Packages
+            -   name: Install nuget
+                uses: nuget/setup-nuget@v2
+                with:
+                    nuget-version: 'latest'
+            -   name: Publish
+                run: |
+                    echo "Found the following packages to push:"
+                    search_dir=Artifacts/Packages
+                    for entry in Artifacts/Packages/*.nupkg
+                    do
+                      echo "- $entry"
+                    done
+                    for entry in Artifacts/Packages/*.nupkg
+                    do
+                      nuget push $entry -Source 'https://api.nuget.org/v3/index.json' -SkipDuplicate
+                    done
+    
     static-code-analysis:
         name: "Static code analysis"
         if: ${{ github.actor != 'dependabot[bot]' }}
