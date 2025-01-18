@@ -129,10 +129,7 @@ jobs:
     push:
         name: "Push"
         runs-on: ubuntu-latest
-        environment: production
         needs: [ pack ]
-        permissions:
-            contents: write
         steps:
             -   name: Download packages
                 uses: actions/download-artifact@v4
