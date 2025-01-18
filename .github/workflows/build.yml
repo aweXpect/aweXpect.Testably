@@ -174,7 +174,7 @@ jobs:
     push:
         name: "Push"
         if: ${{ startsWith(github.ref, 'refs/tags/v') }}
-        runs-on: ubuntu-latest
+        runs-on: macos-latest
         environment: production
         needs: [ pack ]
         permissions:
@@ -185,11 +185,6 @@ jobs:
                 with:
                     name: Packages
                     path: Artifacts/Packages
-            -   name: Install nuget
-                uses: nuget/setup-nuget@v2
-                with:
-                    nuget-api-key: ${{ secrets.NUGET_API_KEY }}
-                    nuget-version: 'latest'
             -   name: Publish
                 run: |
                     echo "Found the following packages to push:"
@@ -200,7 +195,7 @@ jobs:
                     done
                     for entry in Artifacts/Packages/*.nupkg
                     do
-                      nuget push $entry -Source 'https://api.nuget.org/v3/index.json' -SkipDuplicate
+                      nuget push $entry -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.NUGET_API_KEY}} -SkipDuplicate
                     done
             -   name: Create GitHub release
                 continue-on-error: true
