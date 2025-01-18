@@ -1,6 +1,6 @@
 ﻿namespace aweXpect.Testably.Tests;
 
-public partial class HaveFile
+public partial class HasFile
 {
 	/// <summary>
 	///     Use a fixed random time in each test run to ensure, that the tests don't rely on special times.

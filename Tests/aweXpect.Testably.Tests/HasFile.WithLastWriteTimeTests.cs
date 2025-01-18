@@ -4,7 +4,7 @@
 
 namespace aweXpect.Testably.Tests;
 
-public partial class HaveFile
+public partial class HasFile
 {
 	public class WithLastWriteTimeTests
 	{
@@ -19,9 +19,9 @@ public partial class HaveFile
 			sut.File.SetLastWriteTime(path, actualTime);
 
 			async Task Act()
-				=> await That(sut).Should().HaveFile(path).WithLastWriteTime(expectedTime);
+				=> await That(sut).HasFile(path).WithLastWriteTime(expectedTime);
 
-			await That(Act).Should().ThrowException()
+			await That(Act).ThrowsException()
 				.WithMessage($"""
 				              Expected sut to
 				              have file '{path}' with last write time equal to {Formatter.Format(expectedTime)},
@@ -40,9 +40,9 @@ public partial class HaveFile
 			sut.File.SetLastWriteTimeUtc(path, actualTime);
 
 			async Task Act()
-				=> await That(sut).Should().HaveFile(path).WithLastWriteTime(expectedTime);
+				=> await That(sut).HasFile(path).WithLastWriteTime(expectedTime);
 
-			await That(Act).Should().ThrowException()
+			await That(Act).ThrowsException()
 				.WithMessage($"""
 				              Expected sut to
 				              have file '{path}' with last write time equal to {Formatter.Format(expectedTime)},
@@ -61,10 +61,10 @@ public partial class HaveFile
 			sut.File.SetLastWriteTime(path, actualTime);
 
 			async Task Act()
-				=> await That(sut).Should().HaveFile(path).WithLastWriteTime(expectedTime)
+				=> await That(sut).HasFile(path).WithLastWriteTime(expectedTime)
 					.Within(TimeSpan.FromSeconds(2));
 
-			await That(Act).Should().NotThrow();
+			await That(Act).DoesNotThrow();
 		}
 
 		[Fact]
@@ -78,10 +78,10 @@ public partial class HaveFile
 			sut.File.SetLastWriteTimeUtc(path, actualTime);
 
 			async Task Act()
-				=> await That(sut).Should().HaveFile(path).WithLastWriteTime(expectedTime)
+				=> await That(sut).HasFile(path).WithLastWriteTime(expectedTime)
 					.Within(TimeSpan.FromSeconds(2));
 
-			await That(Act).Should().NotThrow();
+			await That(Act).DoesNotThrow();
 		}
 
 		[Fact]
@@ -94,9 +94,9 @@ public partial class HaveFile
 			sut.File.SetLastWriteTime(path, expectedTime);
 
 			async Task Act()
-				=> await That(sut).Should().HaveFile(path).WithLastWriteTime(expectedTime);
+				=> await That(sut).HasFile(path).WithLastWriteTime(expectedTime);
 
-			await That(Act).Should().NotThrow();
+			await That(Act).DoesNotThrow();
 		}
 
 		[Fact]
@@ -109,9 +109,9 @@ public partial class HaveFile
 			sut.File.SetLastWriteTime(path, expectedTime);
 
 			async Task Act()
-				=> await That(sut).Should().HaveFile(path).WithLastWriteTime(expectedTime);
+				=> await That(sut).HasFile(path).WithLastWriteTime(expectedTime);
 
-			await That(Act).Should().NotThrow();
+			await That(Act).DoesNotThrow();
 		}
 
 		[Fact]
@@ -124,9 +124,9 @@ public partial class HaveFile
 			sut.File.SetLastWriteTimeUtc(path, expectedTime);
 
 			async Task Act()
-				=> await That(sut).Should().HaveFile(path).WithLastWriteTime(expectedTime);
+				=> await That(sut).HasFile(path).WithLastWriteTime(expectedTime);
 
-			await That(Act).Should().NotThrow();
+			await That(Act).DoesNotThrow();
 		}
 	}
 }

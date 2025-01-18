@@ -36,14 +36,14 @@ public class FileResult<TFileSystem>(
 	///     Verifies that the string content of the file satisfies the <paramref name="expectations" />.
 	/// </summary>
 	public StringEqualityTypeResult<TFileSystem, FileResult<TFileSystem>> WhichContent(
-		Action<IExpectSubject<string?>> expectations)
+		Action<IThat<string?>> expectations)
 	{
 		StringEqualityOptions options = new();
 		return new StringEqualityTypeResult<TFileSystem, FileResult<TFileSystem>>(
 			_expectationBuilder.ForMember(
 					MemberAccessor<TFileSystem, string>.FromFunc(f => f.File.ReadAllText(path), "content "),
 					(member, expectation) => $" which {member}should {expectation}")
-				.AddExpectations(e => expectations(new Subject<string?>(e))),
+				.AddExpectations(e => expectations(new ThatSubject<string?>(e))),
 			this, options);
 	}
 

@@ -3,7 +3,7 @@ using Testably.Abstractions.Testing;
 
 namespace aweXpect.Testably.Tests;
 
-public class HaveDirectoryTests
+public class HasDirectoryTests
 {
 	[Fact]
 	public async Task WhenDirectoryIsMissing_ShouldFail()
@@ -12,9 +12,9 @@ public class HaveDirectoryTests
 		IFileSystem sut = new MockFileSystem();
 
 		async Task Act()
-			=> await That(sut).Should().HaveDirectory(path);
+			=> await That(sut).HasDirectory(path);
 
-		await That(Act).Should().ThrowException()
+		await That(Act).ThrowsException()
 			.WithMessage($"""
 			              Expected sut to
 			              have directory '{path}',
@@ -31,9 +31,9 @@ public class HaveDirectoryTests
 		sut.File.WriteAllText(path, "");
 
 		async Task Act()
-			=> await That(sut).Should().HaveDirectory(path);
+			=> await That(sut).HasDirectory(path);
 
-		await That(Act).Should().ThrowException()
+		await That(Act).ThrowsException()
 			.WithMessage($"""
 			              Expected sut to
 			              have directory '{path}',
@@ -49,8 +49,8 @@ public class HaveDirectoryTests
 		sut.Directory.CreateDirectory(path);
 
 		async Task Act()
-			=> await That(sut).Should().HaveDirectory(path);
+			=> await That(sut).HasDirectory(path);
 
-		await That(Act).Should().NotThrow();
+		await That(Act).DoesNotThrow();
 	}
 }

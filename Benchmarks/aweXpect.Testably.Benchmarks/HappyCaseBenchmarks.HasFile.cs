@@ -17,5 +17,5 @@ public partial class HappyCaseBenchmarks
 
 	[Benchmark]
 	public async Task<IFileSystem> Dummy_aweXpect()
-		=> await Expect.That(_fileSystem).Should().HaveFile(_path).WithContent(_content);
+		=> await Expect.That(_fileSystem).HasFile(_path).WithContent(_content);
 }
