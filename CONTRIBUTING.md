@@ -12,6 +12,3 @@ In order to support this, static code analysis is performed using [SonarCloud](h
 - have a code coverage of > 90%
 
 Additionally each push to the `main` branch checks the quality of the unit tests using [Stryker.NET](https://stryker-mutator.io/docs/stryker-net/introduction/).
-
-## Versioning
-This project uses [MinVer](https://github.com/adamralph/minver) for versioning.  

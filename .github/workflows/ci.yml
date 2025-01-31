@@ -64,7 +64,7 @@ jobs:
     mutation-tests:
         name: "Mutation tests"
         if: ${{ github.actor != 'dependabot[bot]' }}
-        runs-on: ubuntu-latest
+        runs-on: windows-latest
         env:
             STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
             DOTNET_NOLOGO: true
@@ -77,8 +77,10 @@ jobs:
                 with:
                     dotnet-version: |
                         8.0.x
+            -   name: Add msbuild to PATH
+                uses: microsoft/setup-msbuild@v2
             -   name: Run mutation tests
-                run: ./build.sh MutationTests
+                run: ./build.ps1 MutationTests
     
     benchmarks:
         name: "Benchmarks"
