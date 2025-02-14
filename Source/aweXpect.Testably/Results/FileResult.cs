@@ -27,7 +27,7 @@ public class FileResult<TFileSystem>(
 	{
 		StringEqualityOptions options = new();
 		return new StringEqualityTypeResult<TFileSystem, FileResult<TFileSystem>>(
-			_expectationBuilder.And(" ").AddConstraint(it
+			_expectationBuilder.And(" ").AddConstraint((it, grammar)
 				=> new HasContentConstraint(it, path, options, expected)),
 			this, options);
 	}
@@ -35,14 +35,15 @@ public class FileResult<TFileSystem>(
 	/// <summary>
 	///     Verifies that the string content of the file satisfies the <paramref name="expectations" />.
 	/// </summary>
-	public StringEqualityTypeResult<TFileSystem, FileResult<TFileSystem>> WhichContent(
+	public StringEqualityTypeResult<TFileSystem, FileResult<TFileSystem>> WhoseContent(
 		Action<IThat<string?>> expectations)
 	{
 		StringEqualityOptions options = new();
 		return new StringEqualityTypeResult<TFileSystem, FileResult<TFileSystem>>(
-			_expectationBuilder.ForMember(
+			_expectationBuilder
+				.ForMember(
 					MemberAccessor<TFileSystem, string>.FromFunc(f => f.File.ReadAllText(path), "content "),
-					(member, expectation) => $" which {member}should {expectation}")
+					(member, expectation) => expectation.Append(" whose ").Append(member))
 				.AddExpectations(e => expectations(new ThatSubject<string?>(e))),
 			this, options);
 	}
@@ -59,7 +60,7 @@ public class FileResult<TFileSystem>(
 	{
 		TimeTolerance tolerance = new();
 		return new TimeToleranceResult<TFileSystem, FileResult<TFileSystem>>(
-			_expectationBuilder.And(" ").AddConstraint(it
+			_expectationBuilder.And(" ").AddConstraint((it, grammar)
 				=> new HasTimeConstraint(it, path,
 					f => f.CreationTime, tolerance,
 					expected, "creation time")),
@@ -78,7 +79,7 @@ public class FileResult<TFileSystem>(
 	{
 		TimeTolerance tolerance = new();
 		return new TimeToleranceResult<TFileSystem, FileResult<TFileSystem>>(
-			_expectationBuilder.And(" ").AddConstraint(it
+			_expectationBuilder.And(" ").AddConstraint((it, grammar)
 				=> new HasTimeConstraint(it, path,
 					f => f.LastAccessTime, tolerance,
 					expected, "last access time")),
@@ -97,7 +98,7 @@ public class FileResult<TFileSystem>(
 	{
 		TimeTolerance tolerance = new();
 		return new TimeToleranceResult<TFileSystem, FileResult<TFileSystem>>(
-			_expectationBuilder.And(" ").AddConstraint(it
+			_expectationBuilder.And(" ").AddConstraint((it, grammar)
 				=> new HasTimeConstraint(it, path,
 					f => f.LastWriteTime, tolerance,
 					expected, "last write time")),

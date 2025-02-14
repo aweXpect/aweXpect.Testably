@@ -18,7 +18,7 @@ public static partial class FileInfoExtensions
 	{
 		StringEqualityOptions options = new();
 		return new StringEqualityTypeResult<IFileInfo, IThat<IFileInfo>>(
-			source.ThatIs().ExpectationBuilder.AddConstraint(it
+			source.ThatIs().ExpectationBuilder.AddConstraint((it, grammar)
 				=> new HasContentValueConstraint(
 					it, "have", expected, options)),
 			source,
@@ -46,6 +46,6 @@ public static partial class FileInfoExtensions
 		}
 
 		public override string ToString()
-			=> $"{verb} Content {options.GetExpectation(expected, false)}{options}";
+			=> $"{verb} Content {options.GetExpectation(expected, ExpectationGrammars.None)}{options}";
 	}
 }

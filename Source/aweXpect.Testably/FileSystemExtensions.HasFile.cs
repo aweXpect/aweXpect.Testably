@@ -13,7 +13,7 @@ public static partial class FileSystemExtensions
 	public static FileResult<TFileSystem> HasFile<TFileSystem>(
 		this IThat<TFileSystem> subject, string path)
 		where TFileSystem : IFileSystem
-		=> new(subject.ThatIs().ExpectationBuilder.AddConstraint(it
+		=> new(subject.ThatIs().ExpectationBuilder.AddConstraint((it, grammar)
 				=> new HasFileConstraint<TFileSystem>(it, path)),
 			subject,
 			path);
@@ -42,6 +42,6 @@ public static partial class FileSystemExtensions
 
 		/// <inheritdoc />
 		public override string ToString()
-			=> $"have file '{path}'";
+			=> $"has file '{path}'";
 	}
 }

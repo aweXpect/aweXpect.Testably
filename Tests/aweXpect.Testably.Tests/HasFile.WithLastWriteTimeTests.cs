@@ -23,8 +23,8 @@ public partial class HasFile
 
 			await That(Act).ThrowsException()
 				.WithMessage($"""
-				              Expected sut to
-				              have file '{path}' with last write time equal to {Formatter.Format(expectedTime)},
+				              Expected that sut
+				              has file '{path}' with last write time equal to {Formatter.Format(expectedTime)},
 				              but it was {Formatter.Format(actualTime)}
 				              """);
 		}
@@ -44,8 +44,8 @@ public partial class HasFile
 
 			await That(Act).ThrowsException()
 				.WithMessage($"""
-				              Expected sut to
-				              have file '{path}' with last write time equal to {Formatter.Format(expectedTime)},
+				              Expected that sut
+				              has file '{path}' with last write time equal to {Formatter.Format(expectedTime)},
 				              but it was {Formatter.Format(actualTime)}
 				              """);
 		}

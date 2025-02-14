@@ -16,8 +16,8 @@ public class HasDirectoryTests
 
 		await That(Act).ThrowsException()
 			.WithMessage($"""
-			              Expected sut to
-			              have directory '{path}',
+			              Expected that sut
+			              has directory '{path}',
 			              but it did not exist
 			              """);
 	}
@@ -35,8 +35,8 @@ public class HasDirectoryTests
 
 		await That(Act).ThrowsException()
 			.WithMessage($"""
-			              Expected sut to
-			              have directory '{path}',
+			              Expected that sut
+			              has directory '{path}',
 			              but it was a file
 			              """);
 	}

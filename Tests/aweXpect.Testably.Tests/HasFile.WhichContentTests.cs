@@ -5,7 +5,7 @@ namespace aweXpect.Testably.Tests;
 
 public partial class HasFile
 {
-	public class WhichContentTests
+	public class WhoseContentTests
 	{
 		[Fact]
 		public async Task WhenContentIsDifferent_ShouldFail()
@@ -16,12 +16,12 @@ public partial class HasFile
 			sut.File.WriteAllText(path, "baz");
 
 			async Task Act()
-				=> await That(sut).HasFile(path).WhichContent(c => c.IsEmpty());
+				=> await That(sut).HasFile(path).WhoseContent(c => c.IsEmpty());
 
 			await That(Act).ThrowsException()
 				.WithMessage($"""
-				              Expected sut to
-				              have file '{path}' which content should be empty,
+				              Expected that sut
+				              has file '{path}' whose content is empty,
 				              but content was "baz"
 				              """);
 		}
@@ -35,7 +35,7 @@ public partial class HasFile
 			sut.File.WriteAllText(path, "");
 
 			async Task Act()
-				=> await That(sut).HasFile(path).WhichContent(c => c.IsEmpty());
+				=> await That(sut).HasFile(path).WhoseContent(c => c.IsEmpty());
 
 			await That(Act).DoesNotThrow();
 		}
