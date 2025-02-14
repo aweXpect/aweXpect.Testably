@@ -20,8 +20,8 @@ public partial class HasFile
 
 			await That(Act).ThrowsException()
 				.WithMessage($"""
-				              Expected sut to
-				              have file '{path}' with content "bar",
+				              Expected that sut
+				              has file '{path}' with content "bar",
 				              but it was "baz" which differs at index 2:
 				                   ↓ (actual)
 				                "baz"

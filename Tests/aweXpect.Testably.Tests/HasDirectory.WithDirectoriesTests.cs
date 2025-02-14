@@ -17,12 +17,12 @@ public partial class HasDirectory
 				.WithSubdirectory("directory2"));
 
 			async Task Act()
-				=> await That(sut).HasDirectory(path).WithDirectories(f => f.Has().Exactly(3).Items());
+				=> await That(sut).HasDirectory(path).WithDirectories(f => f.HasCount().EqualTo(3));
 
 			await That(Act).ThrowsException()
 				.WithMessage($"""
-				              Expected sut to
-				              have directory '{path}' which subdirectories should have exactly 3 items,
+				              Expected that sut
+				              has directory '{path}' whose subdirectories has exactly 3 items,
 				              but found only 2
 				              """);
 		}
@@ -37,7 +37,7 @@ public partial class HasDirectory
 				.WithSubdirectory("directory2"));
 
 			async Task Act()
-				=> await That(sut).HasDirectory(path).WithDirectories(f => f.Has().Exactly(2).Items());
+				=> await That(sut).HasDirectory(path).WithDirectories(f => f.HasCount().EqualTo(2));
 
 			await That(Act).DoesNotThrow();
 		}

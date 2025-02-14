@@ -21,8 +21,8 @@ public partial class HasDirectory
 
 			await That(Act).ThrowsException()
 				.WithMessage($"""
-				              Expected sut to
-				              have directory '{path}' which files should be empty,
+				              Expected that sut
+				              has directory '{path}' whose files are empty,
 				              but files was [
 				                foo{Path.DirectorySeparatorChar}bar.txt
 				              ]
@@ -52,12 +52,12 @@ public partial class HasDirectory
 
 			async Task Act()
 				=> await That(sut).HasDirectory(path)
-					.WithFiles(f => f.All().Are(x => x.HasContent("SOME-CONTENT")));
+					.WithFiles(f => f.All().ComplyWith(x => x.HasContent("SOME-CONTENT")));
 
 			await That(Act).ThrowsException()
 				.WithMessage($"""
-				              Expected sut to
-				              have directory '{path}' which files should have all items have Content equal to "SOME-CONTENT",
+				              Expected that sut
+				              has directory '{path}' whose files have Content equal to "SOME-CONTENT" for all items,
 				              but not all were
 				              """);
 		}
@@ -72,7 +72,7 @@ public partial class HasDirectory
 
 			async Task Act()
 				=> await That(sut).HasDirectory(path)
-					.WithFiles(f => f.All().Are(x => x.HasContent("SOME-CONTENT").IgnoringCase()));
+					.WithFiles(f => f.All().ComplyWith(x => x.HasContent("SOME-CONTENT").IgnoringCase()));
 
 			await That(Act).DoesNotThrow();
 		}

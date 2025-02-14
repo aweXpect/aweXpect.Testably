@@ -13,7 +13,7 @@ public static partial class FileSystemExtensions
 	public static DirectoryResult<TFileSystem> HasDirectory<TFileSystem>(
 		this IThat<TFileSystem> subject, string path)
 		where TFileSystem : IFileSystem
-		=> new(subject.ThatIs().ExpectationBuilder.AddConstraint(it
+		=> new(subject.ThatIs().ExpectationBuilder.AddConstraint((it, grammar)
 				=> new HasDirectoryConstraint<TFileSystem>(it, path)),
 			subject,
 			path);
@@ -42,6 +42,6 @@ public static partial class FileSystemExtensions
 
 		/// <inheritdoc />
 		public override string ToString()
-			=> $"have directory '{path}'";
+			=> $"has directory '{path}'";
 	}
 }
