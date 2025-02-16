@@ -1,10 +1,10 @@
+using System.Linq;
 using Nuke.Common;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.Xunit;
-using System.Linq;
 using static Nuke.Common.Tools.Xunit.XunitTasks;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
@@ -20,7 +20,7 @@ partial class Build
 
 	Project[] UnitTestProjects =>
 	[
-		Solution.Tests.aweXpect_Testably_Tests
+		Solution.Tests.aweXpect_Testably_Tests,
 	];
 
 	Target DotNetFrameworkUnitTests => _ => _
@@ -61,7 +61,7 @@ partial class Build
 						(settings, project) => settings
 							.SetProjectFile(project)
 							.CombineWith(
-								project.GetTargetFrameworks()?.Except([net48]),
+								project.GetTargetFrameworks()?.Except([net48,]),
 								(frameworkSettings, framework) => frameworkSettings
 									.SetFramework(framework)
 									.AddLoggers($"trx;LogFileName={project.Name}_{framework}.trx")

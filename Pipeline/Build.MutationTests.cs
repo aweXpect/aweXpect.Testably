@@ -1,13 +1,13 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using Nuke.Common;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
 using Serilog;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
 // ReSharper disable AllUnderscoreLocalParameterName
@@ -30,7 +30,9 @@ partial class Build
 
 			Dictionary<Project, Project[]> projects = new()
 			{
-				{ Solution.aweXpect_Testably, UnitTestProjects }
+				{
+					Solution.aweXpect_Testably, UnitTestProjects
+				},
 			};
 
 			foreach (KeyValuePair<Project, Project[]> project in projects)
@@ -42,7 +44,7 @@ partial class Build
 					branchName = "release/" + version;
 					Log.Information("Use release branch analysis for '{BranchName}'", branchName);
 				}
-				
+
 				string configText = $$"""
 				                      {
 				                      	"stryker-config": {
