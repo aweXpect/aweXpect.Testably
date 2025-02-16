@@ -1,5 +1,4 @@
 ﻿using System.IO.Abstractions;
-using aweXpect.Core;
 
 namespace aweXpect.Testably;
 

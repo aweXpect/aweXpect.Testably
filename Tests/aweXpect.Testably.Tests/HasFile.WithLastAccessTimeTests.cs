@@ -49,6 +49,7 @@ public partial class HasFile
 				              but it was {Formatter.Format(actualTime)}
 				              """);
 		}
+
 		[Fact]
 		public async Task WhenLastAccessTimeDiffersWithinTolerance_WithLocalTime_ShouldSucceed()
 		{

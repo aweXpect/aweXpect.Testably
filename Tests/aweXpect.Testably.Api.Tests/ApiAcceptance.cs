@@ -14,7 +14,7 @@ public sealed class ApiAcceptance
 	{
 		string[] assemblyNames =
 		[
-			"aweXpect.Testably"
+			"aweXpect.Testably",
 		];
 
 		foreach (string assemblyName in assemblyNames)

@@ -6,6 +6,20 @@ namespace aweXpect.Testably.Tests;
 public class HasFileTests
 {
 	[Fact]
+	public async Task WhenFileExists_ShouldSucceed()
+	{
+		string path = "foo";
+		IFileSystem sut = new MockFileSystem();
+		// ReSharper disable once MethodHasAsyncOverload
+		sut.File.WriteAllText(path, "");
+
+		async Task Act()
+			=> await That(sut).HasFile(path);
+
+		await That(Act).DoesNotThrow();
+	}
+
+	[Fact]
 	public async Task WhenFileIsMissing_ShouldFail()
 	{
 		string path = "foo";
@@ -38,19 +52,5 @@ public class HasFileTests
 			              has file '{path}',
 			              but it was a directory
 			              """);
-	}
-
-	[Fact]
-	public async Task WhenFileExists_ShouldSucceed()
-	{
-		string path = "foo";
-		IFileSystem sut = new MockFileSystem();
-		// ReSharper disable once MethodHasAsyncOverload
-		sut.File.WriteAllText(path, "");
-
-		async Task Act()
-			=> await That(sut).HasFile(path);
-
-		await That(Act).DoesNotThrow();
 	}
 }

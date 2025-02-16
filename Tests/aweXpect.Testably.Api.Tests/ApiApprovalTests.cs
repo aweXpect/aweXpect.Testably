@@ -29,7 +29,10 @@ public sealed class ApiApprovalTests
 		{
 			foreach (string targetFramework in Helper.GetTargetFrameworks())
 			{
-				yield return new object[] { targetFramework };
+				yield return new object[]
+				{
+					targetFramework,
+				};
 			}
 		}
 

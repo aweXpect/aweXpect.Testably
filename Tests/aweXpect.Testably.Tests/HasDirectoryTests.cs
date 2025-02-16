@@ -6,6 +6,19 @@ namespace aweXpect.Testably.Tests;
 public class HasDirectoryTests
 {
 	[Fact]
+	public async Task WhenDirectoryExists_ShouldSucceed()
+	{
+		string path = "foo";
+		IFileSystem sut = new MockFileSystem();
+		sut.Directory.CreateDirectory(path);
+
+		async Task Act()
+			=> await That(sut).HasDirectory(path);
+
+		await That(Act).DoesNotThrow();
+	}
+
+	[Fact]
 	public async Task WhenDirectoryIsMissing_ShouldFail()
 	{
 		string path = "foo";
@@ -39,18 +52,5 @@ public class HasDirectoryTests
 			              has directory '{path}',
 			              but it was a file
 			              """);
-	}
-
-	[Fact]
-	public async Task WhenDirectoryExists_ShouldSucceed()
-	{
-		string path = "foo";
-		IFileSystem sut = new MockFileSystem();
-		sut.Directory.CreateDirectory(path);
-
-		async Task Act()
-			=> await That(sut).HasDirectory(path);
-
-		await That(Act).DoesNotThrow();
 	}
 }

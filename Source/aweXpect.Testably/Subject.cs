@@ -11,7 +11,7 @@ internal static class Subject
 		{
 			return thatIs;
 		}
-		
+
 		throw new NotSupportedException($"The type {that.GetType()} is not supported.");
 	}
 }

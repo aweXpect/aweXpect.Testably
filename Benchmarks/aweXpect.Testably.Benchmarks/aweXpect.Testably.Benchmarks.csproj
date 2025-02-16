@@ -10,12 +10,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="BenchmarkDotNet" />
+		<PackageReference Include="BenchmarkDotNet"/>
 		<PackageReference Include="Testably.Abstractions.Testing"/>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\Source\aweXpect.Testably\aweXpect.Testably.csproj" />
+		<ProjectReference Include="..\..\Source\aweXpect.Testably\aweXpect.Testably.csproj"/>
 	</ItemGroup>
 
 </Project>
