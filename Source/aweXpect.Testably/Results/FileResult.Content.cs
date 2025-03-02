@@ -210,10 +210,6 @@ public partial class FileResult<TFileSystem>
 
 		private static string ToString(string fullPath)
 			=> $"with the same content as '{fullPath}'";
-
-		/// <inheritdoc />
-		public override string ToString()
-			=> ToString(expectedPath);
 	}
 
 	private readonly struct HasContentNotSameAsConstraint(
@@ -251,10 +247,6 @@ public partial class FileResult<TFileSystem>
 
 		private static string ToString(string fullPath)
 			=> $"with not the same content as '{fullPath}'";
-
-		/// <inheritdoc />
-		public override string ToString()
-			=> ToString(expectedPath);
 	}
 
 	private readonly struct HasStringContentNotEqualToConstraint(
