@@ -21,6 +21,17 @@ public partial class FileResult<TFileSystem>
 		string path)
 	{
 		/// <summary>
+		///     …is equal to the <paramref name="expected" /> binary.
+		/// </summary>
+		public AndOrResult<TFileSystem, FileResult<TFileSystem>> EqualTo(
+			byte[] expected,
+			[CallerArgumentExpression("expected")] string doNotPopulateThisValue = "")
+			=> new(
+				expectationBuilder.And(" ").AddConstraint((it, grammar)
+					=> new HasBinaryContentConstraint(it, path, expected, doNotPopulateThisValue)),
+				subject);
+
+		/// <summary>
 		///     …is equal to the <paramref name="expected" /> string.
 		/// </summary>
 		public StringEqualityTypeResult<TFileSystem, FileResult<TFileSystem>> EqualTo(
@@ -34,6 +45,18 @@ public partial class FileResult<TFileSystem>
 		}
 
 		/// <summary>
+		///     …differs from the <paramref name="unexpected" /> binary.
+		/// </summary>
+		public AndOrResult<TFileSystem, FileResult<TFileSystem>> DifferentFrom(
+			byte[] unexpected,
+			[CallerArgumentExpression("unexpected")]
+			string doNotPopulateThisValue = "")
+			=> new(
+				expectationBuilder.And(" ").AddConstraint((it, grammar)
+					=> new HasBinaryContentDifferentFromConstraint(it, path, unexpected, doNotPopulateThisValue)),
+				subject);
+
+		/// <summary>
 		///     …differs from the <paramref name="unexpected" /> string.
 		/// </summary>
 		public StringEqualityTypeResult<TFileSystem, FileResult<TFileSystem>> DifferentFrom(
@@ -45,29 +68,6 @@ public partial class FileResult<TFileSystem>
 					=> new HasStringContentDifferentFromConstraint(it, path, options, unexpected)),
 				subject, options);
 		}
-
-		/// <summary>
-		///     …is equal to the <paramref name="expected" /> binary.
-		/// </summary>
-		public AndOrResult<TFileSystem, FileResult<TFileSystem>> EqualTo(
-			byte[] expected,
-			[CallerArgumentExpression("expected")] string doNotPopulateThisValue = "")
-			=> new(
-				expectationBuilder.And(" ").AddConstraint((it, grammar)
-					=> new HasBinaryContentConstraint(it, path, expected, doNotPopulateThisValue)),
-				subject);
-
-		/// <summary>
-		///     …differs from the <paramref name="unexpected" /> binary.
-		/// </summary>
-		public AndOrResult<TFileSystem, FileResult<TFileSystem>> DifferentFrom(
-			byte[] unexpected,
-			[CallerArgumentExpression("unexpected")]
-			string doNotPopulateThisValue = "")
-			=> new(
-				expectationBuilder.And(" ").AddConstraint((it, grammar)
-					=> new HasBinaryContentDifferentFromConstraint(it, path, unexpected, doNotPopulateThisValue)),
-				subject);
 	}
 
 	private readonly struct HasBinaryContentConstraint(
