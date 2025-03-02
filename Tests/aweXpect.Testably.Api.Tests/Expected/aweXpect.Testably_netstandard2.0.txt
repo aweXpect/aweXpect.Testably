@@ -37,10 +37,10 @@ namespace aweXpect.Testably.Results
         public class Content
         {
             public Content(aweXpect.Core.ExpectationBuilder expectationBuilder, aweXpect.Testably.Results.FileResult<TFileSystem> subject, string path) { }
-            public aweXpect.Results.StringEqualityTypeResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> DifferentFrom(string unexpected) { }
-            public aweXpect.Results.AndOrResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> DifferentFrom(byte[] unexpected, [System.Runtime.CompilerServices.CallerArgumentExpression("unexpected")] string doNotPopulateThisValue = "") { }
             public aweXpect.Results.StringEqualityTypeResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> EqualTo(string expected) { }
             public aweXpect.Results.AndOrResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> EqualTo(byte[] expected, [System.Runtime.CompilerServices.CallerArgumentExpression("expected")] string doNotPopulateThisValue = "") { }
+            public aweXpect.Results.StringEqualityTypeResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> NotEqualTo(string unexpected) { }
+            public aweXpect.Results.AndOrResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> NotEqualTo(byte[] unexpected, [System.Runtime.CompilerServices.CallerArgumentExpression("unexpected")] string doNotPopulateThisValue = "") { }
         }
     }
 }

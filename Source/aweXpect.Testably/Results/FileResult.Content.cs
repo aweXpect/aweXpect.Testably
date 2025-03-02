@@ -47,7 +47,7 @@ public partial class FileResult<TFileSystem>
 		/// <summary>
 		///     …differs from the <paramref name="unexpected" /> binary.
 		/// </summary>
-		public AndOrResult<TFileSystem, FileResult<TFileSystem>> DifferentFrom(
+		public AndOrResult<TFileSystem, FileResult<TFileSystem>> NotEqualTo(
 			byte[] unexpected,
 			[CallerArgumentExpression("unexpected")]
 			string doNotPopulateThisValue = "")
@@ -59,7 +59,7 @@ public partial class FileResult<TFileSystem>
 		/// <summary>
 		///     …differs from the <paramref name="unexpected" /> string.
 		/// </summary>
-		public StringEqualityTypeResult<TFileSystem, FileResult<TFileSystem>> DifferentFrom(
+		public StringEqualityTypeResult<TFileSystem, FileResult<TFileSystem>> NotEqualTo(
 			string unexpected)
 		{
 			StringEqualityOptions options = new();

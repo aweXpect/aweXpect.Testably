@@ -8,7 +8,7 @@ public partial class HasFile
 {
 	public sealed partial class WithContent
 	{
-		public class DifferentFrom
+		public class NotEqualTo
 		{
 			public sealed class BinaryTests
 			{
@@ -23,7 +23,7 @@ public partial class HasFile
 					sut.File.WriteAllBytes(path, content);
 
 					async Task Act()
-						=> await That(sut).HasFile(path).WithContent().DifferentFrom(expected);
+						=> await That(sut).HasFile(path).WithContent().NotEqualTo(expected);
 
 					await That(Act).DoesNotThrow();
 				}
@@ -38,7 +38,7 @@ public partial class HasFile
 					sut.File.WriteAllBytes(path, content);
 
 					async Task Act()
-						=> await That(sut).HasFile(path).WithContent().DifferentFrom(content);
+						=> await That(sut).HasFile(path).WithContent().NotEqualTo(content);
 
 					await That(Act).ThrowsException()
 						.WithMessage($"""
@@ -60,7 +60,7 @@ public partial class HasFile
 					sut.File.WriteAllText(path, "baz");
 
 					async Task Act()
-						=> await That(sut).HasFile(path).WithContent().DifferentFrom("bar");
+						=> await That(sut).HasFile(path).WithContent().NotEqualTo("bar");
 
 					await That(Act).DoesNotThrow();
 				}
@@ -75,7 +75,7 @@ public partial class HasFile
 					sut.File.WriteAllText(path, content);
 
 					async Task Act()
-						=> await That(sut).HasFile(path).WithContent().DifferentFrom(content);
+						=> await That(sut).HasFile(path).WithContent().NotEqualTo(content);
 
 					await That(Act).ThrowsException()
 						.WithMessage($"""
@@ -97,7 +97,7 @@ public partial class HasFile
 					sut.File.WriteAllText(path, "baz");
 
 					async Task Act()
-						=> await That(sut).HasFile(path).WithContent().DifferentFrom("b?").AsWildcard();
+						=> await That(sut).HasFile(path).WithContent().NotEqualTo("b?").AsWildcard();
 
 					await That(Act).DoesNotThrow();
 				}
@@ -111,7 +111,7 @@ public partial class HasFile
 					sut.File.WriteAllText(path, "bar");
 
 					async Task Act()
-						=> await That(sut).HasFile(path).WithContent().DifferentFrom("ba?").AsWildcard();
+						=> await That(sut).HasFile(path).WithContent().NotEqualTo("ba?").AsWildcard();
 
 					await That(Act).ThrowsException()
 						.WithMessage($"""
