@@ -1,4 +1,5 @@
 ﻿using System.IO.Abstractions;
+using System.Text;
 using Testably.Abstractions.Testing;
 
 namespace aweXpect.Testably.Tests;
@@ -9,7 +10,46 @@ public partial class HasFile
 	{
 		public class EqualTo
 		{
-			public sealed class Tests
+			public sealed class BinaryTests
+			{
+				[Fact]
+				public async Task WhenContentIsDifferent_ShouldFail()
+				{
+					byte[] content = Encoding.UTF8.GetBytes("baz");
+					byte[] expected = Encoding.UTF8.GetBytes("bar");
+					string path = "foo.txt";
+					IFileSystem sut = new MockFileSystem();
+					// ReSharper disable once MethodHasAsyncOverload
+					sut.File.WriteAllBytes(path, content);
+
+					async Task Act()
+						=> await That(sut).HasFile(path).WithContent().EqualTo(expected);
+
+					await That(Act).ThrowsException()
+						.WithMessage($"""
+						              Expected that sut
+						              has file '{path}' with content equal to expected,
+						              but it differed
+						              """);
+				}
+
+				[Fact]
+				public async Task WhenContentMatches_ShouldSucceed()
+				{
+					byte[] content = Encoding.UTF8.GetBytes("baz");
+					string path = "foo.txt";
+					IFileSystem sut = new MockFileSystem();
+					// ReSharper disable once MethodHasAsyncOverload
+					sut.File.WriteAllBytes(path, content);
+
+					async Task Act()
+						=> await That(sut).HasFile(path).WithContent().EqualTo(content);
+
+					await That(Act).DoesNotThrow();
+				}
+			}
+
+			public sealed class StringTests
 			{
 				[Fact]
 				public async Task WhenContentIsDifferent_ShouldFail()
