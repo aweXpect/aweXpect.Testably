@@ -28,9 +28,16 @@ namespace aweXpect.Testably.Results
     {
         public FileResult(aweXpect.Core.ExpectationBuilder expectationBuilder, aweXpect.Core.IThat<TFileSystem> subject, string path) { }
         public aweXpect.Results.StringEqualityTypeResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> WhoseContent(System.Action<aweXpect.Core.IThat<string?>> expectations) { }
+        public aweXpect.Testably.Results.FileResult<TFileSystem>.Content WithContent() { }
         public aweXpect.Results.StringEqualityTypeResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> WithContent(string expected) { }
         public aweXpect.Results.TimeToleranceResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> WithCreationTime(System.DateTime expected) { }
         public aweXpect.Results.TimeToleranceResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> WithLastAccessTime(System.DateTime expected) { }
         public aweXpect.Results.TimeToleranceResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> WithLastWriteTime(System.DateTime expected) { }
+        public class Content
+        {
+            public Content(aweXpect.Core.ExpectationBuilder expectationBuilder, aweXpect.Testably.Results.FileResult<TFileSystem> subject, string path) { }
+            public aweXpect.Results.StringEqualityTypeResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> DifferentFrom(string unexpected) { }
+            public aweXpect.Results.StringEqualityTypeResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> EqualTo(string expected) { }
+        }
     }
 }
