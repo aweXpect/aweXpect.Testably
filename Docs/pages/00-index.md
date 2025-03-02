@@ -20,6 +20,7 @@ For files, you can verify the file content:
 
 ```csharp
 await That(fileSystem).HasFile("my-file.txt").WithContent("file-content").IgnoringCase();
+await That(fileSystem).HasFile("my-file.txt").WithContent().DifferentTo("some unexpected content");
 ```
 
 For files, you can verify the creation time, last access time and last write time:

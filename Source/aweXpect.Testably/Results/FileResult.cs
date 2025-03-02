@@ -10,7 +10,7 @@ namespace aweXpect.Testably.Results;
 /// <summary>
 ///     The result for additional verifications on a file.
 /// </summary>
-public class FileResult<TFileSystem>(
+public partial class FileResult<TFileSystem>(
 	ExpectationBuilder expectationBuilder,
 	IThat<TFileSystem> subject,
 	string path)
@@ -18,6 +18,12 @@ public class FileResult<TFileSystem>(
 	where TFileSystem : IFileSystem
 {
 	private readonly ExpectationBuilder _expectationBuilder = expectationBuilder;
+
+	/// <summary>
+	///     Verifies that the file content…
+	/// </summary>
+	public Content WithContent()
+		=> new(_expectationBuilder, this, path);
 
 	/// <summary>
 	///     Verifies that the file has the <paramref name="expected" /> string content.
@@ -28,7 +34,7 @@ public class FileResult<TFileSystem>(
 		StringEqualityOptions options = new();
 		return new StringEqualityTypeResult<TFileSystem, FileResult<TFileSystem>>(
 			_expectationBuilder.And(" ").AddConstraint((it, grammar)
-				=> new HasContentConstraint(it, path, options, expected)),
+				=> new HasStringContentConstraint(it, grammar, path, options, expected)),
 			this, options);
 	}
 
@@ -152,30 +158,5 @@ public class FileResult<TFileSystem>(
 		/// <inheritdoc />
 		public override string ToString()
 			=> $"with {expectedString} equal to {Formatter.Format(expected)}{tolerance}";
-	}
-
-	private readonly struct HasContentConstraint(
-		string it,
-		string path,
-		StringEqualityOptions options,
-		string expected)
-		: IValueConstraint<TFileSystem>
-	{
-		/// <inheritdoc />
-		public ConstraintResult IsMetBy(TFileSystem actual)
-		{
-			string content = actual.File.ReadAllText(path);
-			if (options.AreConsideredEqual(content, expected))
-			{
-				return new ConstraintResult.Success<TFileSystem>(actual, ToString());
-			}
-
-			return new ConstraintResult.Failure<TFileSystem>(actual, ToString(),
-				$"{it} was {Formatter.Format(content)} which {new StringDifference(content, expected)}");
-		}
-
-		/// <inheritdoc />
-		public override string ToString()
-			=> $"with content {Formatter.Format(expected)}";
 	}
 }
