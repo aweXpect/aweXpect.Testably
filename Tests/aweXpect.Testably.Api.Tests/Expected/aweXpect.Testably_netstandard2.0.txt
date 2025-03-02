@@ -30,6 +30,7 @@ namespace aweXpect.Testably.Results
         public aweXpect.Results.StringEqualityTypeResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> WhoseContent(System.Action<aweXpect.Core.IThat<string?>> expectations) { }
         public aweXpect.Testably.Results.FileResult<TFileSystem>.Content WithContent() { }
         public aweXpect.Results.StringEqualityTypeResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> WithContent(string expected) { }
+        public aweXpect.Results.AndOrResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> WithContent(byte[] expected, [System.Runtime.CompilerServices.CallerArgumentExpression("expected")] string doNotPopulateThisValue = "") { }
         public aweXpect.Results.TimeToleranceResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> WithCreationTime(System.DateTime expected) { }
         public aweXpect.Results.TimeToleranceResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> WithLastAccessTime(System.DateTime expected) { }
         public aweXpect.Results.TimeToleranceResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> WithLastWriteTime(System.DateTime expected) { }
@@ -37,7 +38,9 @@ namespace aweXpect.Testably.Results
         {
             public Content(aweXpect.Core.ExpectationBuilder expectationBuilder, aweXpect.Testably.Results.FileResult<TFileSystem> subject, string path) { }
             public aweXpect.Results.StringEqualityTypeResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> DifferentFrom(string unexpected) { }
+            public aweXpect.Results.AndOrResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> DifferentFrom(byte[] unexpected, [System.Runtime.CompilerServices.CallerArgumentExpression("unexpected")] string doNotPopulateThisValue = "") { }
             public aweXpect.Results.StringEqualityTypeResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> EqualTo(string expected) { }
+            public aweXpect.Results.AndOrResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> EqualTo(byte[] expected, [System.Runtime.CompilerServices.CallerArgumentExpression("expected")] string doNotPopulateThisValue = "") { }
         }
     }
 }

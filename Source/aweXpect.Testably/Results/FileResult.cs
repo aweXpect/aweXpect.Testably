@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO.Abstractions;
+using System.Runtime.CompilerServices;
 using aweXpect.Core;
 using aweXpect.Core.Constraints;
 using aweXpect.Options;
@@ -37,6 +38,17 @@ public partial class FileResult<TFileSystem>(
 				=> new HasStringContentConstraint(it, grammar, path, options, expected)),
 			this, options);
 	}
+
+	/// <summary>
+	///     Verifies that the file has the <paramref name="expected" /> binary content.
+	/// </summary>
+	public AndOrResult<TFileSystem, FileResult<TFileSystem>> WithContent(
+		byte[] expected,
+		[CallerArgumentExpression("expected")] string doNotPopulateThisValue = "")
+		=> new(
+			_expectationBuilder.And(" ").AddConstraint((it, grammar)
+				=> new HasBinaryContentConstraint(it, path, expected, doNotPopulateThisValue)),
+			this);
 
 	/// <summary>
 	///     Verifies that the string content of the file satisfies the <paramref name="expectations" />.
