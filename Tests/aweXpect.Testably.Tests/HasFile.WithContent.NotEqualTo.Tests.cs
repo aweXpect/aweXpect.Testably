@@ -82,6 +82,9 @@ public partial class HasFile
 						              Expected that sut
 						              has file '{path}' with content different from "bar",
 						              but it did match
+						              
+						              File content:
+						              bar
 						              """);
 				}
 			}
@@ -118,6 +121,9 @@ public partial class HasFile
 						              Expected that sut
 						              has file '{path}' with content different from "ba?",
 						              but it did match
+						              
+						              File content:
+						              bar
 						              """);
 				}
 			}

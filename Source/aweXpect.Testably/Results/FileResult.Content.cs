@@ -28,7 +28,7 @@ public partial class FileResult<TFileSystem>
 			[CallerArgumentExpression("expected")] string doNotPopulateThisValue = "")
 			=> new(
 				expectationBuilder.And(" ").AddConstraint((it, grammar)
-					=> new HasBinaryContentConstraint(it, path, expected, doNotPopulateThisValue)),
+					=> new HasBinaryContentEqualToConstraint(it, path, expected, doNotPopulateThisValue)),
 				subject);
 
 		/// <summary>
@@ -39,8 +39,8 @@ public partial class FileResult<TFileSystem>
 		{
 			StringEqualityOptions options = new();
 			return new StringEqualityTypeResult<TFileSystem, FileResult<TFileSystem>>(
-				expectationBuilder.And(" ").AddConstraint((it, grammar)
-					=> new HasStringContentConstraint(it, grammar, path, options, expected)),
+				expectationBuilder.And(" ").AddConstraint((expectationBuilder, it, grammar)
+					=> new HasStringContentEqualToConstraint(expectationBuilder, it, grammar, path, options, expected)),
 				subject, options);
 		}
 
@@ -53,7 +53,7 @@ public partial class FileResult<TFileSystem>
 			string doNotPopulateThisValue = "")
 			=> new(
 				expectationBuilder.And(" ").AddConstraint((it, grammar)
-					=> new HasBinaryContentDifferentFromConstraint(it, path, unexpected, doNotPopulateThisValue)),
+					=> new HasBinaryContentNotEqualToConstraint(it, path, unexpected, doNotPopulateThisValue)),
 				subject);
 
 		/// <summary>
@@ -64,13 +64,39 @@ public partial class FileResult<TFileSystem>
 		{
 			StringEqualityOptions options = new();
 			return new StringEqualityTypeResult<TFileSystem, FileResult<TFileSystem>>(
-				expectationBuilder.And(" ").AddConstraint((it, grammar)
-					=> new HasStringContentDifferentFromConstraint(it, path, options, unexpected)),
+				expectationBuilder.And(" ").AddConstraint((expectationBuilder, it, grammar)
+					=> new HasStringContentNotEqualToConstraint(expectationBuilder, it, path, options, unexpected)),
+				subject, options);
+		}
+
+		/// <summary>
+		///     …has the same content as the file on the <paramref name="filePath" />.
+		/// </summary>
+		public StringEqualityTypeResult<TFileSystem, FileResult<TFileSystem>> SameAs(
+			string filePath)
+		{
+			StringEqualityOptions options = new();
+			return new StringEqualityTypeResult<TFileSystem, FileResult<TFileSystem>>(
+				expectationBuilder.And(" ").AddConstraint((expectationBuilder, it, grammar)
+					=> new HasContentSameAsConstraint(expectationBuilder, it, path, options, filePath)),
+				subject, options);
+		}
+
+		/// <summary>
+		///     …does not have the same content as the file on the <paramref name="filePath" />.
+		/// </summary>
+		public StringEqualityTypeResult<TFileSystem, FileResult<TFileSystem>> NotSameAs(
+			string filePath)
+		{
+			StringEqualityOptions options = new();
+			return new StringEqualityTypeResult<TFileSystem, FileResult<TFileSystem>>(
+				expectationBuilder.And(" ").AddConstraint((expectationBuilder, it, grammar)
+					=> new HasContentNotSameAsConstraint(expectationBuilder, it, path, options, filePath)),
 				subject, options);
 		}
 	}
 
-	private readonly struct HasBinaryContentConstraint(
+	private readonly struct HasBinaryContentEqualToConstraint(
 		string it,
 		string path,
 		byte[] expected,
@@ -95,7 +121,7 @@ public partial class FileResult<TFileSystem>
 			=> $"with content equal to {expectedExpression}";
 	}
 
-	private readonly struct HasBinaryContentDifferentFromConstraint(
+	private readonly struct HasBinaryContentNotEqualToConstraint(
 		string it,
 		string path,
 		byte[] expected,
@@ -120,7 +146,8 @@ public partial class FileResult<TFileSystem>
 			=> $"with content different from {expectedExpression}";
 	}
 
-	private readonly struct HasStringContentConstraint(
+	private readonly struct HasStringContentEqualToConstraint(
+		ExpectationBuilder expectationBuilder,
 		string it,
 		ExpectationGrammars grammar,
 		string path,
@@ -137,6 +164,8 @@ public partial class FileResult<TFileSystem>
 				return new ConstraintResult.Success<TFileSystem>(actual, ToString());
 			}
 
+			expectationBuilder.UpdateContexts(contexts => contexts
+				.Add(new ResultContext("File content", content)));
 			return new ConstraintResult.Failure<TFileSystem>(actual, ToString(),
 				options.GetExtendedFailure(it, content, expected));
 		}
@@ -146,7 +175,90 @@ public partial class FileResult<TFileSystem>
 			=> $"with content {options.GetExpectation(expected, grammar)}";
 	}
 
-	private readonly struct HasStringContentDifferentFromConstraint(
+	private readonly struct HasContentSameAsConstraint(
+		ExpectationBuilder expectationBuilder,
+		string it,
+		string path,
+		StringEqualityOptions options,
+		string expectedPath)
+		: IValueConstraint<TFileSystem>
+	{
+		/// <inheritdoc />
+		public ConstraintResult IsMetBy(TFileSystem actual)
+		{
+			string actualContent = actual.File.ReadAllText(path);
+			string fullPath = actual.Path.GetFullPath(expectedPath);
+			if (!actual.File.Exists(expectedPath))
+			{
+				expectationBuilder.UpdateContexts(contexts => contexts
+					.Add(new ResultContext("File content", actualContent)));
+				return new ConstraintResult.Failure<TFileSystem>(actual, ToString(fullPath),
+					$"{it} did not contain any file at '{fullPath}'");
+			}
+
+			string expectedContent = actual.File.ReadAllText(expectedPath);
+			if (options.AreConsideredEqual(actualContent, expectedContent))
+			{
+				return new ConstraintResult.Success<TFileSystem>(actual, ToString(fullPath));
+			}
+
+			expectationBuilder.UpdateContexts(contexts => contexts
+				.Add(new ResultContext("File content", actualContent)));
+			return new ConstraintResult.Failure<TFileSystem>(actual, ToString(fullPath),
+				options.GetExtendedFailure(it, actualContent, expectedContent));
+		}
+
+		private static string ToString(string fullPath)
+			=> $"with the same content as '{fullPath}'";
+
+		/// <inheritdoc />
+		public override string ToString()
+			=> ToString(expectedPath);
+	}
+
+	private readonly struct HasContentNotSameAsConstraint(
+		ExpectationBuilder expectationBuilder,
+		string it,
+		string path,
+		StringEqualityOptions options,
+		string expectedPath)
+		: IValueConstraint<TFileSystem>
+	{
+		/// <inheritdoc />
+		public ConstraintResult IsMetBy(TFileSystem actual)
+		{
+			string actualContent = actual.File.ReadAllText(path);
+			string fullPath = actual.Path.GetFullPath(expectedPath);
+			if (!actual.File.Exists(expectedPath))
+			{
+				expectationBuilder.UpdateContexts(contexts => contexts
+					.Add(new ResultContext("File content", actualContent)));
+				return new ConstraintResult.Failure<TFileSystem>(actual, ToString(fullPath),
+					$"{it} did not contain any file at '{fullPath}'");
+			}
+
+			string expectedContent = actual.File.ReadAllText(expectedPath);
+			if (!options.AreConsideredEqual(actualContent, expectedContent))
+			{
+				return new ConstraintResult.Success<TFileSystem>(actual, ToString(fullPath));
+			}
+
+			expectationBuilder.UpdateContexts(contexts => contexts
+				.Add(new ResultContext("File content", actualContent)));
+			return new ConstraintResult.Failure<TFileSystem>(actual, ToString(fullPath),
+				$"{it} did match");
+		}
+
+		private static string ToString(string fullPath)
+			=> $"with not the same content as '{fullPath}'";
+
+		/// <inheritdoc />
+		public override string ToString()
+			=> ToString(expectedPath);
+	}
+
+	private readonly struct HasStringContentNotEqualToConstraint(
+		ExpectationBuilder expectationBuilder,
 		string it,
 		string path,
 		StringEqualityOptions options,
@@ -162,7 +274,8 @@ public partial class FileResult<TFileSystem>
 				return new ConstraintResult.Success<TFileSystem>(actual, ToString());
 			}
 
-
+			expectationBuilder.UpdateContexts(contexts => contexts
+				.Add(new ResultContext("File content", content)));
 			return new ConstraintResult.Failure<TFileSystem>(actual, ToString(),
 				$"{it} did match");
 		}

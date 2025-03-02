@@ -1,5 +1,4 @@
 ﻿using System.IO.Abstractions;
-using System.Text;
 using Testably.Abstractions.Testing;
 
 namespace aweXpect.Testably.Tests;
@@ -8,70 +7,34 @@ public partial class HasFile
 {
 	public sealed partial class WithContent
 	{
-		public class EqualTo
+		public class SameAs
 		{
-			public sealed class BinaryTests
-			{
-				[Fact]
-				public async Task WhenContentIsDifferent_ShouldFail()
-				{
-					byte[] content = Encoding.UTF8.GetBytes("baz");
-					byte[] expected = Encoding.UTF8.GetBytes("bar");
-					string path = "foo.txt";
-					IFileSystem sut = new MockFileSystem();
-					// ReSharper disable once MethodHasAsyncOverload
-					sut.File.WriteAllBytes(path, content);
-
-					async Task Act()
-						=> await That(sut).HasFile(path).WithContent().EqualTo(expected);
-
-					await That(Act).ThrowsException()
-						.WithMessage($"""
-						              Expected that sut
-						              has file '{path}' with content equal to expected,
-						              but it differed
-						              """);
-				}
-
-				[Fact]
-				public async Task WhenContentMatches_ShouldSucceed()
-				{
-					byte[] content = Encoding.UTF8.GetBytes("baz");
-					string path = "foo.txt";
-					IFileSystem sut = new MockFileSystem();
-					// ReSharper disable once MethodHasAsyncOverload
-					sut.File.WriteAllBytes(path, content);
-
-					async Task Act()
-						=> await That(sut).HasFile(path).WithContent().EqualTo(content);
-
-					await That(Act).DoesNotThrow();
-				}
-			}
-
 			public sealed class StringTests
 			{
 				[Fact]
 				public async Task WhenContentIsDifferent_ShouldFail()
 				{
-					string path = "foo.txt";
 					IFileSystem sut = new MockFileSystem();
+					string path = "foo.txt";
+					string expectedPath = "bar.txt";
+					string fullExpectedPath = sut.Path.GetFullPath(expectedPath);
 					// ReSharper disable once MethodHasAsyncOverload
 					sut.File.WriteAllText(path, "baz");
+					sut.File.WriteAllText(expectedPath, "bar");
 
 					async Task Act()
-						=> await That(sut).HasFile(path).WithContent().EqualTo("bar");
+						=> await That(sut).HasFile(path).WithContent().SameAs(expectedPath);
 
 					await That(Act).ThrowsException()
 						.WithMessage($"""
 						              Expected that sut
-						              has file '{path}' with content equal to "bar",
+						              has file '{path}' with the same content as '{fullExpectedPath}',
 						              but it was "baz" which differs at index 2:
 						                   ↓ (actual)
 						                "baz"
 						                "bar"
 						                   ↑ (expected)
-						              
+
 						              File content:
 						              baz
 						              """);
@@ -80,14 +43,16 @@ public partial class HasFile
 				[Fact]
 				public async Task WhenContentMatches_ShouldSucceed()
 				{
-					string path = "foo.txt";
-					string content = "bar";
 					IFileSystem sut = new MockFileSystem();
+					string path = "foo.txt";
+					string expectedPath = "bar.txt";
+					string content = "bar";
 					// ReSharper disable once MethodHasAsyncOverload
 					sut.File.WriteAllText(path, content);
+					sut.File.WriteAllText(expectedPath, content);
 
 					async Task Act()
-						=> await That(sut).HasFile(path).WithContent().EqualTo(content);
+						=> await That(sut).HasFile(path).WithContent().SameAs(expectedPath);
 
 					await That(Act).DoesNotThrow();
 				}
@@ -98,24 +63,27 @@ public partial class HasFile
 				[Fact]
 				public async Task WhenContentIsDifferent_ShouldFail()
 				{
-					string path = "foo.txt";
 					IFileSystem sut = new MockFileSystem();
+					string path = "foo.txt";
+					string expectedPath = "bar.txt";
+					string fullExpectedPath = sut.Path.GetFullPath(expectedPath);
 					// ReSharper disable once MethodHasAsyncOverload
 					sut.File.WriteAllText(path, "baz");
+					sut.File.WriteAllText(expectedPath, "b?");
 
 					async Task Act()
-						=> await That(sut).HasFile(path).WithContent().EqualTo("b?").AsWildcard();
+						=> await That(sut).HasFile(path).WithContent().SameAs(expectedPath).AsWildcard();
 
 					await That(Act).ThrowsException()
 						.WithMessage($"""
 						              Expected that sut
-						              has file '{path}' with content matching "b?",
+						              has file '{path}' with the same content as '{fullExpectedPath}',
 						              but it did not match:
 						                ↓ (actual)
 						                "baz"
 						                "b?"
 						                ↑ (wildcard pattern)
-						              
+
 						              File content:
 						              baz
 						              """);
@@ -124,13 +92,15 @@ public partial class HasFile
 				[Fact]
 				public async Task WhenContentMatches_ShouldSucceed()
 				{
-					string path = "foo.txt";
 					IFileSystem sut = new MockFileSystem();
+					string path = "foo.txt";
+					string expectedPath = "bar.txt";
 					// ReSharper disable once MethodHasAsyncOverload
 					sut.File.WriteAllText(path, "bar");
+					sut.File.WriteAllText(expectedPath, "ba?");
 
 					async Task Act()
-						=> await That(sut).HasFile(path).WithContent().EqualTo("ba?").AsWildcard();
+						=> await That(sut).HasFile(path).WithContent().SameAs(expectedPath).AsWildcard();
 
 					await That(Act).DoesNotThrow();
 				}
