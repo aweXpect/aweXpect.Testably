@@ -41,6 +41,8 @@ namespace aweXpect.Testably.Results
             public aweXpect.Results.AndOrResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> EqualTo(byte[] expected, [System.Runtime.CompilerServices.CallerArgumentExpression("expected")] string doNotPopulateThisValue = "") { }
             public aweXpect.Results.StringEqualityTypeResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> NotEqualTo(string unexpected) { }
             public aweXpect.Results.AndOrResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> NotEqualTo(byte[] unexpected, [System.Runtime.CompilerServices.CallerArgumentExpression("unexpected")] string doNotPopulateThisValue = "") { }
+            public aweXpect.Results.StringEqualityTypeResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> NotSameAs(string filePath) { }
+            public aweXpect.Results.StringEqualityTypeResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> SameAs(string filePath) { }
         }
     }
 }

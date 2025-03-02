@@ -34,8 +34,8 @@ public partial class FileResult<TFileSystem>(
 	{
 		StringEqualityOptions options = new();
 		return new StringEqualityTypeResult<TFileSystem, FileResult<TFileSystem>>(
-			_expectationBuilder.And(" ").AddConstraint((it, grammar)
-				=> new HasStringContentConstraint(it, grammar, path, options, expected)),
+			_expectationBuilder.And(" ").AddConstraint((expectationBuilder, it, grammar)
+				=> new HasStringContentEqualToConstraint(expectationBuilder, it, grammar, path, options, expected)),
 			this, options);
 	}
 
@@ -47,7 +47,7 @@ public partial class FileResult<TFileSystem>(
 		[CallerArgumentExpression("expected")] string doNotPopulateThisValue = "")
 		=> new(
 			_expectationBuilder.And(" ").AddConstraint((it, grammar)
-				=> new HasBinaryContentConstraint(it, path, expected, doNotPopulateThisValue)),
+				=> new HasBinaryContentEqualToConstraint(it, path, expected, doNotPopulateThisValue)),
 			this);
 
 	/// <summary>
