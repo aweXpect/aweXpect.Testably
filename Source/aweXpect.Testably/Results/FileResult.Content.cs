@@ -12,6 +12,8 @@ namespace aweXpect.Testably.Results;
 /// </summary>
 public partial class FileResult<TFileSystem>
 {
+	private const string FileContentContext = "File content";
+
 	/// <summary>
 	///     The result for additional verifications on a file content.
 	/// </summary>
@@ -165,7 +167,7 @@ public partial class FileResult<TFileSystem>
 			}
 
 			expectationBuilder.UpdateContexts(contexts => contexts
-				.Add(new ResultContext("File content", content)));
+				.Add(new ResultContext(FileContentContext, content)));
 			return new ConstraintResult.Failure<TFileSystem>(actual, ToString(),
 				options.GetExtendedFailure(it, content, expected));
 		}
@@ -191,7 +193,7 @@ public partial class FileResult<TFileSystem>
 			if (!actual.File.Exists(expectedPath))
 			{
 				expectationBuilder.UpdateContexts(contexts => contexts
-					.Add(new ResultContext("File content", actualContent)));
+					.Add(new ResultContext(FileContentContext, actualContent)));
 				return new ConstraintResult.Failure<TFileSystem>(actual, ToString(fullPath),
 					$"{it} did not contain any file at '{fullPath}'");
 			}
@@ -203,7 +205,7 @@ public partial class FileResult<TFileSystem>
 			}
 
 			expectationBuilder.UpdateContexts(contexts => contexts
-				.Add(new ResultContext("File content", actualContent)));
+				.Add(new ResultContext(FileContentContext, actualContent)));
 			return new ConstraintResult.Failure<TFileSystem>(actual, ToString(fullPath),
 				options.GetExtendedFailure(it, actualContent, expectedContent));
 		}
@@ -228,7 +230,7 @@ public partial class FileResult<TFileSystem>
 			if (!actual.File.Exists(expectedPath))
 			{
 				expectationBuilder.UpdateContexts(contexts => contexts
-					.Add(new ResultContext("File content", actualContent)));
+					.Add(new ResultContext(FileContentContext, actualContent)));
 				return new ConstraintResult.Failure<TFileSystem>(actual, ToString(fullPath),
 					$"{it} did not contain any file at '{fullPath}'");
 			}
@@ -240,7 +242,7 @@ public partial class FileResult<TFileSystem>
 			}
 
 			expectationBuilder.UpdateContexts(contexts => contexts
-				.Add(new ResultContext("File content", actualContent)));
+				.Add(new ResultContext(FileContentContext, actualContent)));
 			return new ConstraintResult.Failure<TFileSystem>(actual, ToString(fullPath),
 				$"{it} did match");
 		}
@@ -267,7 +269,7 @@ public partial class FileResult<TFileSystem>
 			}
 
 			expectationBuilder.UpdateContexts(contexts => contexts
-				.Add(new ResultContext("File content", content)));
+				.Add(new ResultContext(FileContentContext, content)));
 			return new ConstraintResult.Failure<TFileSystem>(actual, ToString(),
 				$"{it} did match");
 		}
