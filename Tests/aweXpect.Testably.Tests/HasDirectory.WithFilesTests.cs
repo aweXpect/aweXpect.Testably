@@ -26,7 +26,7 @@ public partial class HasDirectory
 				              Expected that sut
 				              has directory '{path}' whose files have Content equal to "SOME-CONTENT" for all items,
 				              but not all were
-				              
+
 				              File-Content:
 				              some-content
 				              """);
@@ -45,6 +45,45 @@ public partial class HasDirectory
 					.WithFiles(f => f.All().ComplyWith(x => x.HasContent("SOME-CONTENT").IgnoringCase()));
 
 			await That(Act).DoesNotThrow();
+		}
+
+		[Fact]
+		public async Task AllHaveContent_WhenNegated_WhenContentIsDifferent_ShouldSucceed()
+		{
+			string path = "foo";
+			IFileSystem sut = new MockFileSystem();
+			sut.Initialize().WithSubdirectory(path).Initialized(d => d
+				.WithFile("bar.txt").Which(f => f.HasStringContent("some-content")));
+
+			async Task Act()
+				=> await That(sut).HasDirectory(path)
+					.WithFiles(files => files.All().ComplyWith(file
+						=> file.DoesNotComplyWith(it => it.HasContent("SOME-CONTENT"))));
+
+			await That(Act).DoesNotThrow();
+		}
+
+		[Fact]
+		public async Task AllHaveContent_WhenNegated_WhenContentMatches_ShouldFail()
+		{
+			string path = "foo";
+			IFileSystem sut = new MockFileSystem();
+			sut.Initialize().WithSubdirectory(path).Initialized(d => d
+				.WithFile("bar.txt").Which(f => f.HasStringContent("some-content")));
+
+			async Task Act()
+				=> await That(sut).HasDirectory(path)
+					.WithFiles(f => f.All().ComplyWith(x => x.DoesNotComplyWith(it => it.HasContent("some-content"))));
+
+			await That(Act).ThrowsException()
+				.WithMessage($"""
+				              Expected that sut
+				              has directory '{path}' whose files have Content not equal to "some-content" for all items,
+				              but not all were
+
+				              File-Content:
+				              some-content
+				              """);
 		}
 
 		[Fact]

@@ -29,7 +29,7 @@ public partial class HasFile
 					                "baz"
 					                "bar"
 					                   ↑ (expected)
-					              
+
 					              File content:
 					              baz
 					              """);
@@ -73,7 +73,7 @@ public partial class HasFile
 					                "baz"
 					                "b?"
 					                ↑ (wildcard pattern)
-					              
+
 					              File content:
 					              baz
 					              """);
