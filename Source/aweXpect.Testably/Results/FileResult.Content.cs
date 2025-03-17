@@ -232,13 +232,13 @@ public partial class FileResult<TFileSystem>
 		}
 
 		protected override void AppendNormalExpectation(StringBuilder stringBuilder, string? indentation = null)
-			=> stringBuilder.Append("with the same content as '").Append(_fullPath).Append("'");
+			=> stringBuilder.Append("with the same content as '").Append(_fullPath).Append('\'');
 
 		protected override void AppendNormalResult(StringBuilder stringBuilder, string? indentation = null)
 		{
 			if (!_isExpectedFound)
 			{
-				stringBuilder.Append(it).Append(" did not contain any file at '").Append(_fullPath).Append("'");
+				stringBuilder.Append(it).Append(" did not contain any file at '").Append(_fullPath).Append('\'');
 			}
 			else
 			{
@@ -247,13 +247,13 @@ public partial class FileResult<TFileSystem>
 		}
 
 		protected override void AppendNegatedExpectation(StringBuilder stringBuilder, string? indentation = null)
-			=> stringBuilder.Append("with not the same content as '").Append(_fullPath).Append("'");
+			=> stringBuilder.Append("with not the same content as '").Append(_fullPath).Append('\'');
 
 		protected override void AppendNegatedResult(StringBuilder stringBuilder, string? indentation = null)
 		{
 			if (!_isExpectedFound)
 			{
-				stringBuilder.Append(it).Append(" did not contain any file at '").Append(_fullPath).Append("'");
+				stringBuilder.Append(it).Append(" did not contain any file at '").Append(_fullPath).Append('\'');
 			}
 			else
 			{

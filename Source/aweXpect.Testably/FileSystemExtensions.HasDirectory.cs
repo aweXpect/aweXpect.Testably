@@ -34,7 +34,7 @@ public static partial class FileSystemExtensions
 		}
 
 		protected override void AppendNormalExpectation(StringBuilder stringBuilder, string? indentation = null)
-			=> stringBuilder.Append("has directory '").Append(path).Append("'");
+			=> stringBuilder.Append("has directory '").Append(path).Append('\'');
 
 		protected override void AppendNormalResult(StringBuilder stringBuilder, string? indentation = null)
 		{
@@ -49,7 +49,7 @@ public static partial class FileSystemExtensions
 		}
 
 		protected override void AppendNegatedExpectation(StringBuilder stringBuilder, string? indentation = null)
-			=> stringBuilder.Append("does not have directory '").Append(path).Append("'");
+			=> stringBuilder.Append("does not have directory '").Append(path).Append('\'');
 
 		protected override void AppendNegatedResult(StringBuilder stringBuilder, string? indentation = null)
 			=> stringBuilder.Append(it).Append(" had");
