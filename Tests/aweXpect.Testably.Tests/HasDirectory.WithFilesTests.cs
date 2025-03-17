@@ -18,13 +18,17 @@ public partial class HasDirectory
 
 			async Task Act()
 				=> await That(sut).HasDirectory(path)
-					.WithFiles(f => f.All().ComplyWith(x => x.HasContent("SOME-CONTENT")));
+					.WithFiles(files => files.All().ComplyWith(file
+						=> file.HasContent("SOME-CONTENT")));
 
 			await That(Act).ThrowsException()
 				.WithMessage($"""
 				              Expected that sut
 				              has directory '{path}' whose files have Content equal to "SOME-CONTENT" for all items,
 				              but not all were
+				              
+				              File-Content:
+				              some-content
 				              """);
 		}
 
