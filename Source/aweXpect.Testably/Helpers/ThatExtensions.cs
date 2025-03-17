@@ -2,12 +2,12 @@
 using System.Diagnostics.CodeAnalysis;
 using aweXpect.Core;
 
-namespace aweXpect.Testably;
+namespace aweXpect.Testably.Helpers;
 
 internal static class ThatExtensions
 {
 	[ExcludeFromCodeCoverage]
-	public static IExpectThat<T> ThatIs<T>(this IThat<T> subject)
+	public static IExpectThat<T> Get<T>(this IThat<T> subject)
 	{
 		if (subject is IExpectThat<T> expectThat)
 		{

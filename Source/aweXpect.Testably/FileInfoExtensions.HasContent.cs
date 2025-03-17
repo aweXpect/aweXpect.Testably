@@ -5,6 +5,7 @@ using aweXpect.Core;
 using aweXpect.Core.Constraints;
 using aweXpect.Options;
 using aweXpect.Results;
+using aweXpect.Testably.Helpers;
 
 namespace aweXpect.Testably;
 
@@ -19,7 +20,7 @@ public static partial class FileInfoExtensions
 	{
 		StringEqualityOptions options = new();
 		return new StringEqualityTypeResult<IFileInfo, IThat<IFileInfo>>(
-			source.ThatIs().ExpectationBuilder.AddConstraint((expectationBuilder, it, grammars)
+			source.Get().ExpectationBuilder.AddConstraint((expectationBuilder, it, grammars)
 				=> new HasContentValueConstraint(
 					expectationBuilder, it, grammars, expected, options)),
 			source,

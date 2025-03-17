@@ -2,6 +2,7 @@
 using System.Text;
 using aweXpect.Core;
 using aweXpect.Core.Constraints;
+using aweXpect.Testably.Helpers;
 using aweXpect.Testably.Results;
 
 namespace aweXpect.Testably;
@@ -14,7 +15,7 @@ public static partial class FileSystemExtensions
 	public static DirectoryResult<TFileSystem> HasDirectory<TFileSystem>(
 		this IThat<TFileSystem> subject, string path)
 		where TFileSystem : IFileSystem
-		=> new(subject.ThatIs().ExpectationBuilder.AddConstraint((it, grammars)
+		=> new(subject.Get().ExpectationBuilder.AddConstraint((it, grammars)
 				=> new HasDirectoryConstraint<TFileSystem>(it, grammars, path)),
 			subject,
 			path);
