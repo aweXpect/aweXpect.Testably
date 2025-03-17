@@ -21,8 +21,8 @@
 	<PropertyGroup>
 		<LangVersion>latest</LangVersion>
 		<Nullable>enable</Nullable>
-		<NoWarn>$(NoWarn);1701;1702;NU5104</NoWarn>
-		<WarningsNotAsErrors>CS1591</WarningsNotAsErrors>
+		<NoWarn>$(NoWarn);1701;1702</NoWarn>
+		<WarningsNotAsErrors>CS1591;NU5104</WarningsNotAsErrors>
 		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 	</PropertyGroup>
 
