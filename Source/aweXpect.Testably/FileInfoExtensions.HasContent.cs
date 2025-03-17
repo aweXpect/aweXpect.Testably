@@ -41,47 +41,48 @@ public static partial class FileInfoExtensions
 		public ConstraintResult IsMetBy(IFileInfo actual)
 		{
 			Actual = actual;
+			if (!Actual.Exists)
+			{
+				Outcome = Outcome.Failure;
+				return this;
+			}
+
 			using StreamReader reader = actual.OpenText();
 			_fileContent = reader.ReadToEnd();
 			Outcome = options.AreConsideredEqual(_fileContent, expected) ? Outcome.Success : Outcome.Failure;
-			if (Outcome == Outcome.Failure)
-			{
-				expectationBuilder.UpdateContexts(contexts => contexts
-					.Add(new ResultContext("File-Content", _fileContent)));
-			}
-
+			expectationBuilder.UpdateContexts(contexts => contexts
+				.Add(new ResultContext("File-Content", _fileContent)));
 			return this;
 		}
 
 		protected override void AppendNormalExpectation(StringBuilder stringBuilder, string? indentation = null)
 		{
-			ExpectationGrammars equalityGrammars = Grammars;
-			if (Grammars.HasFlag(ExpectationGrammars.Active))
-			{
-				stringBuilder.Append("with Content ");
-				equalityGrammars &= ~ExpectationGrammars.Active;
-			}
-			else if (Grammars.HasFlag(ExpectationGrammars.Nested))
-			{
-				stringBuilder.Append("Content is ");
-			}
-			else
+			if (Grammars.HasFlag(ExpectationGrammars.Plural))
 			{
 				stringBuilder.Append("have Content ");
 			}
+			else
+			{
+				stringBuilder.Append("has Content ");
+			}
 
-			stringBuilder.Append(options.GetExpectation(expected, equalityGrammars));
-			stringBuilder.Append(options);
-		}
-
-		protected override void AppendNegatedExpectation(StringBuilder stringBuilder, string? indentation = null)
-		{
-			stringBuilder.Append("has Content ");
 			stringBuilder.Append(options.GetExpectation(expected, Grammars));
 			stringBuilder.Append(options);
 		}
 
+		protected override void AppendNegatedExpectation(StringBuilder stringBuilder, string? indentation = null)
+			=> AppendNormalExpectation(stringBuilder, indentation);
+
 		public override void AppendResult(StringBuilder stringBuilder, string? indentation = null)
-			=> stringBuilder.Append(options.GetExtendedFailure(it, Grammars, _fileContent, expected));
+		{
+			if (Actual?.Exists != true)
+			{
+				stringBuilder.Append(it).Append(" did not exist");
+			}
+			else
+			{
+				stringBuilder.Append(options.GetExtendedFailure(it, Grammars, _fileContent, expected));
+			}
+		}
 	}
 }
