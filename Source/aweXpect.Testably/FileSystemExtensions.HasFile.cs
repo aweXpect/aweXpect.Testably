@@ -1,6 +1,8 @@
 ﻿using System.IO.Abstractions;
+using System.Text;
 using aweXpect.Core;
 using aweXpect.Core.Constraints;
+using aweXpect.Testably.Helpers;
 using aweXpect.Testably.Results;
 
 namespace aweXpect.Testably;
@@ -13,35 +15,43 @@ public static partial class FileSystemExtensions
 	public static FileResult<TFileSystem> HasFile<TFileSystem>(
 		this IThat<TFileSystem> subject, string path)
 		where TFileSystem : IFileSystem
-		=> new(subject.ThatIs().ExpectationBuilder.AddConstraint((it, grammar)
-				=> new HasFileConstraint<TFileSystem>(it, path)),
+		=> new(subject.Get().ExpectationBuilder.AddConstraint((it, grammars)
+				=> new HasFileConstraint<TFileSystem>(it, grammars, path)),
 			subject,
 			path);
 
-	private readonly struct HasFileConstraint<TFileSystem>(string it, string path)
-		: IValueConstraint<TFileSystem>
+	private sealed class HasFileConstraint<TFileSystem>(string it, ExpectationGrammars grammars, string path)
+		: ConstraintResult.WithValue<TFileSystem>(grammars),
+			IValueConstraint<TFileSystem>
 		where TFileSystem : IFileSystem
 	{
 		/// <inheritdoc />
 		public ConstraintResult IsMetBy(TFileSystem actual)
 		{
-			if (actual.File.Exists(path))
-			{
-				return new ConstraintResult.Success<TFileSystem>(actual, ToString());
-			}
-
-			if (actual.Directory.Exists(path))
-			{
-				return new ConstraintResult.Failure<TFileSystem>(actual, ToString(),
-					$"{it} was a directory");
-			}
-
-			return new ConstraintResult.Failure<TFileSystem>(actual, ToString(),
-				$"{it} did not exist");
+			Actual = actual;
+			Outcome = actual.File.Exists(path) ? Outcome.Success : Outcome.Failure;
+			return this;
 		}
 
-		/// <inheritdoc />
-		public override string ToString()
-			=> $"has file '{path}'";
+		protected override void AppendNormalExpectation(StringBuilder stringBuilder, string? indentation = null)
+			=> stringBuilder.Append("has file '").Append(path).Append('\'');
+
+		protected override void AppendNormalResult(StringBuilder stringBuilder, string? indentation = null)
+		{
+			if (Actual?.Directory.Exists(path) == true)
+			{
+				stringBuilder.Append(it).Append(" was a directory");
+			}
+			else
+			{
+				stringBuilder.Append(it).Append(" did not exist");
+			}
+		}
+
+		protected override void AppendNegatedExpectation(StringBuilder stringBuilder, string? indentation = null)
+			=> stringBuilder.Append("does not have file '").Append(path).Append('\'');
+
+		protected override void AppendNegatedResult(StringBuilder stringBuilder, string? indentation = null)
+			=> stringBuilder.Append(it).Append(" had");
 	}
 }

@@ -30,8 +30,9 @@ public class DirectoryResult<TFileSystem>(
 				MemberAccessor<TFileSystem, IEnumerable<IFileInfo>>.FromFunc(
 					f => f.Directory.EnumerateFiles(path).Select(p => f.FileInfo.New(p)), "files "),
 				(member, expectation) => expectation.Append(" whose ").Append(member))
-			.AddExpectations(e
-				=> expectations(new ThatSubject<IEnumerable<IFileInfo>>(e)), ExpectationGrammars.Nested);
+			.AddExpectations(
+				e => expectations(new ThatSubject<IEnumerable<IFileInfo>>(e)),
+				grammars => grammars | ExpectationGrammars.Nested | ExpectationGrammars.Plural);
 		return this;
 	}
 
@@ -46,8 +47,9 @@ public class DirectoryResult<TFileSystem>(
 				MemberAccessor<TFileSystem, IEnumerable<IDirectoryInfo>>.FromFunc(
 					f => f.Directory.EnumerateDirectories(path).Select(p => f.DirectoryInfo.New(p)), "subdirectories "),
 				(member, expectation) => expectation.Append(" whose ").Append(member))
-			.AddExpectations(e
-				=> expectations(new ThatSubject<IEnumerable<IDirectoryInfo>>(e)), ExpectationGrammars.Nested);
+			.AddExpectations(
+				e => expectations(new ThatSubject<IEnumerable<IDirectoryInfo>>(e)),
+				grammars => grammars | ExpectationGrammars.Nested | ExpectationGrammars.Plural);
 		return this;
 	}
 }

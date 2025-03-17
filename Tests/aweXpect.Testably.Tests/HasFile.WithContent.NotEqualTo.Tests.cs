@@ -80,7 +80,7 @@ public partial class HasFile
 					await That(Act).ThrowsException()
 						.WithMessage($"""
 						              Expected that sut
-						              has file '{path}' with content different from "bar",
+						              has file '{path}' with content not equal to "bar",
 						              but it did match
 						              
 						              File content:
@@ -119,7 +119,7 @@ public partial class HasFile
 					await That(Act).ThrowsException()
 						.WithMessage($"""
 						              Expected that sut
-						              has file '{path}' with content different from "ba?",
+						              has file '{path}' with content not matching "ba?",
 						              but it did match
 						              
 						              File content:

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO.Abstractions;
 using System.Runtime.CompilerServices;
+using System.Text;
 using aweXpect.Core;
 using aweXpect.Core.Constraints;
 using aweXpect.Options;
@@ -46,8 +47,8 @@ public partial class FileResult<TFileSystem>(
 		byte[] expected,
 		[CallerArgumentExpression("expected")] string doNotPopulateThisValue = "")
 		=> new(
-			_expectationBuilder.And(" ").AddConstraint((it, grammar)
-				=> new HasBinaryContentEqualToConstraint(it, path, expected, doNotPopulateThisValue)),
+			_expectationBuilder.And(" ").AddConstraint((it, grammars)
+				=> new HasBinaryContentEqualToConstraint(it, grammars, path, expected, doNotPopulateThisValue)),
 			this);
 
 	/// <summary>
@@ -78,8 +79,8 @@ public partial class FileResult<TFileSystem>(
 	{
 		TimeTolerance tolerance = new();
 		return new TimeToleranceResult<TFileSystem, FileResult<TFileSystem>>(
-			_expectationBuilder.And(" ").AddConstraint((it, grammar)
-				=> new HasTimeConstraint(it, path,
+			_expectationBuilder.And(" ").AddConstraint((it, grammars)
+				=> new HasTimeConstraint(it, grammars, path,
 					f => f.CreationTime, tolerance,
 					expected, "creation time")),
 			this, tolerance);
@@ -97,8 +98,8 @@ public partial class FileResult<TFileSystem>(
 	{
 		TimeTolerance tolerance = new();
 		return new TimeToleranceResult<TFileSystem, FileResult<TFileSystem>>(
-			_expectationBuilder.And(" ").AddConstraint((it, grammar)
-				=> new HasTimeConstraint(it, path,
+			_expectationBuilder.And(" ").AddConstraint((it, grammars)
+				=> new HasTimeConstraint(it, grammars, path,
 					f => f.LastAccessTime, tolerance,
 					expected, "last access time")),
 			this, tolerance);
@@ -116,44 +117,65 @@ public partial class FileResult<TFileSystem>(
 	{
 		TimeTolerance tolerance = new();
 		return new TimeToleranceResult<TFileSystem, FileResult<TFileSystem>>(
-			_expectationBuilder.And(" ").AddConstraint((it, grammar)
-				=> new HasTimeConstraint(it, path,
+			_expectationBuilder.And(" ").AddConstraint((it, grammars)
+				=> new HasTimeConstraint(it, grammars, path,
 					f => f.LastWriteTime, tolerance,
 					expected, "last write time")),
 			this, tolerance);
 	}
 
-	private readonly struct HasTimeConstraint(
+	private sealed class HasTimeConstraint(
 		string it,
+		ExpectationGrammars grammars,
 		string path,
 		Func<IFileInfo, DateTime> timeAccessor,
 		TimeTolerance tolerance,
 		DateTime expected,
 		string expectedString)
-		: IValueConstraint<TFileSystem>
+		: ConstraintResult.WithValue<TFileSystem>(grammars),
+			IValueConstraint<TFileSystem>
 	{
+		private DateTime _actualTime;
+
 		/// <inheritdoc />
 		public ConstraintResult IsMetBy(TFileSystem actual)
 		{
 			IFileInfo? fileInfo = actual.FileInfo.New(path);
-			DateTime time = timeAccessor(fileInfo);
-			if (expected.Kind == DateTimeKind.Utc && time.Kind == DateTimeKind.Local)
+			_actualTime = timeAccessor(fileInfo);
+			if (expected.Kind == DateTimeKind.Utc && _actualTime.Kind == DateTimeKind.Local)
 			{
-				time = time.ToUniversalTime();
+				_actualTime = _actualTime.ToUniversalTime();
 			}
 
-			if (expected.Kind == DateTimeKind.Local && time.Kind == DateTimeKind.Utc)
+			if (expected.Kind == DateTimeKind.Local && _actualTime.Kind == DateTimeKind.Utc)
 			{
-				time = time.ToLocalTime();
+				_actualTime = _actualTime.ToLocalTime();
 			}
 
-			if (IsWithinTolerance(tolerance.Tolerance, time - expected))
-			{
-				return new ConstraintResult.Success<TFileSystem>(actual, ToString());
-			}
+			Outcome = IsWithinTolerance(tolerance.Tolerance, _actualTime - expected)
+				? Outcome.Success
+				: Outcome.Failure;
+			return this;
+		}
 
-			return new ConstraintResult.Failure<TFileSystem>(actual, ToString(),
-				$"{it} was {Formatter.Format(time)}");
+		protected override void AppendNormalExpectation(StringBuilder stringBuilder, string? indentation = null)
+		{
+			stringBuilder.Append("with ").Append(expectedString).Append(" equal to ");
+			Formatter.Format(stringBuilder, expected);
+			stringBuilder.Append(tolerance);
+		}
+
+		protected override void AppendNegatedExpectation(StringBuilder stringBuilder, string? indentation = null)
+		{
+			stringBuilder.Append("with ").Append(expectedString).Append(" not equal to ");
+			Formatter.Format(stringBuilder, expected);
+			stringBuilder.Append(tolerance);
+		}
+
+		public override void AppendResult(StringBuilder stringBuilder, string? indentation = null)
+		{
+			stringBuilder.Append(it).Append(" was ");
+			Formatter.Format(stringBuilder, _actualTime);
 		}
 
 		private static bool IsWithinTolerance(TimeSpan? tolerance, TimeSpan difference)
@@ -166,9 +188,5 @@ public partial class FileResult<TFileSystem>(
 			return difference <= tolerance.Value &&
 			       difference >= tolerance.Value.Negate();
 		}
-
-		/// <inheritdoc />
-		public override string ToString()
-			=> $"with {expectedString} equal to {Formatter.Format(expected)}{tolerance}";
 	}
 }
