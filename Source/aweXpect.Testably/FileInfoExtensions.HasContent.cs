@@ -70,10 +70,7 @@ public static partial class FileInfoExtensions
 			stringBuilder.Append(options);
 		}
 
-		protected override void AppendNegatedExpectation(StringBuilder stringBuilder, string? indentation = null)
-			=> AppendNormalExpectation(stringBuilder, indentation);
-
-		public override void AppendResult(StringBuilder stringBuilder, string? indentation = null)
+		protected override void AppendNormalResult(StringBuilder stringBuilder, string? indentation = null)
 		{
 			if (Actual?.Exists != true)
 			{
@@ -84,5 +81,11 @@ public static partial class FileInfoExtensions
 				stringBuilder.Append(options.GetExtendedFailure(it, Grammars, _fileContent, expected));
 			}
 		}
+
+		protected override void AppendNegatedExpectation(StringBuilder stringBuilder, string? indentation = null)
+			=> AppendNormalExpectation(stringBuilder, indentation);
+
+		protected override void AppendNegatedResult(StringBuilder stringBuilder, string? indentation = null)
+			=> AppendNormalResult(stringBuilder, indentation);
 	}
 }

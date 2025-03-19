@@ -165,6 +165,12 @@ public partial class FileResult<TFileSystem>(
 			stringBuilder.Append(tolerance);
 		}
 
+		protected override void AppendNormalResult(StringBuilder stringBuilder, string? indentation = null)
+		{
+			stringBuilder.Append(it).Append(" was ");
+			Formatter.Format(stringBuilder, _actualTime);
+		}
+
 		protected override void AppendNegatedExpectation(StringBuilder stringBuilder, string? indentation = null)
 		{
 			stringBuilder.Append("with ").Append(expectedString).Append(" not equal to ");
@@ -172,11 +178,8 @@ public partial class FileResult<TFileSystem>(
 			stringBuilder.Append(tolerance);
 		}
 
-		public override void AppendResult(StringBuilder stringBuilder, string? indentation = null)
-		{
-			stringBuilder.Append(it).Append(" was ");
-			Formatter.Format(stringBuilder, _actualTime);
-		}
+		protected override void AppendNegatedResult(StringBuilder stringBuilder, string? indentation = null)
+			=> AppendNormalResult(stringBuilder, indentation);
 
 		private static bool IsWithinTolerance(TimeSpan? tolerance, TimeSpan difference)
 		{
