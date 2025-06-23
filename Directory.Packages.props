@@ -3,8 +3,8 @@
 		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageVersion Include="aweXpect" Version="2.8.0"/>
-		<PackageVersion Include="aweXpect.Core" Version="2.4.1"/>
+		<PackageVersion Include="aweXpect" Version="2.17.0"/>
+		<PackageVersion Include="aweXpect.Core" Version="2.11.1"/>
 		<PackageVersion Include="Testably.Abstractions.Interface" Version="9.0.0"/>
 		<PackageVersion Include="Testably.Abstractions.Testing" Version="4.0.0"/>
 	</ItemGroup>
@@ -25,9 +25,9 @@
 		<PackageVersion Include="BenchmarkDotNet" Version="0.14.0"/>
 		<PackageVersion Include="NUnit" Version="4.3.2"/>
 		<PackageVersion Include="NUnit3TestAdapter" Version="5.0.0"/>
-		<PackageVersion Include="NUnit.Analyzers" Version="4.7.0"/>
+		<PackageVersion Include="NUnit.Analyzers" Version="4.9.2"/>
 		<PackageVersion Include="xunit" Version="2.9.3"/>
-		<PackageVersion Include="xunit.runner.visualstudio" Version="3.0.2"/>
+		<PackageVersion Include="xunit.runner.visualstudio" Version="3.1.1"/>
 		<PackageVersion Include="AutoFixture.Xunit2" Version="4.18.1"/>
 		<PackageVersion Include="coverlet.collector" Version="6.0.4"/>
 		<PackageVersion Include="PublicApiGenerator" Version="11.4.6"/>
