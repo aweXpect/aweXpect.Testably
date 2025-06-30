@@ -1,4 +1,5 @@
-﻿using System.IO.Abstractions;
+﻿using System.IO;
+using System.IO.Abstractions;
 using Testably.Abstractions.Testing;
 
 namespace aweXpect.Testably.Tests;
@@ -24,7 +25,13 @@ public partial class HasDirectory
 				              Expected that sut
 				              has directory '{path}' whose subdirectories has exactly 3 items,
 				              but found only 2
-				              """);
+				              
+				              Collection:
+				              [
+				                *,
+				                *
+				              ]
+				              """).AsWildcard();
 		}
 
 		[Fact]
