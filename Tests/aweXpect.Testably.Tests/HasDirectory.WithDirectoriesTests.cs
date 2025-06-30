@@ -28,10 +28,10 @@ public partial class HasDirectory
 				              
 				              Collection:
 				              [
-				                foo{Path.DirectorySeparatorChar}directory2,
-				                foo{Path.DirectorySeparatorChar}directory1
+				                *,
+				                *
 				              ]
-				              """);
+				              """).AsWildcard();
 		}
 
 		[Fact]
