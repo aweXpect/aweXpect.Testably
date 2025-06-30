@@ -1,4 +1,5 @@
-﻿using System.IO.Abstractions;
+﻿using System.IO;
+using System.IO.Abstractions;
 using Testably.Abstractions.Testing;
 
 namespace aweXpect.Testably.Tests;
@@ -27,8 +28,8 @@ public partial class HasDirectory
 				              
 				              Collection:
 				              [
-				                foo\directory2,
-				                foo\directory1
+				                foo{Path.DirectorySeparatorChar}directory2,
+				                foo{Path.DirectorySeparatorChar}directory1
 				              ]
 				              """);
 		}
