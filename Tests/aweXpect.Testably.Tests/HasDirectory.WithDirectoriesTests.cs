@@ -24,6 +24,12 @@ public partial class HasDirectory
 				              Expected that sut
 				              has directory '{path}' whose subdirectories has exactly 3 items,
 				              but found only 2
+				              
+				              Collection:
+				              [
+				                foo\directory2,
+				                foo\directory1
+				              ]
 				              """);
 		}
 
