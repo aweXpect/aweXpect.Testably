@@ -3,9 +3,9 @@ using Testably.Abstractions.Testing;
 
 namespace aweXpect.Testably.Tests;
 
-public class FileInfo
+public sealed class FileInfo
 {
-	public class HasContent
+	public sealed class HasContent
 	{
 		public sealed class Tests
 		{
