@@ -8,6 +8,10 @@ namespace aweXpect.Testably
     }
     public static class FileSystemExtensions
     {
+        public static aweXpect.Results.AndOrResult<TFileSystem, aweXpect.Core.IThat<TFileSystem>> DoesNotHaveDirectory<TFileSystem>(this aweXpect.Core.IThat<TFileSystem> subject, string path)
+            where TFileSystem : System.IO.Abstractions.IFileSystem { }
+        public static aweXpect.Results.AndOrResult<TFileSystem, aweXpect.Core.IThat<TFileSystem>> DoesNotHaveFile<TFileSystem>(this aweXpect.Core.IThat<TFileSystem> subject, string path)
+            where TFileSystem : System.IO.Abstractions.IFileSystem { }
         public static aweXpect.Testably.Results.DirectoryResult<TFileSystem> HasDirectory<TFileSystem>(this aweXpect.Core.IThat<TFileSystem> subject, string path)
             where TFileSystem : System.IO.Abstractions.IFileSystem { }
         public static aweXpect.Testably.Results.FileResult<TFileSystem> HasFile<TFileSystem>(this aweXpect.Core.IThat<TFileSystem> subject, string path)
