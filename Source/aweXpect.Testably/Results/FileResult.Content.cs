@@ -232,7 +232,7 @@ public partial class FileResult<TFileSystem>
 		}
 
 		protected override void AppendNormalExpectation(StringBuilder stringBuilder, string? indentation = null)
-			=> stringBuilder.Append("with the same content as '").Append(_fullPath).Append('\'');
+			=> stringBuilder.Append("with the same content as file '").Append(_fullPath).Append('\'');
 
 		protected override void AppendNormalResult(StringBuilder stringBuilder, string? indentation = null)
 		{
@@ -247,7 +247,7 @@ public partial class FileResult<TFileSystem>
 		}
 
 		protected override void AppendNegatedExpectation(StringBuilder stringBuilder, string? indentation = null)
-			=> stringBuilder.Append("with not the same content as '").Append(_fullPath).Append('\'');
+			=> stringBuilder.Append("with not the same content as file '").Append(_fullPath).Append('\'');
 
 		protected override void AppendNegatedResult(StringBuilder stringBuilder, string? indentation = null)
 		{
