@@ -28,10 +28,10 @@ public sealed partial class FileSystem
 					await That(Act).ThrowsException()
 						.WithMessage($"""
 						              Expected that sut
-						              has directory '{path}' whose files have Content equal to "SOME-CONTENT" for all items,
+						              has directory '{path}' whose files have content equal to "SOME-CONTENT" for all items,
 						              but not all were
 
-						              File-Content:
+						              File content:
 						              some-content
 						              """);
 				}
@@ -83,10 +83,10 @@ public sealed partial class FileSystem
 					await That(Act).ThrowsException()
 						.WithMessage($"""
 						              Expected that sut
-						              has directory '{path}' whose files have Content not equal to "some-content" for all items,
+						              has directory '{path}' whose files have content not equal to "some-content" for all items,
 						              but not all were
 
-						              File-Content:
+						              File content:
 						              some-content
 						              """);
 				}
