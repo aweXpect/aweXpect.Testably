@@ -4,6 +4,7 @@ namespace aweXpect.Testably
 {
     public static class FileInfoExtensions
     {
+        public static aweXpect.Testably.Results.FileInfoContentResult HasContent(this aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo> source) { }
         public static aweXpect.Results.StringEqualityTypeResult<System.IO.Abstractions.IFileInfo, aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo>> HasContent(this aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo> source, string? expected) { }
     }
     public static class FileSystemExtensions
@@ -26,6 +27,16 @@ namespace aweXpect.Testably.Results
         public DirectoryResult(aweXpect.Core.ExpectationBuilder expectationBuilder, aweXpect.Core.IThat<TFileSystem> subject, string path) { }
         public aweXpect.Testably.Results.DirectoryResult<TFileSystem> WithDirectories(System.Action<aweXpect.Core.IThat<System.Collections.Generic.IEnumerable<System.IO.Abstractions.IDirectoryInfo>>> expectations) { }
         public aweXpect.Testably.Results.DirectoryResult<TFileSystem> WithFiles(System.Action<aweXpect.Core.IThat<System.Collections.Generic.IEnumerable<System.IO.Abstractions.IFileInfo>>> expectations) { }
+    }
+    public class FileInfoContentResult
+    {
+        public FileInfoContentResult(aweXpect.Core.ExpectationBuilder expectationBuilder, aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo> subject) { }
+        public aweXpect.Results.StringEqualityTypeResult<System.IO.Abstractions.IFileInfo, aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo>> EqualTo(string expected) { }
+        public aweXpect.Results.AndOrResult<System.IO.Abstractions.IFileInfo, aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo>> EqualTo(byte[] expected, [System.Runtime.CompilerServices.CallerArgumentExpression("expected")] string doNotPopulateThisValue = "") { }
+        public aweXpect.Results.StringEqualityTypeResult<System.IO.Abstractions.IFileInfo, aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo>> NotEqualTo(string unexpected) { }
+        public aweXpect.Results.AndOrResult<System.IO.Abstractions.IFileInfo, aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo>> NotEqualTo(byte[] unexpected, [System.Runtime.CompilerServices.CallerArgumentExpression("unexpected")] string doNotPopulateThisValue = "") { }
+        public aweXpect.Results.StringEqualityTypeResult<System.IO.Abstractions.IFileInfo, aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo>> NotSameAs(string filePath) { }
+        public aweXpect.Results.StringEqualityTypeResult<System.IO.Abstractions.IFileInfo, aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo>> SameAs(string filePath) { }
     }
     public class FileResult<TFileSystem> : aweXpect.Results.AndOrResult<System.IO.Abstractions.IFileSystem, aweXpect.Core.IThat<TFileSystem>>
         where TFileSystem : System.IO.Abstractions.IFileSystem

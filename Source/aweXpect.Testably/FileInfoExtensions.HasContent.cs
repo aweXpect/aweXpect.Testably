@@ -6,6 +6,7 @@ using aweXpect.Core.Constraints;
 using aweXpect.Options;
 using aweXpect.Results;
 using aweXpect.Testably.Helpers;
+using aweXpect.Testably.Results;
 
 namespace aweXpect.Testably;
 
@@ -26,6 +27,12 @@ public static partial class FileInfoExtensions
 			source,
 			options);
 	}
+
+	/// <summary>
+	///     Verifies that the content of the <see cref="IFileInfo" />…
+	/// </summary>
+	public static FileInfoContentResult HasContent(this IThat<IFileInfo> source)
+		=> new(source.Get().ExpectationBuilder, source);
 
 	private sealed class HasContentValueConstraint(
 		ExpectationBuilder expectationBuilder,

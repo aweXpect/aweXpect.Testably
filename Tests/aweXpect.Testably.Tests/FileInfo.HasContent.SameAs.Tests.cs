@@ -3,9 +3,9 @@ using Testably.Abstractions.Testing;
 
 namespace aweXpect.Testably.Tests;
 
-public sealed partial class HasFile
+public sealed partial class FileInfo
 {
-	public sealed partial class WithContent
+	public sealed partial class HasContent
 	{
 		public class SameAs
 		{
@@ -14,21 +14,22 @@ public sealed partial class HasFile
 				[Fact]
 				public async Task WhenContentIsDifferent_ShouldFail()
 				{
-					IFileSystem sut = new MockFileSystem();
+					IFileSystem fileSystem = new MockFileSystem();
 					string path = "foo.txt";
 					string expectedPath = "bar.txt";
-					string fullExpectedPath = sut.Path.GetFullPath(expectedPath);
+					string fullExpectedPath = fileSystem.Path.GetFullPath(expectedPath);
 					// ReSharper disable once MethodHasAsyncOverload
-					sut.File.WriteAllText(path, "baz");
-					sut.File.WriteAllText(expectedPath, "bar");
+					fileSystem.File.WriteAllText(path, "baz");
+					fileSystem.File.WriteAllText(expectedPath, "bar");
+					IFileInfo fileInfo = fileSystem.FileInfo.New("foo.txt");
 
 					async Task Act()
-						=> await That(sut).HasFile(path).WithContent().SameAs(expectedPath);
+						=> await That(fileInfo).HasContent().SameAs(expectedPath);
 
 					await That(Act).ThrowsException()
 						.WithMessage($"""
-						              Expected that sut
-						              has file '{path}' with the same content as '{fullExpectedPath}',
+						              Expected that fileInfo
+						              has the same content as file '{fullExpectedPath}',
 						              but it was "baz" which differs at index 2:
 						                   ↓ (actual)
 						                "baz"
@@ -43,16 +44,17 @@ public sealed partial class HasFile
 				[Fact]
 				public async Task WhenContentMatches_ShouldSucceed()
 				{
-					IFileSystem sut = new MockFileSystem();
+					IFileSystem fileSystem = new MockFileSystem();
 					string path = "foo.txt";
 					string expectedPath = "bar.txt";
 					string content = "bar";
 					// ReSharper disable once MethodHasAsyncOverload
-					sut.File.WriteAllText(path, content);
-					sut.File.WriteAllText(expectedPath, content);
+					fileSystem.File.WriteAllText(path, content);
+					fileSystem.File.WriteAllText(expectedPath, content);
+					IFileInfo fileInfo = fileSystem.FileInfo.New("foo.txt");
 
 					async Task Act()
-						=> await That(sut).HasFile(path).WithContent().SameAs(expectedPath);
+						=> await That(fileInfo).HasContent().SameAs(expectedPath);
 
 					await That(Act).DoesNotThrow();
 				}
@@ -63,21 +65,22 @@ public sealed partial class HasFile
 				[Fact]
 				public async Task WhenContentIsDifferent_ShouldFail()
 				{
-					IFileSystem sut = new MockFileSystem();
+					IFileSystem fileSystem = new MockFileSystem();
 					string path = "foo.txt";
 					string expectedPath = "bar.txt";
-					string fullExpectedPath = sut.Path.GetFullPath(expectedPath);
+					string fullExpectedPath = fileSystem.Path.GetFullPath(expectedPath);
 					// ReSharper disable once MethodHasAsyncOverload
-					sut.File.WriteAllText(path, "baz");
-					sut.File.WriteAllText(expectedPath, "b?");
+					fileSystem.File.WriteAllText(path, "baz");
+					fileSystem.File.WriteAllText(expectedPath, "b?");
+					IFileInfo fileInfo = fileSystem.FileInfo.New("foo.txt");
 
 					async Task Act()
-						=> await That(sut).HasFile(path).WithContent().SameAs(expectedPath).AsWildcard();
+						=> await That(fileInfo).HasContent().SameAs(expectedPath).AsWildcard();
 
 					await That(Act).ThrowsException()
 						.WithMessage($"""
-						              Expected that sut
-						              has file '{path}' with the same content as '{fullExpectedPath}',
+						              Expected that fileInfo
+						              has the same content as file '{fullExpectedPath}',
 						              but it did not match:
 						                ↓ (actual)
 						                "baz"
@@ -92,15 +95,16 @@ public sealed partial class HasFile
 				[Fact]
 				public async Task WhenContentMatches_ShouldSucceed()
 				{
-					IFileSystem sut = new MockFileSystem();
+					IFileSystem fileSystem = new MockFileSystem();
 					string path = "foo.txt";
 					string expectedPath = "bar.txt";
 					// ReSharper disable once MethodHasAsyncOverload
-					sut.File.WriteAllText(path, "bar");
-					sut.File.WriteAllText(expectedPath, "ba?");
+					fileSystem.File.WriteAllText(path, "bar");
+					fileSystem.File.WriteAllText(expectedPath, "ba?");
+					IFileInfo fileInfo = fileSystem.FileInfo.New("foo.txt");
 
 					async Task Act()
-						=> await That(sut).HasFile(path).WithContent().SameAs(expectedPath).AsWildcard();
+						=> await That(fileInfo).HasContent().SameAs(expectedPath).AsWildcard();
 
 					await That(Act).DoesNotThrow();
 				}
