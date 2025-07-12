@@ -118,8 +118,6 @@ public static partial class FileInfoExtensions
 		: ConstraintResult.WithValue<IFileInfo>(grammars),
 			IValueConstraint<IFileInfo>
 	{
-		private byte[]? _fileContent;
-
 		public ConstraintResult IsMetBy(IFileInfo actual)
 		{
 			Actual = actual;
@@ -129,8 +127,8 @@ public static partial class FileInfoExtensions
 				return this;
 			}
 
-			_fileContent = actual.FileSystem.File.ReadAllBytes(actual.FullName);
-			Outcome = _fileContent.SequenceEqual(expected) ? Outcome.Success : Outcome.Failure;
+			byte[] content = actual.FileSystem.File.ReadAllBytes(actual.FullName);
+			Outcome = content.SequenceEqual(expected) ? Outcome.Success : Outcome.Failure;
 			return this;
 		}
 
@@ -162,11 +160,11 @@ public static partial class FileInfoExtensions
 		{
 			if (Grammars.HasFlag(ExpectationGrammars.Plural))
 			{
-				stringBuilder.Append("have Content different from ").Append(expectedExpression);
+				stringBuilder.Append("have content different from ").Append(expectedExpression);
 			}
 			else
 			{
-				stringBuilder.Append("has Content different from ").Append(expectedExpression);
+				stringBuilder.Append("has content different from ").Append(expectedExpression);
 			}
 		}
 
