@@ -6,6 +6,7 @@ namespace aweXpect.Testably
     {
         public static aweXpect.Testably.Results.FileInfoContentResult HasContent(this aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo> source) { }
         public static aweXpect.Results.StringEqualityTypeResult<System.IO.Abstractions.IFileInfo, aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo>> HasContent(this aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo> source, string? expected) { }
+        public static aweXpect.Results.AndOrResult<System.IO.Abstractions.IFileInfo, aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo>> HasContent(this aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo> source, byte[] expected, [System.Runtime.CompilerServices.CallerArgumentExpression("expected")] string doNotPopulateThisValue = "") { }
     }
     public static class FileSystemExtensions
     {
