@@ -4,7 +4,7 @@ using Testably.Abstractions.Testing;
 
 namespace aweXpect.Testably.Tests;
 
-public partial class HasFile
+public sealed partial class HasFile
 {
 	public sealed partial class WithContent
 	{

@@ -2,6 +2,7 @@
 using System.Text;
 using aweXpect.Core;
 using aweXpect.Core.Constraints;
+using aweXpect.Results;
 using aweXpect.Testably.Helpers;
 using aweXpect.Testably.Results;
 
@@ -19,6 +20,16 @@ public static partial class FileSystemExtensions
 				=> new HasFileConstraint<TFileSystem>(it, grammars, path)),
 			subject,
 			path);
+
+	/// <summary>
+	///     Verifies that the <see cref="IFileSystem" /> does not have a file at the given <paramref name="path" />.
+	/// </summary>
+	public static AndOrResult<TFileSystem, IThat<TFileSystem>> DoesNotHaveFile<TFileSystem>(
+		this IThat<TFileSystem> subject, string path)
+		where TFileSystem : IFileSystem
+		=> new(subject.Get().ExpectationBuilder.AddConstraint((it, grammars)
+				=> new HasFileConstraint<TFileSystem>(it, grammars, path).Invert()),
+			subject);
 
 	private sealed class HasFileConstraint<TFileSystem>(string it, ExpectationGrammars grammars, string path)
 		: ConstraintResult.WithValue<TFileSystem>(grammars),
@@ -52,6 +63,6 @@ public static partial class FileSystemExtensions
 			=> stringBuilder.Append("does not have file '").Append(path).Append('\'');
 
 		protected override void AppendNegatedResult(StringBuilder stringBuilder, string? indentation = null)
-			=> stringBuilder.Append(it).Append(" had");
+			=> stringBuilder.Append(it).Append(" did");
 	}
 }
