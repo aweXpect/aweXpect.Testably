@@ -15,6 +15,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+  	<PackageReference Include="aweXpect.Core" VersionOverride="2.16.0" />
 		<ProjectReference Include="..\..\Source\aweXpect.Testably\aweXpect.Testably.csproj"/>
 	</ItemGroup>
 
