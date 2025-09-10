@@ -71,7 +71,7 @@ public static partial class FileInfoExtensions
 			}
 
 			using StreamReader reader = actual.OpenText();
-			_fileContent = reader.ReadToEnd();
+			_fileContent = await reader.ReadToEndAsync();
 			Outcome = await options.AreConsideredEqual(_fileContent, expected) ? Outcome.Success : Outcome.Failure;
 			expectationBuilder.UpdateContexts(contexts => contexts
 				.Add(new ResultContext(Constants.FileContentContext, _fileContent)));
