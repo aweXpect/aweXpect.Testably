@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using aweXpect.Core;
 using aweXpect.Core.Constraints;
 using aweXpect.Options;
@@ -148,15 +150,15 @@ public class FileInfoContentResult(
 		StringEqualityOptions options,
 		string expected)
 		: ConstraintResult.WithValue<IFileInfo>(grammars),
-			IValueConstraint<IFileInfo>
+			IAsyncConstraint<IFileInfo>
 	{
 		private string? _fileContent;
 
 		/// <inheritdoc />
-		public ConstraintResult IsMetBy(IFileInfo actual)
+		public async Task<ConstraintResult> IsMetBy(IFileInfo actual, CancellationToken cancellationToken)
 		{
 			_fileContent = actual.FileSystem.File.ReadAllText(actual.FullName);
-			Outcome = options.AreConsideredEqual(_fileContent, expected) ? Outcome.Success : Outcome.Failure;
+			Outcome = await options.AreConsideredEqual(_fileContent, expected) ? Outcome.Success : Outcome.Failure;
 			if (Outcome == Outcome.Failure)
 			{
 				expectationBuilder.UpdateContexts(contexts => contexts
@@ -186,7 +188,7 @@ public class FileInfoContentResult(
 		StringEqualityOptions options,
 		string expectedPath)
 		: ConstraintResult.WithValue<IFileInfo>(grammars),
-			IValueConstraint<IFileInfo>
+			IAsyncConstraint<IFileInfo>
 	{
 		private string? _expectedContent;
 		private string? _fileContent;
@@ -194,7 +196,7 @@ public class FileInfoContentResult(
 		private bool _isExpectedFound;
 
 		/// <inheritdoc />
-		public ConstraintResult IsMetBy(IFileInfo actual)
+		public async Task<ConstraintResult> IsMetBy(IFileInfo actual, CancellationToken cancellationToken)
 		{
 			_fileContent = actual.FileSystem.File.ReadAllText(actual.FullName);
 			_fullPath = actual.FileSystem.Path.GetFullPath(expectedPath);
@@ -208,7 +210,7 @@ public class FileInfoContentResult(
 			}
 
 			_expectedContent = actual.FileSystem.File.ReadAllText(expectedPath);
-			Outcome = options.AreConsideredEqual(_fileContent, _expectedContent) ? Outcome.Success : Outcome.Failure;
+			Outcome = await options.AreConsideredEqual(_fileContent, _expectedContent) ? Outcome.Success : Outcome.Failure;
 			if (Outcome == Outcome.Failure)
 			{
 				expectationBuilder.UpdateContexts(contexts => contexts
