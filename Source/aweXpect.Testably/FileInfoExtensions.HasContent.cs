@@ -3,6 +3,8 @@ using System.IO.Abstractions;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using aweXpect.Core;
 using aweXpect.Core.Constraints;
 using aweXpect.Options;
@@ -55,11 +57,11 @@ public static partial class FileInfoExtensions
 		string? expected,
 		StringEqualityOptions options)
 		: ConstraintResult.WithValue<IFileInfo>(grammars),
-			IValueConstraint<IFileInfo>
+			IAsyncConstraint<IFileInfo>
 	{
 		private string? _fileContent;
 
-		public ConstraintResult IsMetBy(IFileInfo actual)
+		public async Task<ConstraintResult> IsMetBy(IFileInfo actual, CancellationToken cancellationToken)
 		{
 			Actual = actual;
 			if (!Actual.Exists)
@@ -69,8 +71,8 @@ public static partial class FileInfoExtensions
 			}
 
 			using StreamReader reader = actual.OpenText();
-			_fileContent = reader.ReadToEnd();
-			Outcome = options.AreConsideredEqual(_fileContent, expected) ? Outcome.Success : Outcome.Failure;
+			_fileContent = await reader.ReadToEndAsync();
+			Outcome = await options.AreConsideredEqual(_fileContent, expected) ? Outcome.Success : Outcome.Failure;
 			expectationBuilder.UpdateContexts(contexts => contexts
 				.Add(new ResultContext(Constants.FileContentContext, _fileContent)));
 			return this;
