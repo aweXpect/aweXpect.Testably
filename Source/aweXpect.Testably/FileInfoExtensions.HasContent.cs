@@ -74,7 +74,7 @@ public static partial class FileInfoExtensions
 			_fileContent = await reader.ReadToEndAsync();
 			Outcome = await options.AreConsideredEqual(_fileContent, expected) ? Outcome.Success : Outcome.Failure;
 			expectationBuilder.UpdateContexts(contexts => contexts
-				.Add(new ResultContext(Constants.FileContentContext, _fileContent)));
+				.Add(new ResultContext.Fixed(Constants.FileContentContext, _fileContent)));
 			return this;
 		}
 
