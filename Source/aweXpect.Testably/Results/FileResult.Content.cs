@@ -173,7 +173,7 @@ public partial class FileResult<TFileSystem>
 			if (Outcome == Outcome.Failure)
 			{
 				expectationBuilder.UpdateContexts(contexts => contexts
-					.Add(new ResultContext(Constants.FileContentContext, _fileContent)));
+					.Add(new ResultContext.Fixed(Constants.FileContentContext, _fileContent)));
 			}
 
 			return this;
@@ -216,7 +216,7 @@ public partial class FileResult<TFileSystem>
 			if (!_isExpectedFound)
 			{
 				expectationBuilder.UpdateContexts(contexts => contexts
-					.Add(new ResultContext(Constants.FileContentContext, _fileContent)));
+					.Add(new ResultContext.Fixed(Constants.FileContentContext, _fileContent)));
 				Outcome = Outcome.Failure;
 				return this;
 			}
@@ -226,7 +226,7 @@ public partial class FileResult<TFileSystem>
 			if (Outcome == Outcome.Failure)
 			{
 				expectationBuilder.UpdateContexts(contexts => contexts
-					.Add(new ResultContext(Constants.FileContentContext, _fileContent)));
+					.Add(new ResultContext.Fixed(Constants.FileContentContext, _fileContent)));
 			}
 
 			return this;

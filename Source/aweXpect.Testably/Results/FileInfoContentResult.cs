@@ -162,7 +162,7 @@ public class FileInfoContentResult(
 			if (Outcome == Outcome.Failure)
 			{
 				expectationBuilder.UpdateContexts(contexts => contexts
-					.Add(new ResultContext(FileContentContext, _fileContent)));
+					.Add(new ResultContext.Fixed(FileContentContext, _fileContent)));
 			}
 
 			return this;
@@ -204,7 +204,7 @@ public class FileInfoContentResult(
 			if (!_isExpectedFound)
 			{
 				expectationBuilder.UpdateContexts(contexts => contexts
-					.Add(new ResultContext(FileContentContext, _fileContent)));
+					.Add(new ResultContext.Fixed(FileContentContext, _fileContent)));
 				Outcome = Outcome.Failure;
 				return this;
 			}
@@ -214,7 +214,7 @@ public class FileInfoContentResult(
 			if (Outcome == Outcome.Failure)
 			{
 				expectationBuilder.UpdateContexts(contexts => contexts
-					.Add(new ResultContext(FileContentContext, _fileContent)));
+					.Add(new ResultContext.Fixed(FileContentContext, _fileContent)));
 			}
 
 			return this;
