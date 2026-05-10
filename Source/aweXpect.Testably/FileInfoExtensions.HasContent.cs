@@ -74,7 +74,9 @@ public static partial class FileInfoExtensions
 #if NET8_0_OR_GREATER
 			_fileContent = await reader.ReadToEndAsync(cancellationToken);
 #else
+			cancellationToken.ThrowIfCancellationRequested();
 			_fileContent = await reader.ReadToEndAsync();
+			cancellationToken.ThrowIfCancellationRequested();
 #endif
 			Outcome = await options.AreConsideredEqual(_fileContent, expected) ? Outcome.Success : Outcome.Failure;
 			expectationBuilder.UpdateContexts(contexts => contexts
