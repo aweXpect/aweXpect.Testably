@@ -1,0 +1,64 @@
+[assembly: System.Reflection.AssemblyMetadata("RepositoryUrl", "https://github.com/Testably/aweXpect.Testably.git")]
+[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v10.0", FrameworkDisplayName=".NET 10.0")]
+namespace aweXpect.Testably
+{
+    public static class FileInfoExtensions
+    {
+        public static aweXpect.Testably.Results.FileInfoContentResult HasContent(this aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo> source) { }
+        public static aweXpect.Results.StringEqualityTypeResult<System.IO.Abstractions.IFileInfo, aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo>> HasContent(this aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo> source, string? expected) { }
+        public static aweXpect.Results.AndOrResult<System.IO.Abstractions.IFileInfo, aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo>> HasContent(this aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo> source, byte[] expected, [System.Runtime.CompilerServices.CallerArgumentExpression("expected")] string doNotPopulateThisValue = "") { }
+    }
+    public static class FileSystemExtensions
+    {
+        public static aweXpect.Results.AndOrResult<TFileSystem, aweXpect.Core.IThat<TFileSystem>> DoesNotHaveDirectory<TFileSystem>(this aweXpect.Core.IThat<TFileSystem> subject, string path)
+            where TFileSystem : System.IO.Abstractions.IFileSystem { }
+        public static aweXpect.Results.AndOrResult<TFileSystem, aweXpect.Core.IThat<TFileSystem>> DoesNotHaveFile<TFileSystem>(this aweXpect.Core.IThat<TFileSystem> subject, string path)
+            where TFileSystem : System.IO.Abstractions.IFileSystem { }
+        public static aweXpect.Testably.Results.DirectoryResult<TFileSystem> HasDirectory<TFileSystem>(this aweXpect.Core.IThat<TFileSystem> subject, string path)
+            where TFileSystem : System.IO.Abstractions.IFileSystem { }
+        public static aweXpect.Testably.Results.FileResult<TFileSystem> HasFile<TFileSystem>(this aweXpect.Core.IThat<TFileSystem> subject, string path)
+            where TFileSystem : System.IO.Abstractions.IFileSystem { }
+    }
+}
+namespace aweXpect.Testably.Results
+{
+    public class DirectoryResult<TFileSystem> : aweXpect.Results.AndOrResult<System.IO.Abstractions.IFileSystem, aweXpect.Core.IThat<TFileSystem>>
+        where TFileSystem : System.IO.Abstractions.IFileSystem
+    {
+        public DirectoryResult(aweXpect.Core.ExpectationBuilder expectationBuilder, aweXpect.Core.IThat<TFileSystem> subject, string path) { }
+        public aweXpect.Testably.Results.DirectoryResult<TFileSystem> WithDirectories(System.Action<aweXpect.Core.IThat<System.Collections.Generic.IEnumerable<System.IO.Abstractions.IDirectoryInfo>>> expectations) { }
+        public aweXpect.Testably.Results.DirectoryResult<TFileSystem> WithFiles(System.Action<aweXpect.Core.IThat<System.Collections.Generic.IEnumerable<System.IO.Abstractions.IFileInfo>>> expectations) { }
+    }
+    public class FileInfoContentResult
+    {
+        public FileInfoContentResult(aweXpect.Core.ExpectationBuilder expectationBuilder, aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo> subject) { }
+        public aweXpect.Results.StringEqualityTypeResult<System.IO.Abstractions.IFileInfo, aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo>> EqualTo(string expected) { }
+        public aweXpect.Results.AndOrResult<System.IO.Abstractions.IFileInfo, aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo>> EqualTo(byte[] expected, [System.Runtime.CompilerServices.CallerArgumentExpression("expected")] string doNotPopulateThisValue = "") { }
+        public aweXpect.Results.StringEqualityTypeResult<System.IO.Abstractions.IFileInfo, aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo>> NotEqualTo(string unexpected) { }
+        public aweXpect.Results.AndOrResult<System.IO.Abstractions.IFileInfo, aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo>> NotEqualTo(byte[] unexpected, [System.Runtime.CompilerServices.CallerArgumentExpression("unexpected")] string doNotPopulateThisValue = "") { }
+        public aweXpect.Results.StringEqualityTypeResult<System.IO.Abstractions.IFileInfo, aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo>> NotSameAs(string filePath) { }
+        public aweXpect.Results.StringEqualityTypeResult<System.IO.Abstractions.IFileInfo, aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo>> SameAs(string filePath) { }
+    }
+    public class FileResult<TFileSystem> : aweXpect.Results.AndOrResult<System.IO.Abstractions.IFileSystem, aweXpect.Core.IThat<TFileSystem>>
+        where TFileSystem : System.IO.Abstractions.IFileSystem
+    {
+        public FileResult(aweXpect.Core.ExpectationBuilder expectationBuilder, aweXpect.Core.IThat<TFileSystem> subject, string path) { }
+        public aweXpect.Results.StringEqualityTypeResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> WhoseContent(System.Action<aweXpect.Core.IThat<string?>> expectations) { }
+        public aweXpect.Testably.Results.FileResult<TFileSystem>.Content WithContent() { }
+        public aweXpect.Results.StringEqualityTypeResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> WithContent(string expected) { }
+        public aweXpect.Results.AndOrResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> WithContent(byte[] expected, [System.Runtime.CompilerServices.CallerArgumentExpression("expected")] string doNotPopulateThisValue = "") { }
+        public aweXpect.Results.TimeToleranceResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> WithCreationTime(System.DateTime expected) { }
+        public aweXpect.Results.TimeToleranceResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> WithLastAccessTime(System.DateTime expected) { }
+        public aweXpect.Results.TimeToleranceResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> WithLastWriteTime(System.DateTime expected) { }
+        public class Content
+        {
+            public Content(aweXpect.Core.ExpectationBuilder expectationBuilder, aweXpect.Testably.Results.FileResult<TFileSystem> subject, string path) { }
+            public aweXpect.Results.StringEqualityTypeResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> EqualTo(string expected) { }
+            public aweXpect.Results.AndOrResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> EqualTo(byte[] expected, [System.Runtime.CompilerServices.CallerArgumentExpression("expected")] string doNotPopulateThisValue = "") { }
+            public aweXpect.Results.StringEqualityTypeResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> NotEqualTo(string unexpected) { }
+            public aweXpect.Results.AndOrResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> NotEqualTo(byte[] unexpected, [System.Runtime.CompilerServices.CallerArgumentExpression("unexpected")] string doNotPopulateThisValue = "") { }
+            public aweXpect.Results.StringEqualityTypeResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> NotSameAs(string filePath) { }
+            public aweXpect.Results.StringEqualityTypeResult<TFileSystem, aweXpect.Testably.Results.FileResult<TFileSystem>> SameAs(string filePath) { }
+        }
+    }
+}
