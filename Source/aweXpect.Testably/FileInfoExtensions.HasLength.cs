@@ -1,0 +1,72 @@
+using System.IO.Abstractions;
+using System.Text;
+using aweXpect.Core;
+using aweXpect.Core.Constraints;
+using aweXpect.Results;
+using aweXpect.Testably.Helpers;
+
+namespace aweXpect.Testably;
+
+public static partial class FileInfoExtensions
+{
+	/// <summary>
+	///     Verifies that the <see cref="IFileInfo" /> has the <paramref name="expected" /> length in bytes.
+	/// </summary>
+	public static AndOrResult<IFileInfo, IThat<IFileInfo>> HasLength(this IThat<IFileInfo> source,
+		long expected)
+		=> new(
+			source.Get().ExpectationBuilder.AddConstraint((it, grammars)
+				=> new HasLengthConstraint(it, grammars, expected)),
+			source);
+
+	private sealed class HasLengthConstraint(string it, ExpectationGrammars grammars, long expected)
+		: ConstraintResult.WithValue<IFileInfo>(grammars),
+			IValueConstraint<IFileInfo>
+	{
+		private long _actualLength;
+
+		public ConstraintResult IsMetBy(IFileInfo actual)
+		{
+			Actual = actual;
+			if (!actual.Exists)
+			{
+				Outcome = Outcome.Failure;
+				return this;
+			}
+
+			_actualLength = actual.Length;
+			Outcome = _actualLength == expected ? Outcome.Success : Outcome.Failure;
+			return this;
+		}
+
+		protected override void AppendNormalExpectation(StringBuilder stringBuilder, string? indentation = null)
+			=> stringBuilder.Append("has length ").Append(expected);
+
+		protected override void AppendNormalResult(StringBuilder stringBuilder, string? indentation = null)
+		{
+			if (Actual?.Exists != true)
+			{
+				stringBuilder.Append(it).Append(" did not exist");
+			}
+			else
+			{
+				stringBuilder.Append(it).Append(" was ").Append(_actualLength);
+			}
+		}
+
+		protected override void AppendNegatedExpectation(StringBuilder stringBuilder, string? indentation = null)
+			=> stringBuilder.Append("does not have length ").Append(expected);
+
+		protected override void AppendNegatedResult(StringBuilder stringBuilder, string? indentation = null)
+		{
+			if (Actual?.Exists != true)
+			{
+				stringBuilder.Append(it).Append(" did not exist");
+			}
+			else
+			{
+				stringBuilder.Append(it).Append(" did");
+			}
+		}
+	}
+}

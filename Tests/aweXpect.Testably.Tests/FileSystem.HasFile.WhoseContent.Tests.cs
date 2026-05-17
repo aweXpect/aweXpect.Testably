@@ -15,12 +15,14 @@ public sealed partial class FileSystem
 				public async Task WhenContentIsDifferent_ShouldFail()
 				{
 					string path = "foo.txt";
-					IFileSystem sut = new MockFileSystem();
+					MockFileSystem sut = new();
 					// ReSharper disable once MethodHasAsyncOverload
 					sut.File.WriteAllText(path, "baz");
 
 					async Task Act()
-						=> await That(sut).HasFile(path).WhoseContent(c => c.IsEmpty());
+					{
+						await That(sut).HasFile(path).WhoseContent(c => c.IsEmpty());
+					}
 
 					await That(Act).ThrowsException()
 						.WithMessage($"""
@@ -34,12 +36,14 @@ public sealed partial class FileSystem
 				public async Task WhenContentMatches_ShouldSucceed()
 				{
 					string path = "foo.txt";
-					IFileSystem sut = new MockFileSystem();
+					MockFileSystem sut = new();
 					// ReSharper disable once MethodHasAsyncOverload
 					sut.File.WriteAllText(path, "");
 
 					async Task Act()
-						=> await That(sut).HasFile(path).WhoseContent(c => c.IsEmpty());
+					{
+						await That(sut).HasFile(path).WhoseContent(c => c.IsEmpty());
+					}
 
 					await That(Act).DoesNotThrow();
 				}

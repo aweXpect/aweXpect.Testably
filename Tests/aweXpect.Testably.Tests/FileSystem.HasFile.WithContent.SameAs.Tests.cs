@@ -16,7 +16,7 @@ public sealed partial class FileSystem
 					[Fact]
 					public async Task WhenContentIsDifferent_ShouldFail()
 					{
-						IFileSystem sut = new MockFileSystem();
+						MockFileSystem sut = new();
 						string path = "foo.txt";
 						string expectedPath = "bar.txt";
 						string fullExpectedPath = sut.Path.GetFullPath(expectedPath);
@@ -25,7 +25,9 @@ public sealed partial class FileSystem
 						sut.File.WriteAllText(expectedPath, "bar");
 
 						async Task Act()
-							=> await That(sut).HasFile(path).WithContent().SameAs(expectedPath);
+						{
+							await That(sut).HasFile(path).WithContent().SameAs(expectedPath);
+						}
 
 						await That(Act).ThrowsException()
 							.WithMessage($"""
@@ -45,7 +47,7 @@ public sealed partial class FileSystem
 					[Fact]
 					public async Task WhenContentMatches_ShouldSucceed()
 					{
-						IFileSystem sut = new MockFileSystem();
+						MockFileSystem sut = new();
 						string path = "foo.txt";
 						string expectedPath = "bar.txt";
 						string content = "bar";
@@ -54,7 +56,9 @@ public sealed partial class FileSystem
 						sut.File.WriteAllText(expectedPath, content);
 
 						async Task Act()
-							=> await That(sut).HasFile(path).WithContent().SameAs(expectedPath);
+						{
+							await That(sut).HasFile(path).WithContent().SameAs(expectedPath);
+						}
 
 						await That(Act).DoesNotThrow();
 					}
@@ -65,7 +69,7 @@ public sealed partial class FileSystem
 					[Fact]
 					public async Task WhenContentIsDifferent_ShouldFail()
 					{
-						IFileSystem sut = new MockFileSystem();
+						MockFileSystem sut = new();
 						string path = "foo.txt";
 						string expectedPath = "bar.txt";
 						string fullExpectedPath = sut.Path.GetFullPath(expectedPath);
@@ -74,7 +78,9 @@ public sealed partial class FileSystem
 						sut.File.WriteAllText(expectedPath, "b?");
 
 						async Task Act()
-							=> await That(sut).HasFile(path).WithContent().SameAs(expectedPath).AsWildcard();
+						{
+							await That(sut).HasFile(path).WithContent().SameAs(expectedPath).AsWildcard();
+						}
 
 						await That(Act).ThrowsException()
 							.WithMessage($"""
@@ -94,7 +100,7 @@ public sealed partial class FileSystem
 					[Fact]
 					public async Task WhenContentMatches_ShouldSucceed()
 					{
-						IFileSystem sut = new MockFileSystem();
+						MockFileSystem sut = new();
 						string path = "foo.txt";
 						string expectedPath = "bar.txt";
 						// ReSharper disable once MethodHasAsyncOverload
@@ -102,7 +108,9 @@ public sealed partial class FileSystem
 						sut.File.WriteAllText(expectedPath, "ba?");
 
 						async Task Act()
-							=> await That(sut).HasFile(path).WithContent().SameAs(expectedPath).AsWildcard();
+						{
+							await That(sut).HasFile(path).WithContent().SameAs(expectedPath).AsWildcard();
+						}
 
 						await That(Act).DoesNotThrow();
 					}

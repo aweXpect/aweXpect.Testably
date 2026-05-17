@@ -23,7 +23,9 @@ public sealed partial class FileSystem
 					sut.File.SetCreationTime(path, actualTime);
 
 					async Task Act()
-						=> await That(sut).HasFile(path).WithCreationTime(expectedTime);
+					{
+						await That(sut).HasFile(path).WithCreationTime(expectedTime);
+					}
 
 					await That(Act).ThrowsException()
 						.WithMessage($"""
@@ -44,7 +46,9 @@ public sealed partial class FileSystem
 					sut.File.SetCreationTimeUtc(path, actualTime);
 
 					async Task Act()
-						=> await That(sut).HasFile(path).WithCreationTime(expectedTime);
+					{
+						await That(sut).HasFile(path).WithCreationTime(expectedTime);
+					}
 
 					await That(Act).ThrowsException()
 						.WithMessage($"""
@@ -65,8 +69,10 @@ public sealed partial class FileSystem
 					sut.File.SetCreationTime(path, actualTime);
 
 					async Task Act()
-						=> await That(sut).HasFile(path).WithCreationTime(expectedTime)
+					{
+						await That(sut).HasFile(path).WithCreationTime(expectedTime)
 							.Within(TimeSpan.FromSeconds(2));
+					}
 
 					await That(Act).DoesNotThrow();
 				}
@@ -82,8 +88,10 @@ public sealed partial class FileSystem
 					sut.File.SetCreationTimeUtc(path, actualTime);
 
 					async Task Act()
-						=> await That(sut).HasFile(path).WithCreationTime(expectedTime)
+					{
+						await That(sut).HasFile(path).WithCreationTime(expectedTime)
 							.Within(TimeSpan.FromSeconds(2));
+					}
 
 					await That(Act).DoesNotThrow();
 				}
@@ -98,7 +106,9 @@ public sealed partial class FileSystem
 					sut.File.SetCreationTime(path, expectedTime);
 
 					async Task Act()
-						=> await That(sut).HasFile(path).WithCreationTime(expectedTime);
+					{
+						await That(sut).HasFile(path).WithCreationTime(expectedTime);
+					}
 
 					await That(Act).DoesNotThrow();
 				}
@@ -114,7 +124,9 @@ public sealed partial class FileSystem
 					sut.File.SetCreationTime(path, expectedTime);
 
 					async Task Act()
-						=> await That(sut).HasFile(path).WithCreationTime(expectedTime);
+					{
+						await That(sut).HasFile(path).WithCreationTime(expectedTime);
+					}
 
 					await That(Act).DoesNotThrow();
 				}
@@ -129,7 +141,9 @@ public sealed partial class FileSystem
 					sut.File.SetCreationTimeUtc(path, expectedTime);
 
 					async Task Act()
-						=> await That(sut).HasFile(path).WithCreationTime(expectedTime);
+					{
+						await That(sut).HasFile(path).WithCreationTime(expectedTime);
+					}
 
 					await That(Act).DoesNotThrow();
 				}

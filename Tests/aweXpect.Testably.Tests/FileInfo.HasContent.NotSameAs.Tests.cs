@@ -14,7 +14,7 @@ public sealed partial class FileInfo
 				[Fact]
 				public async Task WhenContentIsDifferent_ShouldSucceed()
 				{
-					IFileSystem fileSystem = new MockFileSystem();
+					MockFileSystem fileSystem = new();
 					string path = "foo.txt";
 					string expectedPath = "bar.txt";
 					// ReSharper disable once MethodHasAsyncOverload
@@ -23,7 +23,9 @@ public sealed partial class FileInfo
 					IFileInfo fileInfo = fileSystem.FileInfo.New("foo.txt");
 
 					async Task Act()
-						=> await That(fileInfo).HasContent().NotSameAs(expectedPath);
+					{
+						await That(fileInfo).HasContent().NotSameAs(expectedPath);
+					}
 
 					await That(Act).DoesNotThrow();
 				}
@@ -31,7 +33,7 @@ public sealed partial class FileInfo
 				[Fact]
 				public async Task WhenContentMatches_ShouldFail()
 				{
-					IFileSystem fileSystem = new MockFileSystem();
+					MockFileSystem fileSystem = new();
 					string path = "foo.txt";
 					string content = "bar";
 					string expectedPath = "bar.txt";
@@ -42,7 +44,9 @@ public sealed partial class FileInfo
 					IFileInfo fileInfo = fileSystem.FileInfo.New("foo.txt");
 
 					async Task Act()
-						=> await That(fileInfo).HasContent().NotSameAs(expectedPath);
+					{
+						await That(fileInfo).HasContent().NotSameAs(expectedPath);
+					}
 
 					await That(Act).ThrowsException()
 						.WithMessage($"""
@@ -61,7 +65,7 @@ public sealed partial class FileInfo
 				[Fact]
 				public async Task WhenContentIsDifferent_ShouldSucceed()
 				{
-					IFileSystem fileSystem = new MockFileSystem();
+					MockFileSystem fileSystem = new();
 					string path = "foo.txt";
 					string expectedPath = "bar.txt";
 					// ReSharper disable once MethodHasAsyncOverload
@@ -70,7 +74,9 @@ public sealed partial class FileInfo
 					IFileInfo fileInfo = fileSystem.FileInfo.New("foo.txt");
 
 					async Task Act()
-						=> await That(fileInfo).HasContent().NotSameAs(expectedPath).AsWildcard();
+					{
+						await That(fileInfo).HasContent().NotSameAs(expectedPath).AsWildcard();
+					}
 
 					await That(Act).DoesNotThrow();
 				}
@@ -78,7 +84,7 @@ public sealed partial class FileInfo
 				[Fact]
 				public async Task WhenContentMatches_ShouldFail()
 				{
-					IFileSystem fileSystem = new MockFileSystem();
+					MockFileSystem fileSystem = new();
 					string path = "foo.txt";
 					string expectedPath = "bar.txt";
 					string fullExpectedPath = fileSystem.Path.GetFullPath(expectedPath);
@@ -88,7 +94,9 @@ public sealed partial class FileInfo
 					IFileInfo fileInfo = fileSystem.FileInfo.New("foo.txt");
 
 					async Task Act()
-						=> await That(fileInfo).HasContent().NotSameAs(expectedPath).AsWildcard();
+					{
+						await That(fileInfo).HasContent().NotSameAs(expectedPath).AsWildcard();
+					}
 
 					await That(Act).ThrowsException()
 						.WithMessage($"""

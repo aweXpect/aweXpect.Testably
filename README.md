@@ -78,3 +78,30 @@ fileSystem.File.WriteAllText("foo/bar/my-file.txt", "some content");
 
 await That(fileSystem).HasDirectory("foo/bar").WithFiles(f => f.All().ComplyWith(x => x.HasContent("SOME CONTENT").IgnoringCase()));
 ```
+
+### IFileInfo / IDirectoryInfo as subjects
+
+You can also assert directly on `IFileInfo` and `IDirectoryInfo` instances:
+
+```csharp
+IFileInfo fileInfo = fileSystem.FileInfo.New("my-file.txt");
+await That(fileInfo).HasLength(12).And.HasContent("some content");
+await That(fileInfo).HasName("my-file.txt").And.HasExtension(".txt");
+await That(fileInfo).Exists();
+
+IDirectoryInfo dirInfo = fileSystem.DirectoryInfo.New("foo");
+await That(dirInfo).IsNotEmpty();
+await That(dirInfo).HasFile("bar/my-file.txt");
+await That(dirInfo).HasDirectory("bar").Which.HasFile("my-file.txt");
+```
+
+### Bridging from the file-system chain via `.Which`
+
+`HasFile` and `HasDirectory` expose a `.Which` property that returns the
+`IThat<IFileInfo>` / `IThat<IDirectoryInfo>` for the resolved entry, so the
+same assertions light up in both places:
+
+```csharp
+await That(fileSystem).HasFile("my-file.txt").Which.HasLength(12).And.HasContent("some content");
+await That(fileSystem).HasDirectory("logs").Which.IsEmpty();
+```

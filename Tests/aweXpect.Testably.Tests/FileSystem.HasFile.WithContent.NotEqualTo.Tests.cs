@@ -20,12 +20,14 @@ public sealed partial class FileSystem
 						byte[] content = Encoding.UTF8.GetBytes("baz");
 						byte[] expected = Encoding.UTF8.GetBytes("bar");
 						string path = "foo.txt";
-						IFileSystem sut = new MockFileSystem();
+						MockFileSystem sut = new();
 						// ReSharper disable once MethodHasAsyncOverload
 						sut.File.WriteAllBytes(path, content);
 
 						async Task Act()
-							=> await That(sut).HasFile(path).WithContent().NotEqualTo(expected);
+						{
+							await That(sut).HasFile(path).WithContent().NotEqualTo(expected);
+						}
 
 						await That(Act).DoesNotThrow();
 					}
@@ -35,12 +37,14 @@ public sealed partial class FileSystem
 					{
 						string path = "foo.txt";
 						byte[] content = Encoding.UTF8.GetBytes("baz");
-						IFileSystem sut = new MockFileSystem();
+						MockFileSystem sut = new();
 						// ReSharper disable once MethodHasAsyncOverload
 						sut.File.WriteAllBytes(path, content);
 
 						async Task Act()
-							=> await That(sut).HasFile(path).WithContent().NotEqualTo(content);
+						{
+							await That(sut).HasFile(path).WithContent().NotEqualTo(content);
+						}
 
 						await That(Act).ThrowsException()
 							.WithMessage($"""
@@ -57,12 +61,14 @@ public sealed partial class FileSystem
 					public async Task WhenContentIsDifferent_ShouldSucceed()
 					{
 						string path = "foo.txt";
-						IFileSystem sut = new MockFileSystem();
+						MockFileSystem sut = new();
 						// ReSharper disable once MethodHasAsyncOverload
 						sut.File.WriteAllText(path, "baz");
 
 						async Task Act()
-							=> await That(sut).HasFile(path).WithContent().NotEqualTo("bar");
+						{
+							await That(sut).HasFile(path).WithContent().NotEqualTo("bar");
+						}
 
 						await That(Act).DoesNotThrow();
 					}
@@ -72,12 +78,14 @@ public sealed partial class FileSystem
 					{
 						string path = "foo.txt";
 						string content = "bar";
-						IFileSystem sut = new MockFileSystem();
+						MockFileSystem sut = new();
 						// ReSharper disable once MethodHasAsyncOverload
 						sut.File.WriteAllText(path, content);
 
 						async Task Act()
-							=> await That(sut).HasFile(path).WithContent().NotEqualTo(content);
+						{
+							await That(sut).HasFile(path).WithContent().NotEqualTo(content);
+						}
 
 						await That(Act).ThrowsException()
 							.WithMessage($"""
@@ -97,12 +105,14 @@ public sealed partial class FileSystem
 					public async Task WhenContentIsDifferent_ShouldSucceed()
 					{
 						string path = "foo.txt";
-						IFileSystem sut = new MockFileSystem();
+						MockFileSystem sut = new();
 						// ReSharper disable once MethodHasAsyncOverload
 						sut.File.WriteAllText(path, "baz");
 
 						async Task Act()
-							=> await That(sut).HasFile(path).WithContent().NotEqualTo("b?").AsWildcard();
+						{
+							await That(sut).HasFile(path).WithContent().NotEqualTo("b?").AsWildcard();
+						}
 
 						await That(Act).DoesNotThrow();
 					}
@@ -111,12 +121,14 @@ public sealed partial class FileSystem
 					public async Task WhenContentMatches_ShouldFail()
 					{
 						string path = "foo.txt";
-						IFileSystem sut = new MockFileSystem();
+						MockFileSystem sut = new();
 						// ReSharper disable once MethodHasAsyncOverload
 						sut.File.WriteAllText(path, "bar");
 
 						async Task Act()
-							=> await That(sut).HasFile(path).WithContent().NotEqualTo("ba?").AsWildcard();
+						{
+							await That(sut).HasFile(path).WithContent().NotEqualTo("ba?").AsWildcard();
+						}
 
 						await That(Act).ThrowsException()
 							.WithMessage($"""

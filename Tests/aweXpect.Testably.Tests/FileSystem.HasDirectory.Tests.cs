@@ -13,11 +13,13 @@ public sealed partial class FileSystem
 			public async Task WhenDirectoryExists_ShouldSucceed()
 			{
 				string path = "foo";
-				IFileSystem sut = new MockFileSystem();
+				MockFileSystem sut = new();
 				sut.Directory.CreateDirectory(path);
 
 				async Task Act()
-					=> await That(sut).HasDirectory(path);
+				{
+					await That(sut).HasDirectory(path);
+				}
 
 				await That(Act).DoesNotThrow();
 			}
@@ -26,10 +28,12 @@ public sealed partial class FileSystem
 			public async Task WhenDirectoryIsMissing_ShouldFail()
 			{
 				string path = "foo";
-				IFileSystem sut = new MockFileSystem();
+				MockFileSystem sut = new();
 
 				async Task Act()
-					=> await That(sut).HasDirectory(path);
+				{
+					await That(sut).HasDirectory(path);
+				}
 
 				await That(Act).ThrowsException()
 					.WithMessage($"""
@@ -43,12 +47,14 @@ public sealed partial class FileSystem
 			public async Task WhenPathIsFile_ShouldFail()
 			{
 				string path = "foo";
-				IFileSystem sut = new MockFileSystem();
+				MockFileSystem sut = new();
 				// ReSharper disable once MethodHasAsyncOverload
 				sut.File.WriteAllText(path, "");
 
 				async Task Act()
-					=> await That(sut).HasDirectory(path);
+				{
+					await That(sut).HasDirectory(path);
+				}
 
 				await That(Act).ThrowsException()
 					.WithMessage($"""

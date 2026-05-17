@@ -15,13 +15,15 @@ public sealed partial class FileSystem
 				public async Task WhenItemCountDiffers_ShouldFail()
 				{
 					string path = "foo";
-					IFileSystem sut = new MockFileSystem();
+					MockFileSystem sut = new();
 					sut.Initialize().WithSubdirectory(path).Initialized(d => d
 						.WithSubdirectory("directory1")
 						.WithSubdirectory("directory2"));
 
 					async Task Act()
-						=> await That(sut).HasDirectory(path).WithDirectories(f => f.HasCount().EqualTo(3));
+					{
+						await That(sut).HasDirectory(path).WithDirectories(f => f.HasCount().EqualTo(3));
+					}
 
 					await That(Act).ThrowsException()
 						.WithMessage($"""
@@ -41,13 +43,15 @@ public sealed partial class FileSystem
 				public async Task WhenItemCountMatches_ShouldSucceed()
 				{
 					string path = "foo";
-					IFileSystem sut = new MockFileSystem();
+					MockFileSystem sut = new();
 					sut.Initialize().WithSubdirectory(path).Initialized(d => d
 						.WithSubdirectory("directory1")
 						.WithSubdirectory("directory2"));
 
 					async Task Act()
-						=> await That(sut).HasDirectory(path).WithDirectories(f => f.HasCount().EqualTo(2));
+					{
+						await That(sut).HasDirectory(path).WithDirectories(f => f.HasCount().EqualTo(2));
+					}
 
 					await That(Act).DoesNotThrow();
 				}
