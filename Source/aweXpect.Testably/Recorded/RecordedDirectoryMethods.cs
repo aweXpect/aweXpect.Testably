@@ -27,9 +27,37 @@ public sealed class RecordedDirectoryMethods
 	/// <summary>Recorded calls to <see cref="IDirectory.CreateDirectory(string)" /> and overloads.</summary>
 	public RecordedMethodCallResult CreateDirectory(
 		Func<string, bool>? path = null,
-		[CallerArgumentExpression(nameof(path))] string? pathExpression = null)
+#if NET7_0_OR_GREATER
+		Func<UnixFileMode, bool>? unixCreateMode = null,
+#endif
+		[CallerArgumentExpression(nameof(path))] string? pathExpression = null
+#if NET7_0_OR_GREATER
+		, [CallerArgumentExpression(nameof(unixCreateMode))] string? unixCreateModeExpression = null
+#endif
+		)
 		=> Build(nameof(IDirectory.CreateDirectory),
-			ParameterMatcher.From("path", path, pathExpression));
+			ParameterMatcher.From("path", path, pathExpression)
+#if NET7_0_OR_GREATER
+			, ParameterMatcher.From("unixCreateMode", unixCreateMode, unixCreateModeExpression)
+#endif
+			);
+
+	/// <summary>Recorded calls to <c>IDirectory.CreateSymbolicLink(string, string)</c>.</summary>
+	public RecordedMethodCallResult CreateSymbolicLink(
+		Func<string, bool>? path = null,
+		Func<string, bool>? pathToTarget = null,
+		[CallerArgumentExpression(nameof(path))] string? pathExpression = null,
+		[CallerArgumentExpression(nameof(pathToTarget))] string? pathToTargetExpression = null)
+		=> Build("CreateSymbolicLink",
+			ParameterMatcher.From("path", path, pathExpression),
+			ParameterMatcher.From("pathToTarget", pathToTarget, pathToTargetExpression));
+
+	/// <summary>Recorded calls to <c>IDirectory.CreateTempSubdirectory(string?)</c>.</summary>
+	public RecordedMethodCallResult CreateTempSubdirectory(
+		Func<string?, bool>? prefix = null,
+		[CallerArgumentExpression(nameof(prefix))] string? prefixExpression = null)
+		=> Build("CreateTempSubdirectory",
+			ParameterMatcher.From("prefix", prefix, prefixExpression));
 
 	/// <summary>Recorded calls to <see cref="IDirectory.Delete(string)" /> and overloads.</summary>
 	public RecordedMethodCallResult Delete(
@@ -42,43 +70,88 @@ public sealed class RecordedDirectoryMethods
 			ParameterMatcher.From("recursive", recursive, recursiveExpression));
 
 	/// <summary>Recorded calls to <see cref="IDirectory.EnumerateDirectories(string)" /> and overloads.</summary>
+	/// <remarks>
+	///     <paramref name="searchOption" /> and <c>enumerationOptions</c> share recording position 2,
+	///     so only one should be supplied per call. If both are supplied, <c>enumerationOptions</c> wins.
+	/// </remarks>
 	public RecordedMethodCallResult EnumerateDirectories(
 		Func<string, bool>? path = null,
 		Func<string, bool>? searchPattern = null,
 		Func<SearchOption, bool>? searchOption = null,
+#if NET6_0_OR_GREATER
+		Func<EnumerationOptions, bool>? enumerationOptions = null,
+#endif
 		[CallerArgumentExpression(nameof(path))] string? pathExpression = null,
 		[CallerArgumentExpression(nameof(searchPattern))] string? searchPatternExpression = null,
-		[CallerArgumentExpression(nameof(searchOption))] string? searchOptionExpression = null)
+		[CallerArgumentExpression(nameof(searchOption))] string? searchOptionExpression = null
+#if NET6_0_OR_GREATER
+		, [CallerArgumentExpression(nameof(enumerationOptions))] string? enumerationOptionsExpression = null
+#endif
+		)
 		=> Build(nameof(IDirectory.EnumerateDirectories),
 			ParameterMatcher.From("path", path, pathExpression),
 			ParameterMatcher.From("searchPattern", searchPattern, searchPatternExpression),
-			ParameterMatcher.From("searchOption", searchOption, searchOptionExpression));
+			SearchOrEnumerationMatcher(searchOption, searchOptionExpression
+#if NET6_0_OR_GREATER
+				, enumerationOptions, enumerationOptionsExpression
+#endif
+				));
 
 	/// <summary>Recorded calls to <see cref="IDirectory.EnumerateFiles(string)" /> and overloads.</summary>
+	/// <remarks>
+	///     <paramref name="searchOption" /> and <c>enumerationOptions</c> share recording position 2,
+	///     so only one should be supplied per call. If both are supplied, <c>enumerationOptions</c> wins.
+	/// </remarks>
 	public RecordedMethodCallResult EnumerateFiles(
 		Func<string, bool>? path = null,
 		Func<string, bool>? searchPattern = null,
 		Func<SearchOption, bool>? searchOption = null,
+#if NET6_0_OR_GREATER
+		Func<EnumerationOptions, bool>? enumerationOptions = null,
+#endif
 		[CallerArgumentExpression(nameof(path))] string? pathExpression = null,
 		[CallerArgumentExpression(nameof(searchPattern))] string? searchPatternExpression = null,
-		[CallerArgumentExpression(nameof(searchOption))] string? searchOptionExpression = null)
+		[CallerArgumentExpression(nameof(searchOption))] string? searchOptionExpression = null
+#if NET6_0_OR_GREATER
+		, [CallerArgumentExpression(nameof(enumerationOptions))] string? enumerationOptionsExpression = null
+#endif
+		)
 		=> Build(nameof(IDirectory.EnumerateFiles),
 			ParameterMatcher.From("path", path, pathExpression),
 			ParameterMatcher.From("searchPattern", searchPattern, searchPatternExpression),
-			ParameterMatcher.From("searchOption", searchOption, searchOptionExpression));
+			SearchOrEnumerationMatcher(searchOption, searchOptionExpression
+#if NET6_0_OR_GREATER
+				, enumerationOptions, enumerationOptionsExpression
+#endif
+				));
 
 	/// <summary>Recorded calls to <see cref="IDirectory.EnumerateFileSystemEntries(string)" /> and overloads.</summary>
+	/// <remarks>
+	///     <paramref name="searchOption" /> and <c>enumerationOptions</c> share recording position 2,
+	///     so only one should be supplied per call. If both are supplied, <c>enumerationOptions</c> wins.
+	/// </remarks>
 	public RecordedMethodCallResult EnumerateFileSystemEntries(
 		Func<string, bool>? path = null,
 		Func<string, bool>? searchPattern = null,
 		Func<SearchOption, bool>? searchOption = null,
+#if NET6_0_OR_GREATER
+		Func<EnumerationOptions, bool>? enumerationOptions = null,
+#endif
 		[CallerArgumentExpression(nameof(path))] string? pathExpression = null,
 		[CallerArgumentExpression(nameof(searchPattern))] string? searchPatternExpression = null,
-		[CallerArgumentExpression(nameof(searchOption))] string? searchOptionExpression = null)
+		[CallerArgumentExpression(nameof(searchOption))] string? searchOptionExpression = null
+#if NET6_0_OR_GREATER
+		, [CallerArgumentExpression(nameof(enumerationOptions))] string? enumerationOptionsExpression = null
+#endif
+		)
 		=> Build(nameof(IDirectory.EnumerateFileSystemEntries),
 			ParameterMatcher.From("path", path, pathExpression),
 			ParameterMatcher.From("searchPattern", searchPattern, searchPatternExpression),
-			ParameterMatcher.From("searchOption", searchOption, searchOptionExpression));
+			SearchOrEnumerationMatcher(searchOption, searchOptionExpression
+#if NET6_0_OR_GREATER
+				, enumerationOptions, enumerationOptionsExpression
+#endif
+				));
 
 	/// <summary>Recorded calls to <see cref="IDirectory.Exists(string?)" />.</summary>
 	public RecordedMethodCallResult Exists(
@@ -106,17 +179,32 @@ public sealed class RecordedDirectoryMethods
 		=> Build(nameof(IDirectory.GetCurrentDirectory));
 
 	/// <summary>Recorded calls to <see cref="IDirectory.GetDirectories(string)" /> and overloads.</summary>
+	/// <remarks>
+	///     <paramref name="searchOption" /> and <c>enumerationOptions</c> share recording position 2,
+	///     so only one should be supplied per call. If both are supplied, <c>enumerationOptions</c> wins.
+	/// </remarks>
 	public RecordedMethodCallResult GetDirectories(
 		Func<string, bool>? path = null,
 		Func<string, bool>? searchPattern = null,
 		Func<SearchOption, bool>? searchOption = null,
+#if NET6_0_OR_GREATER
+		Func<EnumerationOptions, bool>? enumerationOptions = null,
+#endif
 		[CallerArgumentExpression(nameof(path))] string? pathExpression = null,
 		[CallerArgumentExpression(nameof(searchPattern))] string? searchPatternExpression = null,
-		[CallerArgumentExpression(nameof(searchOption))] string? searchOptionExpression = null)
+		[CallerArgumentExpression(nameof(searchOption))] string? searchOptionExpression = null
+#if NET6_0_OR_GREATER
+		, [CallerArgumentExpression(nameof(enumerationOptions))] string? enumerationOptionsExpression = null
+#endif
+		)
 		=> Build(nameof(IDirectory.GetDirectories),
 			ParameterMatcher.From("path", path, pathExpression),
 			ParameterMatcher.From("searchPattern", searchPattern, searchPatternExpression),
-			ParameterMatcher.From("searchOption", searchOption, searchOptionExpression));
+			SearchOrEnumerationMatcher(searchOption, searchOptionExpression
+#if NET6_0_OR_GREATER
+				, enumerationOptions, enumerationOptionsExpression
+#endif
+				));
 
 	/// <summary>Recorded calls to <see cref="IDirectory.GetDirectoryRoot(string)" />.</summary>
 	public RecordedMethodCallResult GetDirectoryRoot(
@@ -126,30 +214,60 @@ public sealed class RecordedDirectoryMethods
 			ParameterMatcher.From("path", path, pathExpression));
 
 	/// <summary>Recorded calls to <see cref="IDirectory.GetFiles(string)" /> and overloads.</summary>
+	/// <remarks>
+	///     <paramref name="searchOption" /> and <c>enumerationOptions</c> share recording position 2,
+	///     so only one should be supplied per call. If both are supplied, <c>enumerationOptions</c> wins.
+	/// </remarks>
 	public RecordedMethodCallResult GetFiles(
 		Func<string, bool>? path = null,
 		Func<string, bool>? searchPattern = null,
 		Func<SearchOption, bool>? searchOption = null,
+#if NET6_0_OR_GREATER
+		Func<EnumerationOptions, bool>? enumerationOptions = null,
+#endif
 		[CallerArgumentExpression(nameof(path))] string? pathExpression = null,
 		[CallerArgumentExpression(nameof(searchPattern))] string? searchPatternExpression = null,
-		[CallerArgumentExpression(nameof(searchOption))] string? searchOptionExpression = null)
+		[CallerArgumentExpression(nameof(searchOption))] string? searchOptionExpression = null
+#if NET6_0_OR_GREATER
+		, [CallerArgumentExpression(nameof(enumerationOptions))] string? enumerationOptionsExpression = null
+#endif
+		)
 		=> Build(nameof(IDirectory.GetFiles),
 			ParameterMatcher.From("path", path, pathExpression),
 			ParameterMatcher.From("searchPattern", searchPattern, searchPatternExpression),
-			ParameterMatcher.From("searchOption", searchOption, searchOptionExpression));
+			SearchOrEnumerationMatcher(searchOption, searchOptionExpression
+#if NET6_0_OR_GREATER
+				, enumerationOptions, enumerationOptionsExpression
+#endif
+				));
 
 	/// <summary>Recorded calls to <see cref="IDirectory.GetFileSystemEntries(string)" /> and overloads.</summary>
+	/// <remarks>
+	///     <paramref name="searchOption" /> and <c>enumerationOptions</c> share recording position 2,
+	///     so only one should be supplied per call. If both are supplied, <c>enumerationOptions</c> wins.
+	/// </remarks>
 	public RecordedMethodCallResult GetFileSystemEntries(
 		Func<string, bool>? path = null,
 		Func<string, bool>? searchPattern = null,
 		Func<SearchOption, bool>? searchOption = null,
+#if NET6_0_OR_GREATER
+		Func<EnumerationOptions, bool>? enumerationOptions = null,
+#endif
 		[CallerArgumentExpression(nameof(path))] string? pathExpression = null,
 		[CallerArgumentExpression(nameof(searchPattern))] string? searchPatternExpression = null,
-		[CallerArgumentExpression(nameof(searchOption))] string? searchOptionExpression = null)
+		[CallerArgumentExpression(nameof(searchOption))] string? searchOptionExpression = null
+#if NET6_0_OR_GREATER
+		, [CallerArgumentExpression(nameof(enumerationOptions))] string? enumerationOptionsExpression = null
+#endif
+		)
 		=> Build(nameof(IDirectory.GetFileSystemEntries),
 			ParameterMatcher.From("path", path, pathExpression),
 			ParameterMatcher.From("searchPattern", searchPattern, searchPatternExpression),
-			ParameterMatcher.From("searchOption", searchOption, searchOptionExpression));
+			SearchOrEnumerationMatcher(searchOption, searchOptionExpression
+#if NET6_0_OR_GREATER
+				, enumerationOptions, enumerationOptionsExpression
+#endif
+				));
 
 	/// <summary>Recorded calls to <see cref="IDirectory.GetLastAccessTime(string)" />.</summary>
 	public RecordedMethodCallResult GetLastAccessTime(
@@ -199,6 +317,16 @@ public sealed class RecordedDirectoryMethods
 		=> Build(nameof(IDirectory.Move),
 			ParameterMatcher.From("sourceDirName", sourceDirName, sourceDirNameExpression),
 			ParameterMatcher.From("destDirName", destDirName, destDirNameExpression));
+
+	/// <summary>Recorded calls to <c>IDirectory.ResolveLinkTarget(string, bool)</c>.</summary>
+	public RecordedMethodCallResult ResolveLinkTarget(
+		Func<string, bool>? linkPath = null,
+		Func<bool, bool>? returnFinalTarget = null,
+		[CallerArgumentExpression(nameof(linkPath))] string? linkPathExpression = null,
+		[CallerArgumentExpression(nameof(returnFinalTarget))] string? returnFinalTargetExpression = null)
+		=> Build("ResolveLinkTarget",
+			ParameterMatcher.From("linkPath", linkPath, linkPathExpression),
+			ParameterMatcher.From("returnFinalTarget", returnFinalTarget, returnFinalTargetExpression));
 
 	/// <summary>Recorded calls to <see cref="IDirectory.SetCreationTime(string, DateTime)" />.</summary>
 	public RecordedMethodCallResult SetCreationTime(
@@ -266,6 +394,24 @@ public sealed class RecordedDirectoryMethods
 		=> Build(nameof(IDirectory.SetLastWriteTimeUtc),
 			ParameterMatcher.From("path", path, pathExpression),
 			ParameterMatcher.From("lastWriteTimeUtc", lastWriteTimeUtc, lastWriteTimeUtcExpression));
+
+	private static ParameterMatcher SearchOrEnumerationMatcher(
+		Func<SearchOption, bool>? searchOption,
+		string? searchOptionExpression
+#if NET6_0_OR_GREATER
+		, Func<EnumerationOptions, bool>? enumerationOptions,
+		string? enumerationOptionsExpression
+#endif
+		)
+	{
+#if NET6_0_OR_GREATER
+		if (enumerationOptions is not null)
+		{
+			return ParameterMatcher.From("enumerationOptions", enumerationOptions, enumerationOptionsExpression);
+		}
+#endif
+		return ParameterMatcher.From("searchOption", searchOption, searchOptionExpression);
+	}
 
 	private RecordedMethodCallResult Build(string methodName, params ParameterMatcher[] matchers)
 	{
