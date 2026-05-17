@@ -94,12 +94,38 @@ namespace aweXpect.Testably.Recorded
     public sealed class RecordedFileInfoInstance
     {
         public aweXpect.Testably.Recorded.RecordedProperty Attributes { get; }
+        public aweXpect.Testably.Recorded.RecordedProperty CreationTime { get; }
+        public aweXpect.Testably.Recorded.RecordedProperty CreationTimeUtc { get; }
+        public aweXpect.Testably.Recorded.RecordedProperty Directory { get; }
+        public aweXpect.Testably.Recorded.RecordedProperty DirectoryName { get; }
+        public aweXpect.Testably.Recorded.RecordedProperty Exists { get; }
+        public aweXpect.Testably.Recorded.RecordedProperty Extension { get; }
+        public aweXpect.Testably.Recorded.RecordedProperty FullName { get; }
         public aweXpect.Testably.Recorded.RecordedProperty IsReadOnly { get; }
+        public aweXpect.Testably.Recorded.RecordedProperty LastAccessTime { get; }
+        public aweXpect.Testably.Recorded.RecordedProperty LastAccessTimeUtc { get; }
+        public aweXpect.Testably.Recorded.RecordedProperty LastWriteTime { get; }
+        public aweXpect.Testably.Recorded.RecordedProperty LastWriteTimeUtc { get; }
+        public aweXpect.Testably.Recorded.RecordedProperty Length { get; }
+        public aweXpect.Testably.Recorded.RecordedProperty LinkTarget { get; }
+        public aweXpect.Testably.Recorded.RecordedProperty Name { get; }
+        public aweXpect.Testably.Recorded.RecordedProperty UnixFileMode { get; }
         public aweXpect.Testably.Results.RecordedMethodCallResult AppendText() { }
+        public aweXpect.Testably.Results.RecordedMethodCallResult CopyTo(System.Func<string, bool>? destFileName = null, System.Func<bool, bool>? overwrite = null, [System.Runtime.CompilerServices.CallerArgumentExpression("destFileName")] string? destFileNameExpression = null, [System.Runtime.CompilerServices.CallerArgumentExpression("overwrite")] string? overwriteExpression = null) { }
         public aweXpect.Testably.Results.RecordedMethodCallResult Create() { }
+        public aweXpect.Testably.Results.RecordedMethodCallResult CreateAsSymbolicLink(System.Func<string, bool>? pathToTarget = null, [System.Runtime.CompilerServices.CallerArgumentExpression("pathToTarget")] string? pathToTargetExpression = null) { }
         public aweXpect.Testably.Results.RecordedMethodCallResult CreateText() { }
+        public aweXpect.Testably.Results.RecordedMethodCallResult Decrypt() { }
         public aweXpect.Testably.Results.RecordedMethodCallResult Delete() { }
+        public aweXpect.Testably.Results.RecordedMethodCallResult Encrypt() { }
         public aweXpect.Testably.Results.RecordedMethodCallResult MoveTo(System.Func<string, bool>? destFileName = null, System.Func<bool, bool>? overwrite = null, [System.Runtime.CompilerServices.CallerArgumentExpression("destFileName")] string? destFileNameExpression = null, [System.Runtime.CompilerServices.CallerArgumentExpression("overwrite")] string? overwriteExpression = null) { }
+        public aweXpect.Testably.Results.RecordedMethodCallResult Open(System.Func<System.IO.FileMode, bool>? mode = null, System.Func<System.IO.FileAccess, bool>? access = null, System.Func<System.IO.FileShare, bool>? share = null, [System.Runtime.CompilerServices.CallerArgumentExpression("mode")] string? modeExpression = null, [System.Runtime.CompilerServices.CallerArgumentExpression("access")] string? accessExpression = null, [System.Runtime.CompilerServices.CallerArgumentExpression("share")] string? shareExpression = null) { }
+        public aweXpect.Testably.Results.RecordedMethodCallResult OpenRead() { }
+        public aweXpect.Testably.Results.RecordedMethodCallResult OpenText() { }
+        public aweXpect.Testably.Results.RecordedMethodCallResult OpenWrite() { }
+        public aweXpect.Testably.Results.RecordedMethodCallResult Refresh() { }
+        public aweXpect.Testably.Results.RecordedMethodCallResult Replace(System.Func<string, bool>? destinationFileName = null, System.Func<string?, bool>? destinationBackupFileName = null, System.Func<bool, bool>? ignoreMetadataErrors = null, [System.Runtime.CompilerServices.CallerArgumentExpression("destinationFileName")] string? destinationFileNameExpression = null, [System.Runtime.CompilerServices.CallerArgumentExpression("destinationBackupFileName")] string? destinationBackupFileNameExpression = null, [System.Runtime.CompilerServices.CallerArgumentExpression("ignoreMetadataErrors")] string? ignoreMetadataErrorsExpression = null) { }
+        public aweXpect.Testably.Results.RecordedMethodCallResult ResolveLinkTarget(System.Func<bool, bool>? returnFinalTarget = null, [System.Runtime.CompilerServices.CallerArgumentExpression("returnFinalTarget")] string? returnFinalTargetExpression = null) { }
     }
     public sealed class RecordedFileMethods
     {
