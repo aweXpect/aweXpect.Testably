@@ -29,6 +29,34 @@ public sealed class RecordedFileMethods
 		_subject = subject;
 	}
 
+	/// <summary>Recorded calls to <c>IFile.AppendAllBytes(string, byte[])</c> and overloads.</summary>
+	/// <remarks>
+	///     The <c>ReadOnlySpan&lt;byte&gt;</c> overload records its bytes as a span; the <paramref name="bytes" />
+	///     filter only matches the <c>byte[]</c> overload. Use no filter to count both.
+	/// </remarks>
+	public RecordedMethodCallResult AppendAllBytes(
+		Func<string, bool>? path = null,
+		Func<byte[], bool>? bytes = null,
+		[CallerArgumentExpression(nameof(path))] string? pathExpression = null,
+		[CallerArgumentExpression(nameof(bytes))] string? bytesExpression = null)
+		=> Build("AppendAllBytes",
+			ParameterMatcher.From("path", path, pathExpression),
+			ParameterMatcher.From("bytes", bytes, bytesExpression));
+
+	/// <summary>Recorded calls to <c>IFile.AppendAllBytesAsync(string, byte[], CancellationToken)</c> and overloads.</summary>
+	/// <remarks>
+	///     The <c>ReadOnlyMemory&lt;byte&gt;</c> overload records its bytes as a memory value; the <paramref name="bytes" />
+	///     filter only matches the <c>byte[]</c> overload. Use no filter to count both.
+	/// </remarks>
+	public RecordedMethodCallResult AppendAllBytesAsync(
+		Func<string, bool>? path = null,
+		Func<byte[], bool>? bytes = null,
+		[CallerArgumentExpression(nameof(path))] string? pathExpression = null,
+		[CallerArgumentExpression(nameof(bytes))] string? bytesExpression = null)
+		=> Build("AppendAllBytesAsync",
+			ParameterMatcher.From("path", path, pathExpression),
+			ParameterMatcher.From("bytes", bytes, bytesExpression));
+
 	/// <summary>Recorded calls to <see cref="IFile.AppendAllLines(string, System.Collections.Generic.IEnumerable{string})" /> and overloads.</summary>
 	public RecordedMethodCallResult AppendAllLines(
 		Func<string, bool>? path = null,
@@ -36,6 +64,21 @@ public sealed class RecordedFileMethods
 		[CallerArgumentExpression(nameof(path))] string? pathExpression = null,
 		[CallerArgumentExpression(nameof(encoding))] string? encodingExpression = null)
 		=> Build(nameof(IFile.AppendAllLines),
+			ParameterMatcher.From("path", path, pathExpression),
+			ParameterMatcher.From<object>("contents", null, null),
+			ParameterMatcher.From("encoding", encoding, encodingExpression));
+
+	/// <summary>Recorded calls to <c>IFile.AppendAllLinesAsync(string, IEnumerable&lt;string&gt;, CancellationToken)</c> and overloads.</summary>
+	/// <remarks>
+	///     The contents parameter is omitted because the underlying overloads vary in generic shape; only
+	///     <paramref name="path" />, <paramref name="encoding" />, and call count can be filtered.
+	/// </remarks>
+	public RecordedMethodCallResult AppendAllLinesAsync(
+		Func<string, bool>? path = null,
+		Func<Encoding, bool>? encoding = null,
+		[CallerArgumentExpression(nameof(path))] string? pathExpression = null,
+		[CallerArgumentExpression(nameof(encoding))] string? encodingExpression = null)
+		=> Build("AppendAllLinesAsync",
 			ParameterMatcher.From("path", path, pathExpression),
 			ParameterMatcher.From<object>("contents", null, null),
 			ParameterMatcher.From("encoding", encoding, encodingExpression));
@@ -49,6 +92,19 @@ public sealed class RecordedFileMethods
 		[CallerArgumentExpression(nameof(contents))] string? contentsExpression = null,
 		[CallerArgumentExpression(nameof(encoding))] string? encodingExpression = null)
 		=> Build(nameof(IFile.AppendAllText),
+			ParameterMatcher.From("path", path, pathExpression),
+			ParameterMatcher.From("contents", contents, contentsExpression),
+			ParameterMatcher.From("encoding", encoding, encodingExpression));
+
+	/// <summary>Recorded calls to <c>IFile.AppendAllTextAsync(string, string?, CancellationToken)</c> and overloads.</summary>
+	public RecordedMethodCallResult AppendAllTextAsync(
+		Func<string, bool>? path = null,
+		Func<string?, bool>? contents = null,
+		Func<Encoding, bool>? encoding = null,
+		[CallerArgumentExpression(nameof(path))] string? pathExpression = null,
+		[CallerArgumentExpression(nameof(contents))] string? contentsExpression = null,
+		[CallerArgumentExpression(nameof(encoding))] string? encodingExpression = null)
+		=> Build("AppendAllTextAsync",
 			ParameterMatcher.From("path", path, pathExpression),
 			ParameterMatcher.From("contents", contents, contentsExpression),
 			ParameterMatcher.From("encoding", encoding, encodingExpression));
@@ -85,6 +141,16 @@ public sealed class RecordedFileMethods
 			ParameterMatcher.From("path", path, pathExpression),
 			ParameterMatcher.From("bufferSize", bufferSize, bufferSizeExpression),
 			ParameterMatcher.From("options", options, optionsExpression));
+
+	/// <summary>Recorded calls to <c>IFile.CreateSymbolicLink(string, string)</c>.</summary>
+	public RecordedMethodCallResult CreateSymbolicLink(
+		Func<string, bool>? path = null,
+		Func<string, bool>? pathToTarget = null,
+		[CallerArgumentExpression(nameof(path))] string? pathExpression = null,
+		[CallerArgumentExpression(nameof(pathToTarget))] string? pathToTargetExpression = null)
+		=> Build("CreateSymbolicLink",
+			ParameterMatcher.From("path", path, pathExpression),
+			ParameterMatcher.From("pathToTarget", pathToTarget, pathToTargetExpression));
 
 	/// <summary>Recorded calls to <see cref="IFile.CreateText(string)" />.</summary>
 	public RecordedMethodCallResult CreateText(
@@ -170,6 +236,13 @@ public sealed class RecordedFileMethods
 		=> Build(nameof(IFile.GetLastWriteTimeUtc),
 			ParameterMatcher.From("path", path, pathExpression));
 
+	/// <summary>Recorded calls to <c>IFile.GetUnixFileMode(string)</c>.</summary>
+	public RecordedMethodCallResult GetUnixFileMode(
+		Func<string, bool>? path = null,
+		[CallerArgumentExpression(nameof(path))] string? pathExpression = null)
+		=> Build("GetUnixFileMode",
+			ParameterMatcher.From("path", path, pathExpression));
+
 	/// <summary>Recorded calls to <see cref="IFile.Move(string, string)" /> and overloads.</summary>
 	public RecordedMethodCallResult Move(
 		Func<string, bool>? sourceFileName = null,
@@ -184,6 +257,11 @@ public sealed class RecordedFileMethods
 			ParameterMatcher.From("overwrite", overwrite, overwriteExpression));
 
 	/// <summary>Recorded calls to <see cref="IFile.Open(string, FileMode)" /> and overloads.</summary>
+	/// <remarks>
+	///     The <c>Open(string, FileStreamOptions)</c> overload is matched (and counted) when no filter is supplied,
+	///     but its <c>FileStreamOptions</c> value cannot be filtered through this mirror because it is recorded at
+	///     parameter position 1 (the same slot used by <see cref="FileMode" /> on the other overloads).
+	/// </remarks>
 	public RecordedMethodCallResult Open(
 		Func<string, bool>? path = null,
 		Func<FileMode, bool>? mode = null,
@@ -227,6 +305,13 @@ public sealed class RecordedFileMethods
 		=> Build(nameof(IFile.ReadAllBytes),
 			ParameterMatcher.From("path", path, pathExpression));
 
+	/// <summary>Recorded calls to <c>IFile.ReadAllBytesAsync(string, CancellationToken)</c>.</summary>
+	public RecordedMethodCallResult ReadAllBytesAsync(
+		Func<string, bool>? path = null,
+		[CallerArgumentExpression(nameof(path))] string? pathExpression = null)
+		=> Build("ReadAllBytesAsync",
+			ParameterMatcher.From("path", path, pathExpression));
+
 	/// <summary>Recorded calls to <see cref="IFile.ReadAllLines(string)" /> and overloads.</summary>
 	public RecordedMethodCallResult ReadAllLines(
 		Func<string, bool>? path = null,
@@ -234,6 +319,16 @@ public sealed class RecordedFileMethods
 		[CallerArgumentExpression(nameof(path))] string? pathExpression = null,
 		[CallerArgumentExpression(nameof(encoding))] string? encodingExpression = null)
 		=> Build(nameof(IFile.ReadAllLines),
+			ParameterMatcher.From("path", path, pathExpression),
+			ParameterMatcher.From("encoding", encoding, encodingExpression));
+
+	/// <summary>Recorded calls to <c>IFile.ReadAllLinesAsync(string, CancellationToken)</c> and overloads.</summary>
+	public RecordedMethodCallResult ReadAllLinesAsync(
+		Func<string, bool>? path = null,
+		Func<Encoding, bool>? encoding = null,
+		[CallerArgumentExpression(nameof(path))] string? pathExpression = null,
+		[CallerArgumentExpression(nameof(encoding))] string? encodingExpression = null)
+		=> Build("ReadAllLinesAsync",
 			ParameterMatcher.From("path", path, pathExpression),
 			ParameterMatcher.From("encoding", encoding, encodingExpression));
 
@@ -247,6 +342,16 @@ public sealed class RecordedFileMethods
 			ParameterMatcher.From("path", path, pathExpression),
 			ParameterMatcher.From("encoding", encoding, encodingExpression));
 
+	/// <summary>Recorded calls to <c>IFile.ReadAllTextAsync(string, CancellationToken)</c> and overloads.</summary>
+	public RecordedMethodCallResult ReadAllTextAsync(
+		Func<string, bool>? path = null,
+		Func<Encoding, bool>? encoding = null,
+		[CallerArgumentExpression(nameof(path))] string? pathExpression = null,
+		[CallerArgumentExpression(nameof(encoding))] string? encodingExpression = null)
+		=> Build("ReadAllTextAsync",
+			ParameterMatcher.From("path", path, pathExpression),
+			ParameterMatcher.From("encoding", encoding, encodingExpression));
+
 	/// <summary>Recorded calls to <see cref="IFile.ReadLines(string)" /> and overloads.</summary>
 	public RecordedMethodCallResult ReadLines(
 		Func<string, bool>? path = null,
@@ -254,6 +359,16 @@ public sealed class RecordedFileMethods
 		[CallerArgumentExpression(nameof(path))] string? pathExpression = null,
 		[CallerArgumentExpression(nameof(encoding))] string? encodingExpression = null)
 		=> Build(nameof(IFile.ReadLines),
+			ParameterMatcher.From("path", path, pathExpression),
+			ParameterMatcher.From("encoding", encoding, encodingExpression));
+
+	/// <summary>Recorded calls to <c>IFile.ReadLinesAsync(string, CancellationToken)</c> and overloads.</summary>
+	public RecordedMethodCallResult ReadLinesAsync(
+		Func<string, bool>? path = null,
+		Func<Encoding, bool>? encoding = null,
+		[CallerArgumentExpression(nameof(path))] string? pathExpression = null,
+		[CallerArgumentExpression(nameof(encoding))] string? encodingExpression = null)
+		=> Build("ReadLinesAsync",
 			ParameterMatcher.From("path", path, pathExpression),
 			ParameterMatcher.From("encoding", encoding, encodingExpression));
 
@@ -272,6 +387,16 @@ public sealed class RecordedFileMethods
 			ParameterMatcher.From("destinationFileName", destinationFileName, destinationFileNameExpression),
 			ParameterMatcher.From("destinationBackupFileName", destinationBackupFileName, destinationBackupFileNameExpression),
 			ParameterMatcher.From("ignoreMetadataErrors", ignoreMetadataErrors, ignoreMetadataErrorsExpression));
+
+	/// <summary>Recorded calls to <c>IFile.ResolveLinkTarget(string, bool)</c>.</summary>
+	public RecordedMethodCallResult ResolveLinkTarget(
+		Func<string, bool>? linkPath = null,
+		Func<bool, bool>? returnFinalTarget = null,
+		[CallerArgumentExpression(nameof(linkPath))] string? linkPathExpression = null,
+		[CallerArgumentExpression(nameof(returnFinalTarget))] string? returnFinalTargetExpression = null)
+		=> Build("ResolveLinkTarget",
+			ParameterMatcher.From("linkPath", linkPath, linkPathExpression),
+			ParameterMatcher.From("returnFinalTarget", returnFinalTarget, returnFinalTargetExpression));
 
 	/// <summary>Recorded calls to <see cref="IFile.SetAttributes(string, FileAttributes)" /> and overloads.</summary>
 	public RecordedMethodCallResult SetAttributes(
@@ -343,6 +468,18 @@ public sealed class RecordedFileMethods
 			ParameterMatcher.From("path", path, pathExpression),
 			ParameterMatcher.From("lastWriteTimeUtc", lastWriteTimeUtc, lastWriteTimeUtcExpression));
 
+#if NET7_0_OR_GREATER
+	/// <summary>Recorded calls to <c>IFile.SetUnixFileMode(string, UnixFileMode)</c>.</summary>
+	public RecordedMethodCallResult SetUnixFileMode(
+		Func<string, bool>? path = null,
+		Func<UnixFileMode, bool>? mode = null,
+		[CallerArgumentExpression(nameof(path))] string? pathExpression = null,
+		[CallerArgumentExpression(nameof(mode))] string? modeExpression = null)
+		=> Build("SetUnixFileMode",
+			ParameterMatcher.From("path", path, pathExpression),
+			ParameterMatcher.From("mode", mode, modeExpression));
+#endif
+
 	/// <summary>Recorded calls to <see cref="IFile.WriteAllBytes(string, byte[])" /> and overloads.</summary>
 	public RecordedMethodCallResult WriteAllBytes(
 		Func<string, bool>? path = null,
@@ -350,6 +487,20 @@ public sealed class RecordedFileMethods
 		[CallerArgumentExpression(nameof(path))] string? pathExpression = null,
 		[CallerArgumentExpression(nameof(bytes))] string? bytesExpression = null)
 		=> Build(nameof(IFile.WriteAllBytes),
+			ParameterMatcher.From("path", path, pathExpression),
+			ParameterMatcher.From("bytes", bytes, bytesExpression));
+
+	/// <summary>Recorded calls to <c>IFile.WriteAllBytesAsync(string, byte[], CancellationToken)</c> and overloads.</summary>
+	/// <remarks>
+	///     The <c>ReadOnlyMemory&lt;byte&gt;</c> overload records its bytes as a memory value; the <paramref name="bytes" />
+	///     filter only matches the <c>byte[]</c> overload. Use no filter to count both.
+	/// </remarks>
+	public RecordedMethodCallResult WriteAllBytesAsync(
+		Func<string, bool>? path = null,
+		Func<byte[], bool>? bytes = null,
+		[CallerArgumentExpression(nameof(path))] string? pathExpression = null,
+		[CallerArgumentExpression(nameof(bytes))] string? bytesExpression = null)
+		=> Build("WriteAllBytesAsync",
 			ParameterMatcher.From("path", path, pathExpression),
 			ParameterMatcher.From("bytes", bytes, bytesExpression));
 
@@ -364,6 +515,21 @@ public sealed class RecordedFileMethods
 			ParameterMatcher.From<object>("contents", null, null),
 			ParameterMatcher.From("encoding", encoding, encodingExpression));
 
+	/// <summary>Recorded calls to <c>IFile.WriteAllLinesAsync(string, IEnumerable&lt;string&gt;, CancellationToken)</c> and overloads.</summary>
+	/// <remarks>
+	///     The contents parameter is omitted because the underlying overloads vary in generic shape; only
+	///     <paramref name="path" />, <paramref name="encoding" />, and call count can be filtered.
+	/// </remarks>
+	public RecordedMethodCallResult WriteAllLinesAsync(
+		Func<string, bool>? path = null,
+		Func<Encoding, bool>? encoding = null,
+		[CallerArgumentExpression(nameof(path))] string? pathExpression = null,
+		[CallerArgumentExpression(nameof(encoding))] string? encodingExpression = null)
+		=> Build("WriteAllLinesAsync",
+			ParameterMatcher.From("path", path, pathExpression),
+			ParameterMatcher.From<object>("contents", null, null),
+			ParameterMatcher.From("encoding", encoding, encodingExpression));
+
 	/// <summary>Recorded calls to <see cref="IFile.WriteAllText(string, string?)" /> and overloads.</summary>
 	public RecordedMethodCallResult WriteAllText(
 		Func<string, bool>? path = null,
@@ -373,6 +539,19 @@ public sealed class RecordedFileMethods
 		[CallerArgumentExpression(nameof(contents))] string? contentsExpression = null,
 		[CallerArgumentExpression(nameof(encoding))] string? encodingExpression = null)
 		=> Build(nameof(IFile.WriteAllText),
+			ParameterMatcher.From("path", path, pathExpression),
+			ParameterMatcher.From("contents", contents, contentsExpression),
+			ParameterMatcher.From("encoding", encoding, encodingExpression));
+
+	/// <summary>Recorded calls to <c>IFile.WriteAllTextAsync(string, string?, CancellationToken)</c> and overloads.</summary>
+	public RecordedMethodCallResult WriteAllTextAsync(
+		Func<string, bool>? path = null,
+		Func<string?, bool>? contents = null,
+		Func<Encoding, bool>? encoding = null,
+		[CallerArgumentExpression(nameof(path))] string? pathExpression = null,
+		[CallerArgumentExpression(nameof(contents))] string? contentsExpression = null,
+		[CallerArgumentExpression(nameof(encoding))] string? encodingExpression = null)
+		=> Build("WriteAllTextAsync",
 			ParameterMatcher.From("path", path, pathExpression),
 			ParameterMatcher.From("contents", contents, contentsExpression),
 			ParameterMatcher.From("encoding", encoding, encodingExpression));
