@@ -32,10 +32,34 @@ public sealed class RecordedFileSystemStatistics
 	public RecordedDirectoryInfoBucket DirectoryInfo => new(_subject);
 
 	/// <summary>
+	///     Assertions on calls recorded against <see cref="System.IO.Abstractions.IDriveInfoFactory" />
+	///     and individual <see cref="System.IO.Abstractions.IDriveInfo" /> instances.
+	/// </summary>
+	public RecordedDriveInfoBucket DriveInfo => new(_subject);
+
+	/// <summary>
 	///     Assertions on calls recorded against <see cref="System.IO.Abstractions.IFileInfoFactory" />
 	///     and individual <see cref="System.IO.Abstractions.IFileInfo" /> instances.
 	/// </summary>
 	public RecordedFileInfoBucket FileInfo => new(_subject);
+
+	/// <summary>
+	///     Assertions on calls recorded against <see cref="System.IO.Abstractions.IFileStreamFactory" />
+	///     and individual <see cref="System.IO.Abstractions.FileSystemStream" /> instances.
+	/// </summary>
+	public RecordedFileStreamBucket FileStream => new(_subject);
+
+	/// <summary>
+	///     Assertions on calls recorded against <see cref="System.IO.Abstractions.IFileSystemWatcherFactory" />
+	///     and individual <see cref="System.IO.Abstractions.IFileSystemWatcher" /> instances.
+	/// </summary>
+	public RecordedFileSystemWatcherBucket FileSystemWatcher => new(_subject);
+
+	/// <summary>
+	///     Assertions on calls recorded against <see cref="System.IO.Abstractions.IFileVersionInfoFactory" />
+	///     and individual <see cref="System.IO.Abstractions.IFileVersionInfo" /> instances.
+	/// </summary>
+	public RecordedFileVersionInfoBucket FileVersionInfo => new(_subject);
 
 	/// <summary>
 	///     Assertions on calls recorded against <see cref="System.IO.Abstractions.IPath" />.
