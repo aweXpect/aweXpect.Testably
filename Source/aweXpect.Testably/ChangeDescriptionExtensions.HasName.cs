@@ -15,14 +15,15 @@ public static partial class ChangeDescriptionExtensions
 	///     <see cref="ChangeDescription.Name" /> can be <see langword="null" /> on the underlying
 	///     <see cref="ChangeDescription" />, so <paramref name="expected" /> is nullable too.
 	/// </remarks>
-	public static StringEqualityTypeResult<ChangeDescription, IThat<ChangeDescription>> HasName(
-		this IThat<ChangeDescription> source,
+	public static StringEqualityTypeResult<TChange, IThat<TChange>> HasName<TChange>(
+		this IThat<TChange> source,
 		string? expected)
+		where TChange : ChangeDescription
 	{
 		StringEqualityOptions options = new();
-		return new StringEqualityTypeResult<ChangeDescription, IThat<ChangeDescription>>(
+		return new StringEqualityTypeResult<TChange, IThat<TChange>>(
 			source.Get().ExpectationBuilder.AddConstraint((it, grammars)
-				=> new NotificationConstraints.HasStringPropertyConstraint(
+				=> new NotificationConstraints.HasStringPropertyConstraint<TChange>(
 					it, grammars, c => c.Name, options, expected, "name")),
 			source,
 			options);

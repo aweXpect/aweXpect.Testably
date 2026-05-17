@@ -14,14 +14,13 @@ public class DidNotTriggerNotificationResult
 	: AndOrResult<MockFileSystem, IThat<MockFileSystem>, DidNotTriggerNotificationResult>
 {
 	private readonly ExpectationBuilder _expectationBuilder;
-	private readonly NotificationConstraints.TriggerNotificationFilter _filter;
+	private readonly NotificationConstraints.TriggerNotificationFilter<ChangeDescription> _filter;
 	private readonly NotificationTimeoutOptions _options;
 
 	internal DidNotTriggerNotificationResult(
 		ExpectationBuilder expectationBuilder,
 		IThat<MockFileSystem> subject,
-		NotificationTimeoutOptions options,
-		NotificationConstraints.TriggerNotificationFilter filter)
+		NotificationTimeoutOptions options, NotificationConstraints.TriggerNotificationFilter<ChangeDescription> filter)
 		: base(expectationBuilder, subject)
 	{
 		_expectationBuilder = expectationBuilder;

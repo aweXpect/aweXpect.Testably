@@ -15,15 +15,14 @@ public class TriggeredNotificationResult
 	: CountResult<MockFileSystem, IThat<MockFileSystem>, TriggeredNotificationResult>
 {
 	private readonly ExpectationBuilder _expectationBuilder;
-	private readonly NotificationConstraints.TriggerNotificationFilter _filter;
+	private readonly NotificationConstraints.TriggerNotificationFilter<ChangeDescription> _filter;
 	private readonly NotificationTimeoutOptions _options;
 
 	internal TriggeredNotificationResult(
 		ExpectationBuilder expectationBuilder,
 		IThat<MockFileSystem> subject,
 		Quantifier quantifier,
-		NotificationTimeoutOptions options,
-		NotificationConstraints.TriggerNotificationFilter filter)
+		NotificationTimeoutOptions options, NotificationConstraints.TriggerNotificationFilter<ChangeDescription> filter)
 		: base(expectationBuilder, subject, quantifier)
 	{
 		_expectationBuilder = expectationBuilder;
