@@ -15,7 +15,7 @@ public sealed partial class FileSystem
 				public async Task WhenContentIsDifferent_ShouldFail()
 				{
 					string path = "foo.txt";
-					IFileSystem sut = new MockFileSystem();
+					MockFileSystem sut = new();
 					// ReSharper disable once MethodHasAsyncOverload
 					sut.File.WriteAllText(path, "baz");
 
@@ -36,7 +36,7 @@ public sealed partial class FileSystem
 				public async Task WhenContentMatches_ShouldSucceed()
 				{
 					string path = "foo.txt";
-					IFileSystem sut = new MockFileSystem();
+					MockFileSystem sut = new();
 					// ReSharper disable once MethodHasAsyncOverload
 					sut.File.WriteAllText(path, "");
 

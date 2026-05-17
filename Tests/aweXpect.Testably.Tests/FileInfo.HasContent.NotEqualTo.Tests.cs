@@ -18,7 +18,7 @@ public sealed partial class FileInfo
 					byte[] content = Encoding.UTF8.GetBytes("baz");
 					byte[] expected = Encoding.UTF8.GetBytes("bar");
 					string path = "foo.txt";
-					IFileSystem fileSystem = new MockFileSystem();
+					MockFileSystem fileSystem = new();
 					// ReSharper disable once MethodHasAsyncOverload
 					fileSystem.File.WriteAllBytes(path, content);
 					IFileInfo fileInfo = fileSystem.FileInfo.New("foo.txt");
@@ -36,7 +36,7 @@ public sealed partial class FileInfo
 				{
 					string path = "foo.txt";
 					byte[] content = Encoding.UTF8.GetBytes("baz");
-					IFileSystem fileSystem = new MockFileSystem();
+					MockFileSystem fileSystem = new();
 					// ReSharper disable once MethodHasAsyncOverload
 					fileSystem.File.WriteAllBytes(path, content);
 					IFileInfo fileInfo = fileSystem.FileInfo.New("foo.txt");
@@ -61,7 +61,7 @@ public sealed partial class FileInfo
 				public async Task WhenContentIsDifferent_ShouldSucceed()
 				{
 					string path = "foo.txt";
-					IFileSystem fileSystem = new MockFileSystem();
+					MockFileSystem fileSystem = new();
 					// ReSharper disable once MethodHasAsyncOverload
 					fileSystem.File.WriteAllText(path, "baz");
 					IFileInfo fileInfo = fileSystem.FileInfo.New("foo.txt");
@@ -79,7 +79,7 @@ public sealed partial class FileInfo
 				{
 					string path = "foo.txt";
 					string content = "bar";
-					IFileSystem fileSystem = new MockFileSystem();
+					MockFileSystem fileSystem = new();
 					// ReSharper disable once MethodHasAsyncOverload
 					fileSystem.File.WriteAllText(path, content);
 					IFileInfo fileInfo = fileSystem.FileInfo.New("foo.txt");
@@ -107,7 +107,7 @@ public sealed partial class FileInfo
 				public async Task WhenContentIsDifferent_ShouldSucceed()
 				{
 					string path = "foo.txt";
-					IFileSystem fileSystem = new MockFileSystem();
+					MockFileSystem fileSystem = new();
 					// ReSharper disable once MethodHasAsyncOverload
 					fileSystem.File.WriteAllText(path, "baz");
 					IFileInfo fileInfo = fileSystem.FileInfo.New("foo.txt");
@@ -124,7 +124,7 @@ public sealed partial class FileInfo
 				public async Task WhenContentMatches_ShouldFail()
 				{
 					string path = "foo.txt";
-					IFileSystem fileSystem = new MockFileSystem();
+					MockFileSystem fileSystem = new();
 					// ReSharper disable once MethodHasAsyncOverload
 					fileSystem.File.WriteAllText(path, "bar");
 					IFileInfo fileInfo = fileSystem.FileInfo.New("foo.txt");

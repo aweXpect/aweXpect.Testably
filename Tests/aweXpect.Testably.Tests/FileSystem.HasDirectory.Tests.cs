@@ -13,7 +13,7 @@ public sealed partial class FileSystem
 			public async Task WhenDirectoryExists_ShouldSucceed()
 			{
 				string path = "foo";
-				IFileSystem sut = new MockFileSystem();
+				MockFileSystem sut = new();
 				sut.Directory.CreateDirectory(path);
 
 				async Task Act()
@@ -28,7 +28,7 @@ public sealed partial class FileSystem
 			public async Task WhenDirectoryIsMissing_ShouldFail()
 			{
 				string path = "foo";
-				IFileSystem sut = new MockFileSystem();
+				MockFileSystem sut = new();
 
 				async Task Act()
 				{
@@ -47,7 +47,7 @@ public sealed partial class FileSystem
 			public async Task WhenPathIsFile_ShouldFail()
 			{
 				string path = "foo";
-				IFileSystem sut = new MockFileSystem();
+				MockFileSystem sut = new();
 				// ReSharper disable once MethodHasAsyncOverload
 				sut.File.WriteAllText(path, "");
 

@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.IO.Abstractions;
 using Testably.Abstractions.Testing;
 
 namespace aweXpect.Testably.Tests;
@@ -16,7 +15,7 @@ public sealed partial class FileSystem
 				public async Task AllHaveContent_WhenContentIsDifferent_ShouldFail()
 				{
 					string path = "foo";
-					IFileSystem sut = new MockFileSystem();
+					MockFileSystem sut = new();
 					sut.Initialize().WithSubdirectory(path).Initialized(d => d
 						.WithFile("bar.txt").Which(f => f.HasStringContent("some-content")));
 
@@ -42,7 +41,7 @@ public sealed partial class FileSystem
 				public async Task AllHaveContent_WhenContentMatches_ShouldSucceed()
 				{
 					string path = "foo";
-					IFileSystem sut = new MockFileSystem();
+					MockFileSystem sut = new();
 					sut.Initialize().WithSubdirectory(path).Initialized(d => d
 						.WithFile("bar.txt").Which(f => f.HasStringContent("some-content")));
 
@@ -59,7 +58,7 @@ public sealed partial class FileSystem
 				public async Task AllHaveContent_WhenNegated_WhenContentIsDifferent_ShouldSucceed()
 				{
 					string path = "foo";
-					IFileSystem sut = new MockFileSystem();
+					MockFileSystem sut = new();
 					sut.Initialize().WithSubdirectory(path).Initialized(d => d
 						.WithFile("bar.txt").Which(f => f.HasStringContent("some-content")));
 
@@ -77,7 +76,7 @@ public sealed partial class FileSystem
 				public async Task AllHaveContent_WhenNegated_WhenContentMatches_ShouldFail()
 				{
 					string path = "foo";
-					IFileSystem sut = new MockFileSystem();
+					MockFileSystem sut = new();
 					sut.Initialize().WithSubdirectory(path).Initialized(d => d
 						.WithFile("bar.txt").Which(f => f.HasStringContent("some-content")));
 
@@ -103,7 +102,7 @@ public sealed partial class FileSystem
 				public async Task BeEmpty_WhenDirectoryIsEmpty_ShouldSucceed()
 				{
 					string path = "foo";
-					IFileSystem sut = new MockFileSystem();
+					MockFileSystem sut = new();
 					sut.Initialize().WithSubdirectory(path);
 
 					async Task Act()
@@ -118,7 +117,7 @@ public sealed partial class FileSystem
 				public async Task BeEmpty_WhenDirectoryIsNotEmpty_ShouldFail()
 				{
 					string path = "foo";
-					IFileSystem sut = new MockFileSystem();
+					MockFileSystem sut = new();
 					sut.Initialize().WithSubdirectory(path).Initialized(d => d
 						.WithFile("bar.txt").Which(f => f.HasStringContent("some-content")));
 

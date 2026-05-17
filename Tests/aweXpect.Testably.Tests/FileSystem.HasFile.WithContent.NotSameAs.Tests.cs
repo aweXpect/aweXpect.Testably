@@ -16,7 +16,7 @@ public sealed partial class FileSystem
 					[Fact]
 					public async Task WhenContentIsDifferent_ShouldSucceed()
 					{
-						IFileSystem sut = new MockFileSystem();
+						MockFileSystem sut = new();
 						string path = "foo.txt";
 						string expectedPath = "bar.txt";
 						// ReSharper disable once MethodHasAsyncOverload
@@ -34,7 +34,7 @@ public sealed partial class FileSystem
 					[Fact]
 					public async Task WhenContentMatches_ShouldFail()
 					{
-						IFileSystem sut = new MockFileSystem();
+						MockFileSystem sut = new();
 						string path = "foo.txt";
 						string content = "bar";
 						string expectedPath = "bar.txt";
@@ -65,7 +65,7 @@ public sealed partial class FileSystem
 					[Fact]
 					public async Task WhenContentIsDifferent_ShouldSucceed()
 					{
-						IFileSystem sut = new MockFileSystem();
+						MockFileSystem sut = new();
 						string path = "foo.txt";
 						string expectedPath = "bar.txt";
 						// ReSharper disable once MethodHasAsyncOverload
@@ -83,7 +83,7 @@ public sealed partial class FileSystem
 					[Fact]
 					public async Task WhenContentMatches_ShouldFail()
 					{
-						IFileSystem sut = new MockFileSystem();
+						MockFileSystem sut = new();
 						string path = "foo.txt";
 						string expectedPath = "bar.txt";
 						string fullExpectedPath = sut.Path.GetFullPath(expectedPath);

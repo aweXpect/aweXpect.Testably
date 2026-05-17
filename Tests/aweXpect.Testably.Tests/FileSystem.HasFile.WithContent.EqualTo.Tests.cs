@@ -20,7 +20,7 @@ public sealed partial class FileSystem
 						byte[] content = Encoding.UTF8.GetBytes("baz");
 						byte[] expected = Encoding.UTF8.GetBytes("bar");
 						string path = "foo.txt";
-						IFileSystem sut = new MockFileSystem();
+						MockFileSystem sut = new();
 						// ReSharper disable once MethodHasAsyncOverload
 						sut.File.WriteAllBytes(path, content);
 
@@ -42,7 +42,7 @@ public sealed partial class FileSystem
 					{
 						byte[] content = Encoding.UTF8.GetBytes("baz");
 						string path = "foo.txt";
-						IFileSystem sut = new MockFileSystem();
+						MockFileSystem sut = new();
 						// ReSharper disable once MethodHasAsyncOverload
 						sut.File.WriteAllBytes(path, content);
 
@@ -61,7 +61,7 @@ public sealed partial class FileSystem
 					public async Task WhenContentIsDifferent_ShouldFail()
 					{
 						string path = "foo.txt";
-						IFileSystem sut = new MockFileSystem();
+						MockFileSystem sut = new();
 						// ReSharper disable once MethodHasAsyncOverload
 						sut.File.WriteAllText(path, "baz");
 
@@ -90,7 +90,7 @@ public sealed partial class FileSystem
 					{
 						string path = "foo.txt";
 						string content = "bar";
-						IFileSystem sut = new MockFileSystem();
+						MockFileSystem sut = new();
 						// ReSharper disable once MethodHasAsyncOverload
 						sut.File.WriteAllText(path, content);
 
@@ -109,7 +109,7 @@ public sealed partial class FileSystem
 					public async Task WhenContentIsDifferent_ShouldFail()
 					{
 						string path = "foo.txt";
-						IFileSystem sut = new MockFileSystem();
+						MockFileSystem sut = new();
 						// ReSharper disable once MethodHasAsyncOverload
 						sut.File.WriteAllText(path, "baz");
 
@@ -137,7 +137,7 @@ public sealed partial class FileSystem
 					public async Task WhenContentMatches_ShouldSucceed()
 					{
 						string path = "foo.txt";
-						IFileSystem sut = new MockFileSystem();
+						MockFileSystem sut = new();
 						// ReSharper disable once MethodHasAsyncOverload
 						sut.File.WriteAllText(path, "bar");
 

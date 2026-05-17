@@ -12,7 +12,7 @@ public sealed partial class FileInfo
 			[Fact]
 			public async Task WhenExtensionDiffers_ShouldFail()
 			{
-				IFileSystem fileSystem = new MockFileSystem();
+				MockFileSystem fileSystem = new();
 				// ReSharper disable once MethodHasAsyncOverload
 				fileSystem.File.WriteAllText("foo.txt", "");
 				IFileInfo fileInfo = fileSystem.FileInfo.New("foo.txt");
@@ -37,7 +37,7 @@ public sealed partial class FileInfo
 			[Fact]
 			public async Task WhenExtensionMatches_ShouldSucceed()
 			{
-				IFileSystem fileSystem = new MockFileSystem();
+				MockFileSystem fileSystem = new();
 				// ReSharper disable once MethodHasAsyncOverload
 				fileSystem.File.WriteAllText("foo.txt", "");
 				IFileInfo fileInfo = fileSystem.FileInfo.New("foo.txt");

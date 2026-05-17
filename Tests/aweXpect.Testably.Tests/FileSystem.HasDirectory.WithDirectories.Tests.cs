@@ -15,7 +15,7 @@ public sealed partial class FileSystem
 				public async Task WhenItemCountDiffers_ShouldFail()
 				{
 					string path = "foo";
-					IFileSystem sut = new MockFileSystem();
+					MockFileSystem sut = new();
 					sut.Initialize().WithSubdirectory(path).Initialized(d => d
 						.WithSubdirectory("directory1")
 						.WithSubdirectory("directory2"));
@@ -43,7 +43,7 @@ public sealed partial class FileSystem
 				public async Task WhenItemCountMatches_ShouldSucceed()
 				{
 					string path = "foo";
-					IFileSystem sut = new MockFileSystem();
+					MockFileSystem sut = new();
 					sut.Initialize().WithSubdirectory(path).Initialized(d => d
 						.WithSubdirectory("directory1")
 						.WithSubdirectory("directory2"));

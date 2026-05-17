@@ -37,6 +37,20 @@ public sealed partial class FileInfo
 
 				await That(Act).DoesNotThrow();
 			}
+
+			[Fact]
+			public async Task IsNotEmpty_WhenFileDoesNotExist_ShouldStillEvaluateParent()
+			{
+				MockFileSystem fileSystem = new();
+				fileSystem.Initialize().WithSubdirectory("logs").Initialized(d => d
+					.WithFile("other.log"));
+				IFileInfo fileInfo = fileSystem.FileInfo.New("logs/missing.log");
+
+				async Task Act()
+					=> await That(fileInfo).WhoseParent.IsNotEmpty();
+
+				await That(Act).DoesNotThrow();
+			}
 		}
 	}
 }

@@ -13,7 +13,7 @@ public sealed partial class FileInfo
 			[Fact]
 			public async Task WhenFileDoesNotExist_ShouldFail()
 			{
-				IFileSystem fileSystem = new MockFileSystem();
+				MockFileSystem fileSystem = new();
 				IFileInfo fileInfo = fileSystem.FileInfo.New("missing.txt");
 
 				async Task Act()
@@ -32,7 +32,7 @@ public sealed partial class FileInfo
 			[Fact]
 			public async Task WhenLengthDiffers_ShouldFail()
 			{
-				IFileSystem fileSystem = new MockFileSystem();
+				MockFileSystem fileSystem = new();
 				// ReSharper disable once MethodHasAsyncOverload
 				fileSystem.File.WriteAllBytes("foo.txt", Encoding.UTF8.GetBytes("baz"));
 				IFileInfo fileInfo = fileSystem.FileInfo.New("foo.txt");
@@ -53,7 +53,7 @@ public sealed partial class FileInfo
 			[Fact]
 			public async Task WhenLengthMatches_ShouldSucceed()
 			{
-				IFileSystem fileSystem = new MockFileSystem();
+				MockFileSystem fileSystem = new();
 				// ReSharper disable once MethodHasAsyncOverload
 				fileSystem.File.WriteAllBytes("foo.txt", Encoding.UTF8.GetBytes("baz"));
 				IFileInfo fileInfo = fileSystem.FileInfo.New("foo.txt");

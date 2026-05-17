@@ -52,6 +52,24 @@ public sealed partial class FileInfo
 			}
 
 			[Fact]
+			public async Task WhenCreationTimeIsUnspecified_ShouldSucceed()
+			{
+				MockFileSystem fileSystem = new();
+				DateTime expected = new(2020, 2, 1, 12, 0, 0, DateTimeKind.Unspecified);
+				string path = "foo.txt";
+				fileSystem.File.WriteAllText(path, "");
+				fileSystem.File.SetCreationTime(path, expected);
+				IFileInfo fileInfo = fileSystem.FileInfo.New(path);
+
+				async Task Act()
+				{
+					await That(fileInfo).HasCreationTime(expected);
+				}
+
+				await That(Act).DoesNotThrow();
+			}
+
+			[Fact]
 			public async Task WithinTolerance_ShouldSucceed()
 			{
 				MockFileSystem fileSystem = new();
