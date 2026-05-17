@@ -236,12 +236,14 @@ public sealed class RecordedFileMethods
 		=> Build(nameof(IFile.GetLastWriteTimeUtc),
 			ParameterMatcher.From("path", path, pathExpression));
 
+#if NET7_0_OR_GREATER
 	/// <summary>Recorded calls to <c>IFile.GetUnixFileMode(string)</c>.</summary>
 	public RecordedMethodCallResult GetUnixFileMode(
 		Func<string, bool>? path = null,
 		[CallerArgumentExpression(nameof(path))] string? pathExpression = null)
 		=> Build("GetUnixFileMode",
 			ParameterMatcher.From("path", path, pathExpression));
+#endif
 
 	/// <summary>Recorded calls to <see cref="IFile.Move(string, string)" /> and overloads.</summary>
 	public RecordedMethodCallResult Move(

@@ -87,7 +87,7 @@ internal static class StatisticsConstraints
 			string prefix = negated ? "did not record " : "recorded ";
 			if (quantifier.IsNever)
 			{
-				stringBuilder.Append(negated ? "recorded any call to " : "recorded no call to ")
+				stringBuilder.Append(negated ? "recorded at least one call to " : "recorded no call to ")
 					.Append(bucketDescription).Append('.').Append(methodName);
 			}
 			else
@@ -178,7 +178,7 @@ internal static class StatisticsConstraints
 			string accessVerb = access == PropertyAccess.Get ? "get of " : "set of ";
 			if (quantifier.IsNever)
 			{
-				stringBuilder.Append(negated ? "recorded any " : "recorded no ").Append(accessVerb)
+				stringBuilder.Append(negated ? "recorded at least one " : "recorded no ").Append(accessVerb)
 					.Append(bucketDescription).Append('.').Append(propertyName);
 			}
 			else
