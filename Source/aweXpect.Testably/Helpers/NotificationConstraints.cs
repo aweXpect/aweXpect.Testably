@@ -55,7 +55,8 @@ internal static class NotificationConstraints
 				actual,
 				change =>
 				{
-					if (!filter.IsAsyncMatchSync(change, context, cancellationToken))
+					if (deadlineToken.IsCancellationRequested ||
+					    !filter.IsAsyncMatchSync(change, context, deadlineToken))
 					{
 						return;
 					}
