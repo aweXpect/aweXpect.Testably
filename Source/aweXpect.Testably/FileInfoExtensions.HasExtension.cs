@@ -13,7 +13,7 @@ namespace aweXpect.Testably;
 public static partial class FileInfoExtensions
 {
 	/// <summary>
-	///     Verifies that the <see cref="IFileInfo" /> has an extension equal to <paramref name="expected" />.
+	///     Verifies that the <see cref="IFileInfo" /> has the <paramref name="expected" /> extension.
 	/// </summary>
 	public static StringEqualityTypeResult<IFileInfo, IThat<IFileInfo>> HasExtension(this IThat<IFileInfo> source,
 		string expected)

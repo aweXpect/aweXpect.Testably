@@ -1,4 +1,5 @@
 #if NET10_0_OR_GREATER
+using System;
 using System.IO.Abstractions;
 using aweXpect.Core;
 using aweXpect.Testably.Helpers;
@@ -15,7 +16,11 @@ public static partial class DirectoryInfoExtensions
 		public IThat<IDirectoryInfo> WhoseParent
 			=> new ThatSubject<IDirectoryInfo>(
 				source.Get().ExpectationBuilder
-					.ForWhich<IDirectoryInfo, IDirectoryInfo>(d => d.Parent!, " whose parent "));
+					.ForWhich<IDirectoryInfo, IDirectoryInfo>(GetParentOrThrow, " whose parent "));
 	}
+
+	private static IDirectoryInfo GetParentOrThrow(IDirectoryInfo directory)
+		=> directory.Parent ?? throw new InvalidOperationException(
+			"Cannot assert on the parent of a root directory because it has no parent.");
 }
 #endif

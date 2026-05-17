@@ -1,4 +1,5 @@
 #if NET10_0_OR_GREATER
+using System;
 using System.IO.Abstractions;
 using aweXpect.Core;
 using aweXpect.Testably.Helpers;
@@ -15,7 +16,11 @@ public static partial class FileInfoExtensions
 		public IThat<IDirectoryInfo> WhoseParent
 			=> new ThatSubject<IDirectoryInfo>(
 				source.Get().ExpectationBuilder
-					.ForWhich<IFileInfo, IDirectoryInfo>(f => f.Directory!, " whose parent "));
+					.ForWhich<IFileInfo, IDirectoryInfo>(GetDirectoryOrThrow, " whose parent "));
 	}
+
+	private static IDirectoryInfo GetDirectoryOrThrow(IFileInfo file)
+		=> file.Directory ?? throw new InvalidOperationException(
+			"Cannot assert on the parent directory of the file because it has none.");
 }
 #endif
