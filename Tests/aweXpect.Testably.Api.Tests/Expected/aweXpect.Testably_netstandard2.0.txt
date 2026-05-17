@@ -16,8 +16,6 @@ namespace aweXpect.Testably
         public static aweXpect.Results.StringEqualityTypeResult<System.IO.Abstractions.IDirectoryInfo, aweXpect.Core.IThat<System.IO.Abstractions.IDirectoryInfo>> HasName(this aweXpect.Core.IThat<System.IO.Abstractions.IDirectoryInfo> source, string expected) { }
         public static aweXpect.Results.AndOrResult<System.IO.Abstractions.IDirectoryInfo, aweXpect.Core.IThat<System.IO.Abstractions.IDirectoryInfo>> IsEmpty(this aweXpect.Core.IThat<System.IO.Abstractions.IDirectoryInfo> source) { }
         public static aweXpect.Results.AndOrResult<System.IO.Abstractions.IDirectoryInfo, aweXpect.Core.IThat<System.IO.Abstractions.IDirectoryInfo>> IsNotEmpty(this aweXpect.Core.IThat<System.IO.Abstractions.IDirectoryInfo> source) { }
-        public static aweXpect.Results.AndOrResult<System.IO.Abstractions.IDirectoryInfo, aweXpect.Core.IThat<System.IO.Abstractions.IDirectoryInfo>> WithDirectories(this aweXpect.Core.IThat<System.IO.Abstractions.IDirectoryInfo> source, System.Action<aweXpect.Core.IThat<System.Collections.Generic.IEnumerable<System.IO.Abstractions.IDirectoryInfo>>> expectations) { }
-        public static aweXpect.Results.AndOrResult<System.IO.Abstractions.IDirectoryInfo, aweXpect.Core.IThat<System.IO.Abstractions.IDirectoryInfo>> WithFiles(this aweXpect.Core.IThat<System.IO.Abstractions.IDirectoryInfo> source, System.Action<aweXpect.Core.IThat<System.Collections.Generic.IEnumerable<System.IO.Abstractions.IFileInfo>>> expectations) { }
     }
     public static class FileInfoExtensions
     {
