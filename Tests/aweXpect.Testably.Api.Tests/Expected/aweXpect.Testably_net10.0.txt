@@ -62,6 +62,43 @@ namespace aweXpect.Testably
 }
 namespace aweXpect.Testably.Recorded
 {
+    public sealed class RecordedDirectoryInfoBucket
+    {
+        public aweXpect.Testably.Recorded.RecordedDirectoryInfoInstance this[string path] { get; }
+        public aweXpect.Testably.Results.RecordedMethodCallResult New(System.Func<string, bool>? path = null, [System.Runtime.CompilerServices.CallerArgumentExpression("path")] string? pathExpression = null) { }
+        public aweXpect.Testably.Results.RecordedMethodCallResult Wrap(System.Func<System.IO.DirectoryInfo?, bool>? directoryInfo = null, [System.Runtime.CompilerServices.CallerArgumentExpression("directoryInfo")] string? directoryInfoExpression = null) { }
+    }
+    public sealed class RecordedDirectoryInfoInstance
+    {
+        public aweXpect.Testably.Recorded.RecordedProperty Attributes { get; }
+        public aweXpect.Testably.Recorded.RecordedProperty CreationTime { get; }
+        public aweXpect.Testably.Recorded.RecordedProperty CreationTimeUtc { get; }
+        public aweXpect.Testably.Recorded.RecordedProperty Exists { get; }
+        public aweXpect.Testably.Recorded.RecordedProperty Extension { get; }
+        public aweXpect.Testably.Recorded.RecordedProperty FullName { get; }
+        public aweXpect.Testably.Recorded.RecordedProperty LastAccessTime { get; }
+        public aweXpect.Testably.Recorded.RecordedProperty LastAccessTimeUtc { get; }
+        public aweXpect.Testably.Recorded.RecordedProperty LastWriteTime { get; }
+        public aweXpect.Testably.Recorded.RecordedProperty LastWriteTimeUtc { get; }
+        public aweXpect.Testably.Recorded.RecordedProperty LinkTarget { get; }
+        public aweXpect.Testably.Recorded.RecordedProperty Name { get; }
+        public aweXpect.Testably.Recorded.RecordedProperty Parent { get; }
+        public aweXpect.Testably.Recorded.RecordedProperty Root { get; }
+        public aweXpect.Testably.Recorded.RecordedProperty UnixFileMode { get; }
+        public aweXpect.Testably.Results.RecordedMethodCallResult Create() { }
+        public aweXpect.Testably.Results.RecordedMethodCallResult CreateAsSymbolicLink(System.Func<string, bool>? pathToTarget = null, [System.Runtime.CompilerServices.CallerArgumentExpression("pathToTarget")] string? pathToTargetExpression = null) { }
+        public aweXpect.Testably.Results.RecordedMethodCallResult CreateSubdirectory(System.Func<string, bool>? path = null, [System.Runtime.CompilerServices.CallerArgumentExpression("path")] string? pathExpression = null) { }
+        public aweXpect.Testably.Results.RecordedMethodCallResult Delete(System.Func<bool, bool>? recursive = null, [System.Runtime.CompilerServices.CallerArgumentExpression("recursive")] string? recursiveExpression = null) { }
+        public aweXpect.Testably.Results.RecordedMethodCallResult EnumerateDirectories(System.Func<string, bool>? searchPattern = null, System.Func<System.IO.SearchOption, bool>? searchOption = null, System.Func<System.IO.EnumerationOptions, bool>? enumerationOptions = null, [System.Runtime.CompilerServices.CallerArgumentExpression("searchPattern")] string? searchPatternExpression = null, [System.Runtime.CompilerServices.CallerArgumentExpression("searchOption")] string? searchOptionExpression = null, [System.Runtime.CompilerServices.CallerArgumentExpression("enumerationOptions")] string? enumerationOptionsExpression = null) { }
+        public aweXpect.Testably.Results.RecordedMethodCallResult EnumerateFileSystemInfos(System.Func<string, bool>? searchPattern = null, System.Func<System.IO.SearchOption, bool>? searchOption = null, System.Func<System.IO.EnumerationOptions, bool>? enumerationOptions = null, [System.Runtime.CompilerServices.CallerArgumentExpression("searchPattern")] string? searchPatternExpression = null, [System.Runtime.CompilerServices.CallerArgumentExpression("searchOption")] string? searchOptionExpression = null, [System.Runtime.CompilerServices.CallerArgumentExpression("enumerationOptions")] string? enumerationOptionsExpression = null) { }
+        public aweXpect.Testably.Results.RecordedMethodCallResult EnumerateFiles(System.Func<string, bool>? searchPattern = null, System.Func<System.IO.SearchOption, bool>? searchOption = null, System.Func<System.IO.EnumerationOptions, bool>? enumerationOptions = null, [System.Runtime.CompilerServices.CallerArgumentExpression("searchPattern")] string? searchPatternExpression = null, [System.Runtime.CompilerServices.CallerArgumentExpression("searchOption")] string? searchOptionExpression = null, [System.Runtime.CompilerServices.CallerArgumentExpression("enumerationOptions")] string? enumerationOptionsExpression = null) { }
+        public aweXpect.Testably.Results.RecordedMethodCallResult GetDirectories(System.Func<string, bool>? searchPattern = null, System.Func<System.IO.SearchOption, bool>? searchOption = null, System.Func<System.IO.EnumerationOptions, bool>? enumerationOptions = null, [System.Runtime.CompilerServices.CallerArgumentExpression("searchPattern")] string? searchPatternExpression = null, [System.Runtime.CompilerServices.CallerArgumentExpression("searchOption")] string? searchOptionExpression = null, [System.Runtime.CompilerServices.CallerArgumentExpression("enumerationOptions")] string? enumerationOptionsExpression = null) { }
+        public aweXpect.Testably.Results.RecordedMethodCallResult GetFileSystemInfos(System.Func<string, bool>? searchPattern = null, System.Func<System.IO.SearchOption, bool>? searchOption = null, System.Func<System.IO.EnumerationOptions, bool>? enumerationOptions = null, [System.Runtime.CompilerServices.CallerArgumentExpression("searchPattern")] string? searchPatternExpression = null, [System.Runtime.CompilerServices.CallerArgumentExpression("searchOption")] string? searchOptionExpression = null, [System.Runtime.CompilerServices.CallerArgumentExpression("enumerationOptions")] string? enumerationOptionsExpression = null) { }
+        public aweXpect.Testably.Results.RecordedMethodCallResult GetFiles(System.Func<string, bool>? searchPattern = null, System.Func<System.IO.SearchOption, bool>? searchOption = null, System.Func<System.IO.EnumerationOptions, bool>? enumerationOptions = null, [System.Runtime.CompilerServices.CallerArgumentExpression("searchPattern")] string? searchPatternExpression = null, [System.Runtime.CompilerServices.CallerArgumentExpression("searchOption")] string? searchOptionExpression = null, [System.Runtime.CompilerServices.CallerArgumentExpression("enumerationOptions")] string? enumerationOptionsExpression = null) { }
+        public aweXpect.Testably.Results.RecordedMethodCallResult MoveTo(System.Func<string, bool>? destDirName = null, [System.Runtime.CompilerServices.CallerArgumentExpression("destDirName")] string? destDirNameExpression = null) { }
+        public aweXpect.Testably.Results.RecordedMethodCallResult Refresh() { }
+        public aweXpect.Testably.Results.RecordedMethodCallResult ResolveLinkTarget(System.Func<bool, bool>? returnFinalTarget = null, [System.Runtime.CompilerServices.CallerArgumentExpression("returnFinalTarget")] string? returnFinalTargetExpression = null) { }
+    }
     public sealed class RecordedDirectoryMethods
     {
         public aweXpect.Testably.Results.RecordedMethodCallResult CreateDirectory(System.Func<string, bool>? path = null, System.Func<System.IO.UnixFileMode, bool>? unixCreateMode = null, [System.Runtime.CompilerServices.CallerArgumentExpression("path")] string? pathExpression = null, [System.Runtime.CompilerServices.CallerArgumentExpression("unixCreateMode")] string? unixCreateModeExpression = null) { }
@@ -195,6 +232,7 @@ namespace aweXpect.Testably.Recorded
     public sealed class RecordedFileSystemStatistics
     {
         public aweXpect.Testably.Recorded.RecordedDirectoryMethods Directory { get; }
+        public aweXpect.Testably.Recorded.RecordedDirectoryInfoBucket DirectoryInfo { get; }
         public aweXpect.Testably.Recorded.RecordedFileMethods File { get; }
         public aweXpect.Testably.Recorded.RecordedFileInfoBucket FileInfo { get; }
         public aweXpect.Testably.Recorded.RecordedPathMethods Path { get; }

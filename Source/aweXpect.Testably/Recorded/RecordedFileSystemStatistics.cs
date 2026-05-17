@@ -26,6 +26,12 @@ public sealed class RecordedFileSystemStatistics
 	public RecordedDirectoryMethods Directory => new(_subject);
 
 	/// <summary>
+	///     Assertions on calls recorded against <see cref="System.IO.Abstractions.IDirectoryInfoFactory" />
+	///     and individual <see cref="System.IO.Abstractions.IDirectoryInfo" /> instances.
+	/// </summary>
+	public RecordedDirectoryInfoBucket DirectoryInfo => new(_subject);
+
+	/// <summary>
 	///     Assertions on calls recorded against <see cref="System.IO.Abstractions.IFileInfoFactory" />
 	///     and individual <see cref="System.IO.Abstractions.IFileInfo" /> instances.
 	/// </summary>
