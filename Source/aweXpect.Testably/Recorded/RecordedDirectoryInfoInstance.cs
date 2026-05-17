@@ -309,7 +309,11 @@ public sealed class RecordedDirectoryInfoInstance
 	///     Recorded accesses to <c>IFileSystemInfo.LinkTarget</c>.
 	/// </summary>
 	public RecordedProperty LinkTarget
+#if NET6_0_OR_GREATER
+		=> Property(nameof(IFileSystemInfo.LinkTarget));
+#else
 		=> Property("LinkTarget");
+#endif
 
 	/// <summary>
 	///     Recorded accesses to <see cref="IFileSystemInfo.Name" />.
@@ -333,7 +337,11 @@ public sealed class RecordedDirectoryInfoInstance
 	///     Recorded accesses to <c>IFileSystemInfo.UnixFileMode</c>.
 	/// </summary>
 	public RecordedProperty UnixFileMode
+#if NET7_0_OR_GREATER
+		=> Property(nameof(IFileSystemInfo.UnixFileMode));
+#else
 		=> Property("UnixFileMode");
+#endif
 
 	private RecordedProperty Property(string propertyName)
 	{

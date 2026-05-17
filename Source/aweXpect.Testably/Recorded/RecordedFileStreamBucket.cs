@@ -39,6 +39,7 @@ public sealed class RecordedFileStreamBucket
 	/// <summary>
 	///     Recorded calls to <see cref="IFileStreamFactory.New(string, FileMode)" /> and string-path overloads.
 	/// </summary>
+#pragma warning disable S107 // Each filter Func<> pairs with a CallerArgumentExpression string for diagnostics.
 	public RecordedMethodCallResult New(
 		Func<string, bool>? path = null,
 		Func<FileMode, bool>? mode = null,
@@ -56,6 +57,7 @@ public sealed class RecordedFileStreamBucket
 			ParameterMatcher.From("access", access, accessExpression),
 			ParameterMatcher.From("share", share, shareExpression),
 			ParameterMatcher.From("bufferSize", bufferSize, bufferSizeExpression));
+#pragma warning restore S107
 
 	/// <summary>
 	///     Recorded calls to <see cref="IFileStreamFactory.Wrap(FileStream)" />.

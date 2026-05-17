@@ -39,6 +39,7 @@ public sealed class RecordedPathMethods
 			ParameterMatcher.From("extension", extension, extensionExpression));
 
 	/// <summary>Recorded calls to <see cref="IPath.Combine(string, string)" /> and fixed-arity overloads.</summary>
+#pragma warning disable S107 // Each filter Func<> pairs with a CallerArgumentExpression string for diagnostics.
 	public RecordedMethodCallResult Combine(
 		Func<string, bool>? path1 = null,
 		Func<string, bool>? path2 = null,
@@ -53,6 +54,7 @@ public sealed class RecordedPathMethods
 			ParameterMatcher.From("path2", path2, path2Expression),
 			ParameterMatcher.From("path3", path3, path3Expression),
 			ParameterMatcher.From("path4", path4, path4Expression));
+#pragma warning restore S107
 
 	/// <summary>Recorded calls to <c>IPath.EndsInDirectorySeparator(string)</c>.</summary>
 	/// <remarks>The <c>ReadOnlySpan&lt;char&gt;</c> overload is not mirrored.</remarks>
@@ -170,6 +172,7 @@ public sealed class RecordedPathMethods
 	///     The span / <c>TryJoin</c> overloads are not mirrored. Filtering at positions beyond the recording's arity
 	///     (e.g. <paramref name="path4" /> for a 2-arg call) intentionally yields no matches.
 	/// </remarks>
+#pragma warning disable S107 // Each filter Func<> pairs with a CallerArgumentExpression string for diagnostics.
 	public RecordedMethodCallResult Join(
 		Func<string?, bool>? path1 = null,
 		Func<string?, bool>? path2 = null,
@@ -184,6 +187,7 @@ public sealed class RecordedPathMethods
 			ParameterMatcher.From("path2", path2, path2Expression),
 			ParameterMatcher.From("path3", path3, path3Expression),
 			ParameterMatcher.From("path4", path4, path4Expression));
+#pragma warning restore S107
 
 	/// <summary>Recorded calls to <c>IPath.TrimEndingDirectorySeparator(string)</c>.</summary>
 	/// <remarks>The <c>ReadOnlySpan&lt;char&gt;</c> overload is not mirrored.</remarks>

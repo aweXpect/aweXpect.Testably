@@ -56,7 +56,11 @@ public sealed class RecordedFileSystemWatcherInstance
 	public RecordedProperty Filter => Property(nameof(IFileSystemWatcher.Filter));
 
 	/// <summary>Recorded accesses to <c>IFileSystemWatcher.Filters</c>.</summary>
+#if NET6_0_OR_GREATER
+	public RecordedProperty Filters => Property(nameof(IFileSystemWatcher.Filters));
+#else
 	public RecordedProperty Filters => Property("Filters");
+#endif
 
 	/// <summary>Recorded accesses to <see cref="IFileSystemWatcher.IncludeSubdirectories" />.</summary>
 	public RecordedProperty IncludeSubdirectories => Property(nameof(IFileSystemWatcher.IncludeSubdirectories));

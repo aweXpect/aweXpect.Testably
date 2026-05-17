@@ -264,6 +264,7 @@ public sealed class RecordedFileMethods
 	///     but its <c>FileStreamOptions</c> value cannot be filtered through this mirror because it is recorded at
 	///     parameter position 1 (the same slot used by <see cref="FileMode" /> on the other overloads).
 	/// </remarks>
+#pragma warning disable S107 // Each filter Func<> pairs with a CallerArgumentExpression string for diagnostics.
 	public RecordedMethodCallResult Open(
 		Func<string, bool>? path = null,
 		Func<FileMode, bool>? mode = null,
@@ -278,6 +279,7 @@ public sealed class RecordedFileMethods
 			ParameterMatcher.From("mode", mode, modeExpression),
 			ParameterMatcher.From("access", access, accessExpression),
 			ParameterMatcher.From("share", share, shareExpression));
+#pragma warning restore S107
 
 	/// <summary>Recorded calls to <see cref="IFile.OpenRead(string)" />.</summary>
 	public RecordedMethodCallResult OpenRead(
@@ -375,6 +377,7 @@ public sealed class RecordedFileMethods
 			ParameterMatcher.From("encoding", encoding, encodingExpression));
 
 	/// <summary>Recorded calls to <see cref="IFile.Replace(string, string, string?)" /> and overloads.</summary>
+#pragma warning disable S107 // Each filter Func<> pairs with a CallerArgumentExpression string for diagnostics.
 	public RecordedMethodCallResult Replace(
 		Func<string, bool>? sourceFileName = null,
 		Func<string, bool>? destinationFileName = null,
@@ -389,6 +392,7 @@ public sealed class RecordedFileMethods
 			ParameterMatcher.From("destinationFileName", destinationFileName, destinationFileNameExpression),
 			ParameterMatcher.From("destinationBackupFileName", destinationBackupFileName, destinationBackupFileNameExpression),
 			ParameterMatcher.From("ignoreMetadataErrors", ignoreMetadataErrors, ignoreMetadataErrorsExpression));
+#pragma warning restore S107
 
 	/// <summary>Recorded calls to <c>IFile.ResolveLinkTarget(string, bool)</c>.</summary>
 	public RecordedMethodCallResult ResolveLinkTarget(

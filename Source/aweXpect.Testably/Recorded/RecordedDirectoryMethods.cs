@@ -74,6 +74,7 @@ public sealed class RecordedDirectoryMethods
 	///     <paramref name="searchOption" /> and <c>enumerationOptions</c> share recording position 2,
 	///     so only one should be supplied per call. If both are supplied, <c>enumerationOptions</c> wins.
 	/// </remarks>
+#pragma warning disable S107 // Each filter Func<> pairs with a CallerArgumentExpression string for diagnostics.
 	public RecordedMethodCallResult EnumerateDirectories(
 		Func<string, bool>? path = null,
 		Func<string, bool>? searchPattern = null,
@@ -96,12 +97,14 @@ public sealed class RecordedDirectoryMethods
 				, enumerationOptions, enumerationOptionsExpression
 #endif
 				));
+#pragma warning restore S107
 
 	/// <summary>Recorded calls to <see cref="IDirectory.EnumerateFiles(string)" /> and overloads.</summary>
 	/// <remarks>
 	///     <paramref name="searchOption" /> and <c>enumerationOptions</c> share recording position 2,
 	///     so only one should be supplied per call. If both are supplied, <c>enumerationOptions</c> wins.
 	/// </remarks>
+#pragma warning disable S107 // Each filter Func<> pairs with a CallerArgumentExpression string for diagnostics.
 	public RecordedMethodCallResult EnumerateFiles(
 		Func<string, bool>? path = null,
 		Func<string, bool>? searchPattern = null,
@@ -124,12 +127,14 @@ public sealed class RecordedDirectoryMethods
 				, enumerationOptions, enumerationOptionsExpression
 #endif
 				));
+#pragma warning restore S107
 
 	/// <summary>Recorded calls to <see cref="IDirectory.EnumerateFileSystemEntries(string)" /> and overloads.</summary>
 	/// <remarks>
 	///     <paramref name="searchOption" /> and <c>enumerationOptions</c> share recording position 2,
 	///     so only one should be supplied per call. If both are supplied, <c>enumerationOptions</c> wins.
 	/// </remarks>
+#pragma warning disable S107 // Each filter Func<> pairs with a CallerArgumentExpression string for diagnostics.
 	public RecordedMethodCallResult EnumerateFileSystemEntries(
 		Func<string, bool>? path = null,
 		Func<string, bool>? searchPattern = null,
@@ -152,6 +157,7 @@ public sealed class RecordedDirectoryMethods
 				, enumerationOptions, enumerationOptionsExpression
 #endif
 				));
+#pragma warning restore S107
 
 	/// <summary>Recorded calls to <see cref="IDirectory.Exists(string?)" />.</summary>
 	public RecordedMethodCallResult Exists(
@@ -183,6 +189,7 @@ public sealed class RecordedDirectoryMethods
 	///     <paramref name="searchOption" /> and <c>enumerationOptions</c> share recording position 2,
 	///     so only one should be supplied per call. If both are supplied, <c>enumerationOptions</c> wins.
 	/// </remarks>
+#pragma warning disable S107 // Each filter Func<> pairs with a CallerArgumentExpression string for diagnostics.
 	public RecordedMethodCallResult GetDirectories(
 		Func<string, bool>? path = null,
 		Func<string, bool>? searchPattern = null,
@@ -205,6 +212,7 @@ public sealed class RecordedDirectoryMethods
 				, enumerationOptions, enumerationOptionsExpression
 #endif
 				));
+#pragma warning restore S107
 
 	/// <summary>Recorded calls to <see cref="IDirectory.GetDirectoryRoot(string)" />.</summary>
 	public RecordedMethodCallResult GetDirectoryRoot(
@@ -218,6 +226,7 @@ public sealed class RecordedDirectoryMethods
 	///     <paramref name="searchOption" /> and <c>enumerationOptions</c> share recording position 2,
 	///     so only one should be supplied per call. If both are supplied, <c>enumerationOptions</c> wins.
 	/// </remarks>
+#pragma warning disable S107 // Each filter Func<> pairs with a CallerArgumentExpression string for diagnostics.
 	public RecordedMethodCallResult GetFiles(
 		Func<string, bool>? path = null,
 		Func<string, bool>? searchPattern = null,
@@ -240,12 +249,14 @@ public sealed class RecordedDirectoryMethods
 				, enumerationOptions, enumerationOptionsExpression
 #endif
 				));
+#pragma warning restore S107
 
 	/// <summary>Recorded calls to <see cref="IDirectory.GetFileSystemEntries(string)" /> and overloads.</summary>
 	/// <remarks>
 	///     <paramref name="searchOption" /> and <c>enumerationOptions</c> share recording position 2,
 	///     so only one should be supplied per call. If both are supplied, <c>enumerationOptions</c> wins.
 	/// </remarks>
+#pragma warning disable S107 // Each filter Func<> pairs with a CallerArgumentExpression string for diagnostics.
 	public RecordedMethodCallResult GetFileSystemEntries(
 		Func<string, bool>? path = null,
 		Func<string, bool>? searchPattern = null,
@@ -268,6 +279,7 @@ public sealed class RecordedDirectoryMethods
 				, enumerationOptions, enumerationOptionsExpression
 #endif
 				));
+#pragma warning restore S107
 
 	/// <summary>Recorded calls to <see cref="IDirectory.GetLastAccessTime(string)" />.</summary>
 	public RecordedMethodCallResult GetLastAccessTime(
