@@ -1,5 +1,4 @@
-﻿using System.IO.Abstractions;
-using Testably.Abstractions.Testing;
+﻿using Testably.Abstractions.Testing;
 
 namespace aweXpect.Testably.Tests;
 
