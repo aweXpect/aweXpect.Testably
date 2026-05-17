@@ -34,13 +34,13 @@ public sealed partial class FileInfo
 			}
 
 			[Fact]
-			public async Task WhenCreationTimeMatches_ShouldSucceed()
+			public async Task WhenCreationTimeIsUnspecified_ShouldSucceed()
 			{
 				MockFileSystem fileSystem = new();
-				DateTime expected = CurrentTime().ToUniversalTime();
+				DateTime expected = new(2020, 2, 1, 12, 0, 0, DateTimeKind.Unspecified);
 				string path = "foo.txt";
 				fileSystem.File.WriteAllText(path, "");
-				fileSystem.File.SetCreationTimeUtc(path, expected);
+				fileSystem.File.SetCreationTime(path, expected);
 				IFileInfo fileInfo = fileSystem.FileInfo.New(path);
 
 				async Task Act()
@@ -52,13 +52,13 @@ public sealed partial class FileInfo
 			}
 
 			[Fact]
-			public async Task WhenCreationTimeIsUnspecified_ShouldSucceed()
+			public async Task WhenCreationTimeMatches_ShouldSucceed()
 			{
 				MockFileSystem fileSystem = new();
-				DateTime expected = new(2020, 2, 1, 12, 0, 0, DateTimeKind.Unspecified);
+				DateTime expected = CurrentTime().ToUniversalTime();
 				string path = "foo.txt";
 				fileSystem.File.WriteAllText(path, "");
-				fileSystem.File.SetCreationTime(path, expected);
+				fileSystem.File.SetCreationTimeUtc(path, expected);
 				IFileInfo fileInfo = fileSystem.FileInfo.New(path);
 
 				async Task Act()
