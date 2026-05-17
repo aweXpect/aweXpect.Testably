@@ -15,18 +15,15 @@ public partial class DirectoryResult<TParent>
 	where TParent : class
 {
 	private readonly ExpectationBuilder _expectationBuilder;
-	private readonly string _path;
 	private readonly Func<TParent, (IFileSystem fs, string fullPath)> _resolver;
 
 	internal DirectoryResult(
 		ExpectationBuilder expectationBuilder,
 		IThat<TParent> subject,
-		string path,
 		Func<TParent, (IFileSystem fs, string fullPath)> resolver)
 		: base(expectationBuilder, subject)
 	{
 		_expectationBuilder = expectationBuilder;
-		_path = path;
 		_resolver = resolver;
 	}
 

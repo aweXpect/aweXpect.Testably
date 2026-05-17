@@ -16,18 +16,15 @@ public partial class FileResult<TParent>
 	where TParent : class
 {
 	private readonly ExpectationBuilder _expectationBuilder;
-	private readonly string _path;
 	private readonly Func<TParent, (IFileSystem fs, string fullPath)> _resolver;
 
 	internal FileResult(
 		ExpectationBuilder expectationBuilder,
 		IThat<TParent> subject,
-		string path,
 		Func<TParent, (IFileSystem fs, string fullPath)> resolver)
 		: base(expectationBuilder, subject)
 	{
 		_expectationBuilder = expectationBuilder;
-		_path = path;
 		_resolver = resolver;
 	}
 
@@ -93,15 +90,7 @@ public partial class FileResult<TParent>
 	/// </remarks>
 	public TimeToleranceResult<TParent, FileResult<TParent>> WithCreationTime(
 		DateTime expected)
-	{
-		TimeTolerance tolerance = new();
-		return new TimeToleranceResult<TParent, FileResult<TParent>>(
-			_expectationBuilder.And(" ").AddConstraint((it, grammars)
-				=> new FileSystemConstraints.HasTimeConstraint<TParent>(it, grammars, _resolver,
-					f => f.CreationTime, tolerance,
-					expected, "creation time")),
-			this, tolerance);
-	}
+		=> AddTimeConstraint(p => GetInfo(p).CreationTime, expected, "creation time");
 
 	/// <summary>
 	///     Verifies that the last access time of the file matches the <paramref name="expected" /> value.
@@ -112,15 +101,7 @@ public partial class FileResult<TParent>
 	/// </remarks>
 	public TimeToleranceResult<TParent, FileResult<TParent>> WithLastAccessTime(
 		DateTime expected)
-	{
-		TimeTolerance tolerance = new();
-		return new TimeToleranceResult<TParent, FileResult<TParent>>(
-			_expectationBuilder.And(" ").AddConstraint((it, grammars)
-				=> new FileSystemConstraints.HasTimeConstraint<TParent>(it, grammars, _resolver,
-					f => f.LastAccessTime, tolerance,
-					expected, "last access time")),
-			this, tolerance);
-	}
+		=> AddTimeConstraint(p => GetInfo(p).LastAccessTime, expected, "last access time");
 
 	/// <summary>
 	///     Verifies that the last write time of the file matches the <paramref name="expected" /> value.
@@ -131,13 +112,23 @@ public partial class FileResult<TParent>
 	/// </remarks>
 	public TimeToleranceResult<TParent, FileResult<TParent>> WithLastWriteTime(
 		DateTime expected)
+		=> AddTimeConstraint(p => GetInfo(p).LastWriteTime, expected, "last write time");
+
+	private TimeToleranceResult<TParent, FileResult<TParent>> AddTimeConstraint(
+		Func<TParent, DateTime> timeAccessor, DateTime expected, string expectedString)
 	{
 		TimeTolerance tolerance = new();
 		return new TimeToleranceResult<TParent, FileResult<TParent>>(
 			_expectationBuilder.And(" ").AddConstraint((it, grammars)
-				=> new FileSystemConstraints.HasTimeConstraint<TParent>(it, grammars, _resolver,
-					f => f.LastWriteTime, tolerance,
-					expected, "last write time")),
+				=> new FileSystemConstraints.HasTimeConstraint<TParent>(it, grammars,
+					timeAccessor, null, tolerance, expected, expectedString,
+					"with", "with", " not equal to ")),
 			this, tolerance);
+	}
+
+	private IFileSystemInfo GetInfo(TParent source)
+	{
+		(IFileSystem fs, string fullPath) = _resolver(source);
+		return fs.FileInfo.New(fullPath);
 	}
 }

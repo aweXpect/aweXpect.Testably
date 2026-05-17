@@ -22,8 +22,9 @@ public static partial class FileInfoExtensions
 		TimeTolerance tolerance = new();
 		return new TimeToleranceResult<IFileInfo, IThat<IFileInfo>>(
 			source.Get().ExpectationBuilder.AddConstraint((it, grammars)
-				=> new FileSystemConstraints.HasInfoTimeConstraint<IFileInfo>(it, grammars,
-					f => f.CreationTime, tolerance, expected, "creation time")),
+				=> new FileSystemConstraints.HasTimeConstraint<IFileInfo>(it, grammars,
+					f => f.CreationTime, f => f.Exists, tolerance, expected, "creation time",
+					"has", "does not have", " equal to ")),
 			source, tolerance);
 	}
 }
