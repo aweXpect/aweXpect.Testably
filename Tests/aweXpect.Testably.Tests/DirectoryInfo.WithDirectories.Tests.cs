@@ -30,6 +30,7 @@ public sealed partial class DirectoryInfo
 				MockFileSystem fileSystem = new();
 				fileSystem.Directory.CreateDirectory("foo/bar");
 				IDirectoryInfo dirInfo = fileSystem.DirectoryInfo.New("foo");
+				string expectedPath = fileSystem.Path.Combine(dirInfo.FullName, "bar");
 
 				async Task Act()
 				{
@@ -37,13 +38,13 @@ public sealed partial class DirectoryInfo
 				}
 
 				await That(Act).ThrowsException()
-					.WithMessage("""
-					             Expected that dirInfo
-					              whose subdirectories are empty,
-					             but subdirectories was [
-					               foo/bar
-					             ]
-					             """);
+					.WithMessage($"""
+					              Expected that dirInfo
+					               whose subdirectories are empty,
+					              but subdirectories was [
+					                {expectedPath}
+					              ]
+					              """);
 			}
 		}
 	}

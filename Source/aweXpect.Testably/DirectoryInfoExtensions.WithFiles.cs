@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO.Abstractions;
+using System.Linq;
 using aweXpect.Core;
 using aweXpect.Results;
 using aweXpect.Testably.Helpers;
@@ -19,7 +20,9 @@ public static partial class DirectoryInfoExtensions
 		ExpectationBuilder builder = source.Get().ExpectationBuilder
 			.ForMember(
 				MemberAccessor<IDirectoryInfo, IEnumerable<IFileInfo>>.FromFunc(
-					d => d.EnumerateFiles(), "files "),
+					d => d.FileSystem.Directory.EnumerateFiles(d.FullName)
+						.Select(p => d.FileSystem.FileInfo.New(p)),
+					"files "),
 				(member, expectation) => expectation.Append(" whose ").Append(member))
 			.AddExpectations(
 				e => expectations(new ThatSubject<IEnumerable<IFileInfo>>(e)),
