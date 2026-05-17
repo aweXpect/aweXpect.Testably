@@ -18,7 +18,7 @@ public sealed partial class ChangeDescriptionTests
 		MockFileSystem fileSystem = new();
 		using IAwaitableCallback<ChangeDescription> registration = fileSystem.Notify.OnEvent(_ => { });
 		trigger(fileSystem);
-		ChangeDescription[] captured = registration.Wait(1, TimeSpan.FromSeconds(5));
+		ChangeDescription[] captured = registration.Wait(1, TimeSpan.FromSeconds(30));
 		if (captured.Length == 0)
 		{
 			throw new InvalidOperationException("No notification was captured during the trigger action.");

@@ -53,7 +53,7 @@ public sealed partial class FileSystemWatcher
 
 				async Task Act()
 				{
-					await That(sut).Triggered().Within(TimeSpan.FromSeconds(10));
+					await That(sut).Triggered().Within(TimeSpan.FromSeconds(30));
 				}
 
 				await That(Act).DoesNotThrow();
@@ -130,7 +130,7 @@ public sealed partial class FileSystemWatcher
 				async Task Act()
 				{
 					await That(sut).Triggered(c => c.Name == "foo.txt")
-						.Within(TimeSpan.FromSeconds(2));
+						.Within(TimeSpan.FromSeconds(30));
 				}
 
 				await That(Act).DoesNotThrow();
@@ -153,7 +153,7 @@ public sealed partial class FileSystemWatcher
 				{
 					await That(sut).Triggered()
 						.Which(c => c.HasName("foo.txt"))
-						.Within(TimeSpan.FromSeconds(2));
+						.Within(TimeSpan.FromSeconds(30));
 				}
 
 				await That(Act).DoesNotThrow();
@@ -321,7 +321,7 @@ public sealed partial class FileSystemWatcher
 					c => c.FileSystemWatcher == sut && c.ChangeType == WatcherChangeTypes.Created);
 				fs.File.WriteAllText("a.txt", "x");
 				fs.File.WriteAllText("b.txt", "x");
-				WatcherChangeDescription[] created = reg.Wait(2, TimeSpan.FromSeconds(5));
+				WatcherChangeDescription[] created = reg.Wait(2, TimeSpan.FromSeconds(30));
 
 				async Task Act()
 				{

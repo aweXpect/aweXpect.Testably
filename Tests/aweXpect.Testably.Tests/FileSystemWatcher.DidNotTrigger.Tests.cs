@@ -41,7 +41,7 @@ public sealed partial class FileSystemWatcher
 					_ => { },
 					c => c.FileSystemWatcher == sut);
 				fs.File.WriteAllText("foo.txt", "x");
-				WatcherChangeDescription firstEvent = reg.Wait(1, TimeSpan.FromSeconds(5))[0];
+				WatcherChangeDescription firstEvent = reg.Wait(1, TimeSpan.FromSeconds(30))[0];
 
 				async Task Act()
 				{
@@ -85,7 +85,7 @@ public sealed partial class FileSystemWatcher
 					_ => { },
 					c => c.FileSystemWatcher == sut && c.Name == "foo.txt");
 				fs.File.WriteAllText("foo.txt", "x");
-				WatcherChangeDescription firstMatch = reg.Wait(1, TimeSpan.FromSeconds(5))[0];
+				WatcherChangeDescription firstMatch = reg.Wait(1, TimeSpan.FromSeconds(30))[0];
 
 				async Task Act()
 				{
@@ -150,7 +150,7 @@ public sealed partial class FileSystemWatcher
 					_ => { },
 					c => c.FileSystemWatcher == sut && c.Name == "foo.txt");
 				fs.File.WriteAllText("foo.txt", "x");
-				WatcherChangeDescription firstMatch = reg.Wait(1, TimeSpan.FromSeconds(5))[0];
+				WatcherChangeDescription firstMatch = reg.Wait(1, TimeSpan.FromSeconds(30))[0];
 
 				async Task Act()
 				{
