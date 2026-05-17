@@ -19,7 +19,9 @@ public sealed partial class DirectoryInfo
 				IDirectoryInfo dirInfo = fileSystem.DirectoryInfo.New("project/src");
 
 				async Task Act()
-					=> await That(dirInfo).WhoseParent.HasName("project");
+				{
+					await That(dirInfo).WhoseParent.HasName("project");
+				}
 
 				await That(Act).DoesNotThrow();
 			}
@@ -33,7 +35,9 @@ public sealed partial class DirectoryInfo
 				IDirectoryInfo dirInfo = fileSystem.DirectoryInfo.New("project/src");
 
 				async Task Act()
-					=> await That(dirInfo).WhoseParent.IsNotEmpty();
+				{
+					await That(dirInfo).WhoseParent.IsNotEmpty();
+				}
 
 				await That(Act).DoesNotThrow();
 			}
@@ -45,7 +49,9 @@ public sealed partial class DirectoryInfo
 				IDirectoryInfo rootDirInfo = fileSystem.DirectoryInfo.New(fileSystem.Path.GetPathRoot(fileSystem.Directory.GetCurrentDirectory())!);
 
 				async Task Act()
-					=> await That(rootDirInfo).WhoseParent.IsNotEmpty();
+				{
+					await That(rootDirInfo).WhoseParent.IsNotEmpty();
+				}
 
 				await That(Act).Throws<InvalidOperationException>();
 			}

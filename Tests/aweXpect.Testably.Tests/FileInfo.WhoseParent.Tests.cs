@@ -11,20 +11,6 @@ public sealed partial class FileInfo
 		public sealed class Tests
 		{
 			[Fact]
-			public async Task IsNotEmpty_WhenFileIsInNonEmptyDirectory_ShouldSucceed()
-			{
-				MockFileSystem fileSystem = new();
-				fileSystem.Initialize().WithSubdirectory("logs").Initialized(d => d
-					.WithFile("today.log"));
-				IFileInfo fileInfo = fileSystem.FileInfo.New("logs/today.log");
-
-				async Task Act()
-					=> await That(fileInfo).WhoseParent.IsNotEmpty();
-
-				await That(Act).DoesNotThrow();
-			}
-
-			[Fact]
 			public async Task HasName_WhenParentNameMatches_ShouldSucceed()
 			{
 				MockFileSystem fileSystem = new();
@@ -33,7 +19,9 @@ public sealed partial class FileInfo
 				IFileInfo fileInfo = fileSystem.FileInfo.New("logs/today.log");
 
 				async Task Act()
-					=> await That(fileInfo).WhoseParent.HasName("logs");
+				{
+					await That(fileInfo).WhoseParent.HasName("logs");
+				}
 
 				await That(Act).DoesNotThrow();
 			}
@@ -47,7 +35,25 @@ public sealed partial class FileInfo
 				IFileInfo fileInfo = fileSystem.FileInfo.New("logs/missing.log");
 
 				async Task Act()
-					=> await That(fileInfo).WhoseParent.IsNotEmpty();
+				{
+					await That(fileInfo).WhoseParent.IsNotEmpty();
+				}
+
+				await That(Act).DoesNotThrow();
+			}
+
+			[Fact]
+			public async Task IsNotEmpty_WhenFileIsInNonEmptyDirectory_ShouldSucceed()
+			{
+				MockFileSystem fileSystem = new();
+				fileSystem.Initialize().WithSubdirectory("logs").Initialized(d => d
+					.WithFile("today.log"));
+				IFileInfo fileInfo = fileSystem.FileInfo.New("logs/today.log");
+
+				async Task Act()
+				{
+					await That(fileInfo).WhoseParent.IsNotEmpty();
+				}
 
 				await That(Act).DoesNotThrow();
 			}
