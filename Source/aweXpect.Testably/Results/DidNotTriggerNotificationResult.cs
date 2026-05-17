@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using aweXpect.Core;
 using aweXpect.Results;
 using aweXpect.Testably.Helpers;
@@ -10,7 +11,7 @@ using Testably.Abstractions.Testing.FileSystem;
 namespace aweXpect.Testably.Results;
 
 /// <summary>
-///     The result for <see cref="FileSystemExtensions.DidNotTriggerNotification(aweXpect.Core.IThat{Testably.Abstractions.Testing.MockFileSystem},System.Func{System.Threading.CancellationToken,System.Threading.Tasks.Task})" />.
+///     The result for <see cref="FileSystemExtensions.DidNotTriggerNotification(IThat{MockFileSystem}, Func{Task})" />.
 /// </summary>
 public class DidNotTriggerNotificationResult
 	: AndOrResult<MockFileSystem, IThat<MockFileSystem>, DidNotTriggerNotificationResult>

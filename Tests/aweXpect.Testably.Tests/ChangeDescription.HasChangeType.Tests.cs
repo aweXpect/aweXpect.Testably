@@ -12,7 +12,7 @@ public sealed partial class ChangeDescription
 			[Fact]
 			public async Task DoesNotHaveChangeType_WhenChangeTypeDiffers_ShouldSucceed()
 			{
-				TFsChangeDescription change = await CaptureAsync(fs => fs.File.WriteAllText("foo.txt", ""));
+				TFsChangeDescription change = Capture(fs => fs.File.WriteAllText("foo.txt", ""));
 
 				async Task Act()
 				{
@@ -25,7 +25,7 @@ public sealed partial class ChangeDescription
 			[Fact]
 			public async Task WhenChangeTypeDiffers_ShouldFail()
 			{
-				TFsChangeDescription change = await CaptureAsync(fs => fs.File.WriteAllText("foo.txt", ""));
+				TFsChangeDescription change = Capture(fs => fs.File.WriteAllText("foo.txt", ""));
 
 				async Task Act()
 				{
@@ -43,7 +43,7 @@ public sealed partial class ChangeDescription
 			[Fact]
 			public async Task WhenChangeTypeMatches_ShouldSucceed()
 			{
-				TFsChangeDescription change = await CaptureAsync(fs => fs.File.WriteAllText("foo.txt", ""));
+				TFsChangeDescription change = Capture(fs => fs.File.WriteAllText("foo.txt", ""));
 
 				async Task Act()
 				{

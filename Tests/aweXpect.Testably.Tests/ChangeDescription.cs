@@ -9,7 +9,7 @@ public sealed partial class ChangeDescription
 	///     Runs <paramref name="trigger" /> on a fresh <see cref="MockFileSystem" /> and returns
 	///     the first <see cref="TFsChangeDescription" /> that fired during it.
 	/// </summary>
-	internal static Task<TFsChangeDescription> CaptureAsync(Action<MockFileSystem> trigger)
+	internal static TFsChangeDescription Capture(Action<MockFileSystem> trigger)
 	{
 		MockFileSystem fileSystem = new();
 		TFsChangeDescription? captured = null;
@@ -20,6 +20,6 @@ public sealed partial class ChangeDescription
 			throw new InvalidOperationException("No notification was captured during the trigger action.");
 		}
 
-		return Task.FromResult(captured);
+		return captured;
 	}
 }

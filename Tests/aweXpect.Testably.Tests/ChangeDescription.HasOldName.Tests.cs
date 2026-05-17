@@ -11,6 +11,45 @@ public sealed partial class ChangeDescription
 		public sealed class Tests
 		{
 			[Fact]
+			public async Task WhenOldNameDiffers_ShouldFail()
+			{
+				MockFileSystem fileSystem = new();
+				fileSystem.File.WriteAllText("foo.txt", "");
+				TFsChangeDescription? renamed = null;
+				using IAwaitableCallback<TFsChangeDescription> registration =
+					fileSystem.Notify.OnEvent(c =>
+					{
+						if (c.ChangeType == WatcherChangeTypes.Renamed)
+						{
+							renamed ??= c;
+						}
+					});
+				fileSystem.File.Move("foo.txt", "bar.txt");
+
+				async Task Act()
+				{
+					await That(renamed!).HasOldName("other-name.txt");
+				}
+
+				await That(Act).ThrowsException()
+					.WithMessage("*has old name equal to \"other-name.txt\"*").AsWildcard();
+			}
+
+			[Fact]
+			public async Task WhenOldNameIsNull_AndExpectedIsNotNull_ShouldFail()
+			{
+				TFsChangeDescription change = Capture(fs => fs.File.WriteAllText("foo.txt", ""));
+
+				async Task Act()
+				{
+					await That(change).HasOldName("foo.txt");
+				}
+
+				await That(Act).ThrowsException()
+					.WithMessage("*has old name equal to \"foo.txt\"*").AsWildcard();
+			}
+
+			[Fact]
 			public async Task WhenOldNameMatches_ShouldSucceed()
 			{
 				MockFileSystem fileSystem = new();

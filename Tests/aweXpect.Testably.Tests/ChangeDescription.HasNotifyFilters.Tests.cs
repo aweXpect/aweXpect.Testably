@@ -10,9 +10,37 @@ public sealed partial class ChangeDescription
 		public sealed class Tests
 		{
 			[Fact]
+			public async Task DoesNotHaveNotifyFilters_WhenFlagIsMissing_ShouldSucceed()
+			{
+				TFsChangeDescription change = Capture(fs => fs.File.WriteAllText("foo.txt", ""));
+
+				async Task Act()
+				{
+					await That(change).DoesNotHaveNotifyFilters(NotifyFilters.Security);
+				}
+
+				await That(Act).DoesNotThrow();
+			}
+
+			[Fact]
+			public async Task DoesNotHaveNotifyFilters_WhenFlagIsPresent_ShouldFail()
+			{
+				TFsChangeDescription change = Capture(fs => fs.File.WriteAllText("foo.txt", ""));
+				NotifyFilters present = change.NotifyFilters;
+
+				async Task Act()
+				{
+					await That(change).DoesNotHaveNotifyFilters(present);
+				}
+
+				await That(Act).ThrowsException()
+					.WithMessage("*does not have notify filters*").AsWildcard();
+			}
+
+			[Fact]
 			public async Task WhenContainingExpectedFlag_ShouldSucceed()
 			{
-				TFsChangeDescription change = await CaptureAsync(fs => fs.File.WriteAllText("foo.txt", ""));
+				TFsChangeDescription change = Capture(fs => fs.File.WriteAllText("foo.txt", ""));
 				NotifyFilters expected = change.NotifyFilters;
 
 				async Task Act()
@@ -26,7 +54,7 @@ public sealed partial class ChangeDescription
 			[Fact]
 			public async Task WhenMissingExpectedFlag_ShouldFail()
 			{
-				TFsChangeDescription change = await CaptureAsync(fs => fs.File.WriteAllText("foo.txt", ""));
+				TFsChangeDescription change = Capture(fs => fs.File.WriteAllText("foo.txt", ""));
 
 				async Task Act()
 				{

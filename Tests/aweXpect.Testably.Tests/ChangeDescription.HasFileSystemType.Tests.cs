@@ -12,7 +12,7 @@ public sealed partial class ChangeDescription
 			[Fact]
 			public async Task DoesNotHaveFileSystemType_WhenItDiffers_ShouldSucceed()
 			{
-				TFsChangeDescription change = await CaptureAsync(fs => fs.File.WriteAllText("foo.txt", ""));
+				TFsChangeDescription change = Capture(fs => fs.File.WriteAllText("foo.txt", ""));
 
 				async Task Act()
 				{
@@ -25,7 +25,7 @@ public sealed partial class ChangeDescription
 			[Fact]
 			public async Task WhenFileSystemTypeDiffers_ShouldFail()
 			{
-				TFsChangeDescription change = await CaptureAsync(fs => fs.File.WriteAllText("foo.txt", ""));
+				TFsChangeDescription change = Capture(fs => fs.File.WriteAllText("foo.txt", ""));
 
 				async Task Act()
 				{
@@ -43,7 +43,7 @@ public sealed partial class ChangeDescription
 			[Fact]
 			public async Task WhenFileSystemTypeMatches_ShouldSucceed()
 			{
-				TFsChangeDescription change = await CaptureAsync(fs => fs.File.WriteAllText("foo.txt", ""));
+				TFsChangeDescription change = Capture(fs => fs.File.WriteAllText("foo.txt", ""));
 
 				async Task Act()
 				{

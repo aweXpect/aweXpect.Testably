@@ -11,7 +11,7 @@ public sealed partial class ChangeDescription
 			[Fact]
 			public async Task WhenPathDiffers_ShouldFail()
 			{
-				TFsChangeDescription change = await CaptureAsync(fs => fs.File.WriteAllText("foo.txt", ""));
+				TFsChangeDescription change = Capture(fs => fs.File.WriteAllText("foo.txt", ""));
 
 				async Task Act()
 				{
@@ -25,7 +25,7 @@ public sealed partial class ChangeDescription
 			[Fact]
 			public async Task WhenPathMatches_ShouldSucceed()
 			{
-				TFsChangeDescription change = await CaptureAsync(fs => fs.File.WriteAllText("foo.txt", ""));
+				TFsChangeDescription change = Capture(fs => fs.File.WriteAllText("foo.txt", ""));
 
 				async Task Act()
 				{

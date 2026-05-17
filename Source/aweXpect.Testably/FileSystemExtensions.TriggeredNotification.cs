@@ -76,7 +76,8 @@ public static partial class FileSystemExtensions
 		return new DidNotTriggerNotificationResult(
 			subject.Get().ExpectationBuilder.AddConstraint((it, grammars)
 				=> new NotificationConstraints.TriggeredNotificationConstraint(
-					it, grammars, triggerAction, filter, quantifier, options, captured).Invert()),
+					it, grammars, triggerAction, filter, quantifier, options, captured,
+					exitOnFirstMatch: true).Invert()),
 			subject,
 			captured,
 			filter,

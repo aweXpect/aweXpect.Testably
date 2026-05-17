@@ -22,7 +22,8 @@ internal static class NotificationConstraints
 		TriggerNotificationFilter filter,
 		Quantifier quantifier,
 		NotificationTimeoutOptions options,
-		List<ChangeDescription> captured)
+		List<ChangeDescription> captured,
+		bool exitOnFirstMatch = false)
 		: ConstraintResult.WithValue<MockFileSystem>(grammars),
 			IAsyncConstraint<MockFileSystem>
 	{
@@ -37,9 +38,8 @@ internal static class NotificationConstraints
 				return this;
 			}
 
-			TimeSpan timeout = options.Timeout > TimeSpan.Zero ? options.Timeout : TimeSpan.FromSeconds(30);
+			TimeSpan timeout = options.Timeout;
 			TaskCompletionSource<bool> earlyExit = new();
-			object lockObj = new();
 
 			using CancellationTokenSource deadlineCts =
 				CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
@@ -49,10 +49,10 @@ internal static class NotificationConstraints
 			using IAwaitableCallback<ChangeDescription> registration = actual.Notify.OnEvent(
 				change =>
 				{
-					lock (lockObj)
+					lock (captured)
 					{
 						captured.Add(change);
-						if (quantifier.Check(captured.Count, false) == false)
+						if (exitOnFirstMatch || quantifier.Check(captured.Count, false) == false)
 						{
 							earlyExit.TrySetResult(false);
 						}
@@ -83,7 +83,7 @@ internal static class NotificationConstraints
 			}
 
 			int finalCount;
-			lock (lockObj)
+			lock (captured)
 			{
 				finalCount = captured.Count;
 			}
