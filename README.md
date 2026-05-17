@@ -105,3 +105,69 @@ same assertions light up in both places:
 await That(fileSystem).HasFile("my-file.txt").Which.HasLength(12).And.HasContent("some content");
 await That(fileSystem).HasDirectory("logs").Which.IsEmpty();
 ```
+
+### Notifications
+
+A `MockFileSystem` raises notifications when files or directories change. You
+can verify that a piece of code triggers (or does not trigger) a notification:
+
+```csharp
+MockFileSystem fileSystem = new();
+
+await That(fileSystem).TriggeredNotification(_ =>
+{
+    fileSystem.File.WriteAllText("my-file.txt", "some content");
+    return Task.CompletedTask;
+});
+
+await That(fileSystem).DidNotTriggerNotification(_ =>
+{
+    bool _ = fileSystem.Directory.Exists("/");
+    return Task.CompletedTask;
+}).Within(TimeSpan.FromMilliseconds(100));
+```
+
+`TriggeredNotification` accepts a `Quantifier` (`AtLeast`, `AtMost`, `Exactly`,
+`Between`, `Never`, `Once`) so you can assert how often the notification fires,
+and `.Matching(predicate)` narrows the assertion to specific changes:
+
+```csharp
+await That(fileSystem).TriggeredNotification(_ =>
+{
+    fileSystem.File.WriteAllText("a.txt", "x");
+    fileSystem.File.WriteAllText("b.txt", "y");
+    return Task.CompletedTask;
+}).Exactly(2.Times())
+  .Matching(c => c.ChangeType == WatcherChangeTypes.Created);
+```
+
+Both `TriggeredNotification` and `DidNotTriggerNotification` honour a
+`.Within(timeout)` (default 30 s) and expose `.Which` for further assertions on
+the list of captured `ChangeDescription`s:
+
+```csharp
+await That(fileSystem).TriggeredNotification(_ =>
+{
+    fileSystem.File.WriteAllText("a.txt", "x");
+    return Task.CompletedTask;
+}).Which.HasCount().EqualTo(1);
+```
+
+### `ChangeDescription` as a subject
+
+Individual `ChangeDescription` instances can be asserted directly. The
+`HasChangeType`, `HasFileSystemType` and `HasNotifyFilters` assertions use flag
+containment (so a `LastWrite | FileName` change satisfies
+`HasNotifyFilters(NotifyFilters.LastWrite)`); the empty / `default` value is
+rejected with an `ArgumentException` to avoid silent passes.
+
+```csharp
+await That(change).HasChangeType(WatcherChangeTypes.Created);
+await That(change).DoesNotHaveChangeType(WatcherChangeTypes.Deleted);
+
+await That(change).HasFileSystemType(FileSystemTypes.File);
+await That(change).HasNotifyFilters(NotifyFilters.LastWrite);
+
+await That(change).HasName("my-file.txt").And.HasPath("/abs/my-file.txt");
+await That(renamedChange).HasOldName("old.txt").And.HasOldPath("/abs/old.txt");
+```
