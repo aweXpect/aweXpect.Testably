@@ -23,6 +23,34 @@ public sealed partial class ChangeDescription
 			}
 
 			[Fact]
+			public async Task DoesNotHaveFileSystemType_WhenUnexpectedIsDefault_ShouldThrowArgumentException()
+			{
+				TFsChangeDescription change = Capture(fs => fs.File.WriteAllText("foo.txt", ""));
+
+				async Task Act()
+				{
+					await That(change).DoesNotHaveFileSystemType(default);
+				}
+
+				await That(Act).Throws<ArgumentException>()
+					.WithParamName("unexpected");
+			}
+
+			[Fact]
+			public async Task WhenExpectedIsDefault_ShouldThrowArgumentException()
+			{
+				TFsChangeDescription change = Capture(fs => fs.File.WriteAllText("foo.txt", ""));
+
+				async Task Act()
+				{
+					await That(change).HasFileSystemType(default);
+				}
+
+				await That(Act).Throws<ArgumentException>()
+					.WithParamName("expected");
+			}
+
+			[Fact]
 			public async Task WhenFileSystemTypeDiffers_ShouldFail()
 			{
 				TFsChangeDescription change = Capture(fs => fs.File.WriteAllText("foo.txt", ""));

@@ -23,6 +23,20 @@ public sealed partial class ChangeDescription
 			}
 
 			[Fact]
+			public async Task DoesNotHaveChangeType_WhenUnexpectedIsDefault_ShouldThrowArgumentException()
+			{
+				TFsChangeDescription change = Capture(fs => fs.File.WriteAllText("foo.txt", ""));
+
+				async Task Act()
+				{
+					await That(change).DoesNotHaveChangeType(default);
+				}
+
+				await That(Act).Throws<ArgumentException>()
+					.WithParamName("unexpected");
+			}
+
+			[Fact]
 			public async Task WhenChangeTypeDiffers_ShouldFail()
 			{
 				TFsChangeDescription change = Capture(fs => fs.File.WriteAllText("foo.txt", ""));
@@ -51,6 +65,20 @@ public sealed partial class ChangeDescription
 				}
 
 				await That(Act).DoesNotThrow();
+			}
+
+			[Fact]
+			public async Task WhenExpectedIsDefault_ShouldThrowArgumentException()
+			{
+				TFsChangeDescription change = Capture(fs => fs.File.WriteAllText("foo.txt", ""));
+
+				async Task Act()
+				{
+					await That(change).HasChangeType(default);
+				}
+
+				await That(Act).Throws<ArgumentException>()
+					.WithParamName("expected");
 			}
 		}
 	}

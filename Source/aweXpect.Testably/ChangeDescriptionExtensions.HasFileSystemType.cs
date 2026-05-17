@@ -1,3 +1,4 @@
+using System;
 using aweXpect.Core;
 using aweXpect.Core.Constraints;
 using aweXpect.Results;
@@ -19,10 +20,18 @@ public static partial class ChangeDescriptionExtensions
 	public static AndOrResult<ChangeDescription, IThat<ChangeDescription>> HasFileSystemType(
 		this IThat<ChangeDescription> source,
 		FileSystemTypes expected)
-		=> new(
+	{
+		if (expected == default)
+		{
+			throw new ArgumentException(
+				"The expected file system type must include at least one flag.", nameof(expected));
+		}
+
+		return new AndOrResult<ChangeDescription, IThat<ChangeDescription>>(
 			source.Get().ExpectationBuilder.AddConstraint((it, grammars)
 				=> new NotificationConstraints.HasFileSystemTypeConstraint(it, grammars, expected)),
 			source);
+	}
 
 	/// <summary>
 	///     Verifies that the <see cref="ChangeDescription" /> does not have the <paramref name="unexpected" />
@@ -31,8 +40,16 @@ public static partial class ChangeDescriptionExtensions
 	public static AndOrResult<ChangeDescription, IThat<ChangeDescription>> DoesNotHaveFileSystemType(
 		this IThat<ChangeDescription> source,
 		FileSystemTypes unexpected)
-		=> new(
+	{
+		if (unexpected == default)
+		{
+			throw new ArgumentException(
+				"The unexpected file system type must include at least one flag.", nameof(unexpected));
+		}
+
+		return new AndOrResult<ChangeDescription, IThat<ChangeDescription>>(
 			source.Get().ExpectationBuilder.AddConstraint((it, grammars)
 				=> new NotificationConstraints.HasFileSystemTypeConstraint(it, grammars, unexpected).Invert()),
 			source);
+	}
 }

@@ -38,6 +38,20 @@ public sealed partial class ChangeDescription
 			}
 
 			[Fact]
+			public async Task DoesNotHaveNotifyFilters_WhenUnexpectedIsDefault_ShouldThrowArgumentException()
+			{
+				TFsChangeDescription change = Capture(fs => fs.File.WriteAllText("foo.txt", ""));
+
+				async Task Act()
+				{
+					await That(change).DoesNotHaveNotifyFilters(default);
+				}
+
+				await That(Act).Throws<ArgumentException>()
+					.WithParamName("unexpected");
+			}
+
+			[Fact]
 			public async Task WhenContainingExpectedFlag_ShouldSucceed()
 			{
 				TFsChangeDescription change = Capture(fs => fs.File.WriteAllText("foo.txt", ""));
@@ -49,6 +63,20 @@ public sealed partial class ChangeDescription
 				}
 
 				await That(Act).DoesNotThrow();
+			}
+
+			[Fact]
+			public async Task WhenExpectedIsDefault_ShouldThrowArgumentException()
+			{
+				TFsChangeDescription change = Capture(fs => fs.File.WriteAllText("foo.txt", ""));
+
+				async Task Act()
+				{
+					await That(change).HasNotifyFilters(default);
+				}
+
+				await That(Act).Throws<ArgumentException>()
+					.WithParamName("expected");
 			}
 
 			[Fact]

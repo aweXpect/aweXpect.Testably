@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using aweXpect.Core;
 using aweXpect.Core.Constraints;
@@ -19,10 +20,18 @@ public static partial class ChangeDescriptionExtensions
 	public static AndOrResult<ChangeDescription, IThat<ChangeDescription>> HasNotifyFilters(
 		this IThat<ChangeDescription> source,
 		NotifyFilters expected)
-		=> new(
+	{
+		if (expected == default)
+		{
+			throw new ArgumentException(
+				"The expected notify filters must include at least one flag.", nameof(expected));
+		}
+
+		return new AndOrResult<ChangeDescription, IThat<ChangeDescription>>(
 			source.Get().ExpectationBuilder.AddConstraint((it, grammars)
 				=> new NotificationConstraints.HasNotifyFiltersConstraint(it, grammars, expected)),
 			source);
+	}
 
 	/// <summary>
 	///     Verifies that the <see cref="ChangeDescription" /> does not have the <paramref name="unexpected" />
@@ -31,8 +40,16 @@ public static partial class ChangeDescriptionExtensions
 	public static AndOrResult<ChangeDescription, IThat<ChangeDescription>> DoesNotHaveNotifyFilters(
 		this IThat<ChangeDescription> source,
 		NotifyFilters unexpected)
-		=> new(
+	{
+		if (unexpected == default)
+		{
+			throw new ArgumentException(
+				"The unexpected notify filters must include at least one flag.", nameof(unexpected));
+		}
+
+		return new AndOrResult<ChangeDescription, IThat<ChangeDescription>>(
 			source.Get().ExpectationBuilder.AddConstraint((it, grammars)
 				=> new NotificationConstraints.HasNotifyFiltersConstraint(it, grammars, unexpected).Invert()),
 			source);
+	}
 }
