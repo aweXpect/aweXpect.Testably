@@ -164,8 +164,14 @@ namespace aweXpect.Testably.Recorded
     }
     public sealed class RecordedPathMethods
     {
+        public aweXpect.Testably.Recorded.RecordedProperty AltDirectorySeparatorChar { get; }
+        public aweXpect.Testably.Recorded.RecordedProperty DirectorySeparatorChar { get; }
+        public aweXpect.Testably.Recorded.RecordedProperty PathSeparator { get; }
+        public aweXpect.Testably.Recorded.RecordedProperty VolumeSeparatorChar { get; }
         public aweXpect.Testably.Results.RecordedMethodCallResult ChangeExtension(System.Func<string?, bool>? path = null, System.Func<string?, bool>? extension = null, [System.Runtime.CompilerServices.CallerArgumentExpression("path")] string? pathExpression = null, [System.Runtime.CompilerServices.CallerArgumentExpression("extension")] string? extensionExpression = null) { }
         public aweXpect.Testably.Results.RecordedMethodCallResult Combine(System.Func<string, bool>? path1 = null, System.Func<string, bool>? path2 = null, System.Func<string, bool>? path3 = null, System.Func<string, bool>? path4 = null, [System.Runtime.CompilerServices.CallerArgumentExpression("path1")] string? path1Expression = null, [System.Runtime.CompilerServices.CallerArgumentExpression("path2")] string? path2Expression = null, [System.Runtime.CompilerServices.CallerArgumentExpression("path3")] string? path3Expression = null, [System.Runtime.CompilerServices.CallerArgumentExpression("path4")] string? path4Expression = null) { }
+        public aweXpect.Testably.Results.RecordedMethodCallResult EndsInDirectorySeparator(System.Func<string, bool>? path = null, [System.Runtime.CompilerServices.CallerArgumentExpression("path")] string? pathExpression = null) { }
+        public aweXpect.Testably.Results.RecordedMethodCallResult Exists(System.Func<string?, bool>? path = null, [System.Runtime.CompilerServices.CallerArgumentExpression("path")] string? pathExpression = null) { }
         public aweXpect.Testably.Results.RecordedMethodCallResult GetDirectoryName(System.Func<string?, bool>? path = null, [System.Runtime.CompilerServices.CallerArgumentExpression("path")] string? pathExpression = null) { }
         public aweXpect.Testably.Results.RecordedMethodCallResult GetExtension(System.Func<string?, bool>? path = null, [System.Runtime.CompilerServices.CallerArgumentExpression("path")] string? pathExpression = null) { }
         public aweXpect.Testably.Results.RecordedMethodCallResult GetFileName(System.Func<string?, bool>? path = null, [System.Runtime.CompilerServices.CallerArgumentExpression("path")] string? pathExpression = null) { }
@@ -175,10 +181,14 @@ namespace aweXpect.Testably.Recorded
         public aweXpect.Testably.Results.RecordedMethodCallResult GetInvalidPathChars() { }
         public aweXpect.Testably.Results.RecordedMethodCallResult GetPathRoot(System.Func<string?, bool>? path = null, [System.Runtime.CompilerServices.CallerArgumentExpression("path")] string? pathExpression = null) { }
         public aweXpect.Testably.Results.RecordedMethodCallResult GetRandomFileName() { }
+        public aweXpect.Testably.Results.RecordedMethodCallResult GetRelativePath(System.Func<string, bool>? relativeTo = null, System.Func<string, bool>? path = null, [System.Runtime.CompilerServices.CallerArgumentExpression("relativeTo")] string? relativeToExpression = null, [System.Runtime.CompilerServices.CallerArgumentExpression("path")] string? pathExpression = null) { }
         public aweXpect.Testably.Results.RecordedMethodCallResult GetTempFileName() { }
         public aweXpect.Testably.Results.RecordedMethodCallResult GetTempPath() { }
         public aweXpect.Testably.Results.RecordedMethodCallResult HasExtension(System.Func<string?, bool>? path = null, [System.Runtime.CompilerServices.CallerArgumentExpression("path")] string? pathExpression = null) { }
+        public aweXpect.Testably.Results.RecordedMethodCallResult IsPathFullyQualified(System.Func<string, bool>? path = null, [System.Runtime.CompilerServices.CallerArgumentExpression("path")] string? pathExpression = null) { }
         public aweXpect.Testably.Results.RecordedMethodCallResult IsPathRooted(System.Func<string?, bool>? path = null, [System.Runtime.CompilerServices.CallerArgumentExpression("path")] string? pathExpression = null) { }
+        public aweXpect.Testably.Results.RecordedMethodCallResult Join(System.Func<string?, bool>? path1 = null, System.Func<string?, bool>? path2 = null, System.Func<string?, bool>? path3 = null, System.Func<string?, bool>? path4 = null, [System.Runtime.CompilerServices.CallerArgumentExpression("path1")] string? path1Expression = null, [System.Runtime.CompilerServices.CallerArgumentExpression("path2")] string? path2Expression = null, [System.Runtime.CompilerServices.CallerArgumentExpression("path3")] string? path3Expression = null, [System.Runtime.CompilerServices.CallerArgumentExpression("path4")] string? path4Expression = null) { }
+        public aweXpect.Testably.Results.RecordedMethodCallResult TrimEndingDirectorySeparator(System.Func<string, bool>? path = null, [System.Runtime.CompilerServices.CallerArgumentExpression("path")] string? pathExpression = null) { }
     }
     public sealed class RecordedProperty
     {
