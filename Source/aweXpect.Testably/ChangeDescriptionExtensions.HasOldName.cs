@@ -15,14 +15,15 @@ public static partial class ChangeDescriptionExtensions
 	///     The old name is only set on a <see cref="System.IO.WatcherChangeTypes.Renamed" /> change,
 	///     so <see cref="ChangeDescription.OldName" /> is nullable and <paramref name="expected" /> is too.
 	/// </remarks>
-	public static StringEqualityTypeResult<ChangeDescription, IThat<ChangeDescription>> HasOldName(
-		this IThat<ChangeDescription> source,
+	public static StringEqualityTypeResult<TChange, IThat<TChange>> HasOldName<TChange>(
+		this IThat<TChange> source,
 		string? expected)
+		where TChange : ChangeDescription
 	{
 		StringEqualityOptions options = new();
-		return new StringEqualityTypeResult<ChangeDescription, IThat<ChangeDescription>>(
+		return new StringEqualityTypeResult<TChange, IThat<TChange>>(
 			source.Get().ExpectationBuilder.AddConstraint((it, grammars)
-				=> new NotificationConstraints.HasStringPropertyConstraint(
+				=> new NotificationConstraints.HasStringPropertyConstraint<TChange>(
 					it, grammars, c => c.OldName, options, expected, "old name")),
 			source,
 			options);

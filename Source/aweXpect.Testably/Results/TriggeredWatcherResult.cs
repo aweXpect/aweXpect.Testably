@@ -1,0 +1,65 @@
+using System;
+using System.IO.Abstractions;
+using aweXpect.Core;
+using aweXpect.Options;
+using aweXpect.Results;
+using aweXpect.Testably.Helpers;
+using Testably.Abstractions.Testing.FileSystem;
+
+namespace aweXpect.Testably.Results;
+
+/// <summary>
+///     The result for <see cref="FileSystemWatcherExtensions.Triggered(aweXpect.Core.IThat{IFileSystemWatcher})" />.
+/// </summary>
+public class TriggeredWatcherResult
+	: CountResult<IFileSystemWatcher, IThat<IFileSystemWatcher>, TriggeredWatcherResult>
+{
+	private readonly ExpectationBuilder _expectationBuilder;
+	private readonly NotificationConstraints.TriggerNotificationFilter<WatcherChangeDescription> _filter;
+	private readonly NotificationTimeoutOptions _options;
+
+	internal TriggeredWatcherResult(
+		ExpectationBuilder expectationBuilder,
+		IThat<IFileSystemWatcher> subject,
+		Quantifier quantifier,
+		NotificationTimeoutOptions options, NotificationConstraints.TriggerNotificationFilter<WatcherChangeDescription> filter)
+		: base(expectationBuilder, subject, quantifier)
+	{
+		_expectationBuilder = expectationBuilder;
+		_options = options;
+		_filter = filter;
+	}
+
+	/// <summary>
+	///     Restricts the assertion to events that satisfy the inner <paramref name="expectation" />.
+	/// </summary>
+	/// <remarks>
+	///     The <paramref name="expectation" /> is applied as an additional per-event filter, so any
+	///     assertions from <see cref="ChangeDescriptionExtensions" /> (e.g. <c>.HasName(...)</c>,
+	///     <c>.HasChangeType(...)</c>) compose naturally — only events that satisfy all of them
+	///     count toward the quantifier. The expectation text is taken from the inner expectation
+	///     builder, so it reads like <c>which has name equal to "foo.txt"</c> rather than the raw
+	///     lambda source.
+	/// </remarks>
+	public TriggeredWatcherResult Which(Action<IThat<WatcherChangeDescription>> expectation)
+	{
+		if (expectation is null)
+		{
+			throw new ArgumentNullException(nameof(expectation));
+		}
+
+		ManualExpectationBuilder<WatcherChangeDescription> manualBuilder = new(_expectationBuilder);
+		expectation(new ThatSubject<WatcherChangeDescription>(manualBuilder));
+		_filter.Add(manualBuilder);
+		return this;
+	}
+
+	/// <summary>
+	///     Allows a <paramref name="timeout" /> for waiting for asynchronous events.
+	/// </summary>
+	public TriggeredWatcherResult Within(TimeSpan timeout)
+	{
+		_options.Within(timeout);
+		return this;
+	}
+}

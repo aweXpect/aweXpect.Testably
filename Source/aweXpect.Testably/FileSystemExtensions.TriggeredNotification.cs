@@ -89,7 +89,7 @@ public static partial class FileSystemExtensions
 	{
 		Quantifier quantifier = new();
 		NotificationTimeoutOptions options = new();
-		NotificationConstraints.TriggerNotificationFilter filter = new();
+		NotificationConstraints.TriggerNotificationFilter<ChangeDescription> filter = new();
 		if (predicate is not null)
 		{
 			filter.Add(predicate, predicateExpression);
@@ -98,8 +98,12 @@ public static partial class FileSystemExtensions
 		List<ChangeDescription> matches = new();
 		return new TriggeredNotificationResult(
 			subject.Get().ExpectationBuilder.AddConstraint((it, grammars)
-				=> new NotificationConstraints.TriggeredNotificationConstraint(
-					it, grammars, filter, quantifier, options, matches)),
+				=> new NotificationConstraints.TriggeredNotificationConstraint<MockFileSystem, ChangeDescription>(
+					it, grammars,
+					"triggered a notification",
+					"did not trigger a notification",
+					(fs, action, f) => fs.Notify.OnEventOrReplay(action, f),
+					filter, quantifier, options, matches)),
 			subject,
 			quantifier,
 			options,
@@ -113,7 +117,7 @@ public static partial class FileSystemExtensions
 	{
 		Quantifier quantifier = new();
 		NotificationTimeoutOptions options = new();
-		NotificationConstraints.TriggerNotificationFilter filter = new();
+		NotificationConstraints.TriggerNotificationFilter<ChangeDescription> filter = new();
 		if (predicate is not null)
 		{
 			filter.Add(predicate, predicateExpression);
@@ -122,8 +126,12 @@ public static partial class FileSystemExtensions
 		List<ChangeDescription> matches = new();
 		return new DidNotTriggerNotificationResult(
 			subject.Get().ExpectationBuilder.AddConstraint((it, grammars)
-				=> new NotificationConstraints.TriggeredNotificationConstraint(
-					it, grammars, filter, quantifier, options, matches,
+				=> new NotificationConstraints.TriggeredNotificationConstraint<MockFileSystem, ChangeDescription>(
+					it, grammars,
+					"triggered a notification",
+					"did not trigger a notification",
+					(fs, action, f) => fs.Notify.OnEventOrReplay(action, f),
+					filter, quantifier, options, matches,
 					true).Invert()),
 			subject,
 			options,

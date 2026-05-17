@@ -4,16 +4,26 @@ namespace aweXpect.Testably
 {
     public static class ChangeDescriptionExtensions
     {
-        public static aweXpect.Results.AndOrResult<Testably.Abstractions.Testing.FileSystem.ChangeDescription, aweXpect.Core.IThat<Testably.Abstractions.Testing.FileSystem.ChangeDescription>> DoesNotHaveChangeType(this aweXpect.Core.IThat<Testably.Abstractions.Testing.FileSystem.ChangeDescription> source, System.IO.WatcherChangeTypes unexpected) { }
-        public static aweXpect.Results.AndOrResult<Testably.Abstractions.Testing.FileSystem.ChangeDescription, aweXpect.Core.IThat<Testably.Abstractions.Testing.FileSystem.ChangeDescription>> DoesNotHaveFileSystemType(this aweXpect.Core.IThat<Testably.Abstractions.Testing.FileSystem.ChangeDescription> source, Testably.Abstractions.Testing.FileSystemTypes unexpected) { }
-        public static aweXpect.Results.AndOrResult<Testably.Abstractions.Testing.FileSystem.ChangeDescription, aweXpect.Core.IThat<Testably.Abstractions.Testing.FileSystem.ChangeDescription>> DoesNotHaveNotifyFilters(this aweXpect.Core.IThat<Testably.Abstractions.Testing.FileSystem.ChangeDescription> source, System.IO.NotifyFilters unexpected) { }
-        public static aweXpect.Results.AndOrResult<Testably.Abstractions.Testing.FileSystem.ChangeDescription, aweXpect.Core.IThat<Testably.Abstractions.Testing.FileSystem.ChangeDescription>> HasChangeType(this aweXpect.Core.IThat<Testably.Abstractions.Testing.FileSystem.ChangeDescription> source, System.IO.WatcherChangeTypes expected) { }
-        public static aweXpect.Results.AndOrResult<Testably.Abstractions.Testing.FileSystem.ChangeDescription, aweXpect.Core.IThat<Testably.Abstractions.Testing.FileSystem.ChangeDescription>> HasFileSystemType(this aweXpect.Core.IThat<Testably.Abstractions.Testing.FileSystem.ChangeDescription> source, Testably.Abstractions.Testing.FileSystemTypes expected) { }
-        public static aweXpect.Results.StringEqualityTypeResult<Testably.Abstractions.Testing.FileSystem.ChangeDescription, aweXpect.Core.IThat<Testably.Abstractions.Testing.FileSystem.ChangeDescription>> HasName(this aweXpect.Core.IThat<Testably.Abstractions.Testing.FileSystem.ChangeDescription> source, string? expected) { }
-        public static aweXpect.Results.AndOrResult<Testably.Abstractions.Testing.FileSystem.ChangeDescription, aweXpect.Core.IThat<Testably.Abstractions.Testing.FileSystem.ChangeDescription>> HasNotifyFilters(this aweXpect.Core.IThat<Testably.Abstractions.Testing.FileSystem.ChangeDescription> source, System.IO.NotifyFilters expected) { }
-        public static aweXpect.Results.StringEqualityTypeResult<Testably.Abstractions.Testing.FileSystem.ChangeDescription, aweXpect.Core.IThat<Testably.Abstractions.Testing.FileSystem.ChangeDescription>> HasOldName(this aweXpect.Core.IThat<Testably.Abstractions.Testing.FileSystem.ChangeDescription> source, string? expected) { }
-        public static aweXpect.Results.StringEqualityTypeResult<Testably.Abstractions.Testing.FileSystem.ChangeDescription, aweXpect.Core.IThat<Testably.Abstractions.Testing.FileSystem.ChangeDescription>> HasOldPath(this aweXpect.Core.IThat<Testably.Abstractions.Testing.FileSystem.ChangeDescription> source, string? expected) { }
-        public static aweXpect.Results.StringEqualityTypeResult<Testably.Abstractions.Testing.FileSystem.ChangeDescription, aweXpect.Core.IThat<Testably.Abstractions.Testing.FileSystem.ChangeDescription>> HasPath(this aweXpect.Core.IThat<Testably.Abstractions.Testing.FileSystem.ChangeDescription> source, string expected) { }
+        public static aweXpect.Results.AndOrResult<TChange, aweXpect.Core.IThat<TChange>> DoesNotHaveChangeType<TChange>(this aweXpect.Core.IThat<TChange> source, System.IO.WatcherChangeTypes unexpected)
+            where TChange : Testably.Abstractions.Testing.FileSystem.ChangeDescription { }
+        public static aweXpect.Results.AndOrResult<TChange, aweXpect.Core.IThat<TChange>> DoesNotHaveFileSystemType<TChange>(this aweXpect.Core.IThat<TChange> source, Testably.Abstractions.Testing.FileSystemTypes unexpected)
+            where TChange : Testably.Abstractions.Testing.FileSystem.ChangeDescription { }
+        public static aweXpect.Results.AndOrResult<TChange, aweXpect.Core.IThat<TChange>> DoesNotHaveNotifyFilters<TChange>(this aweXpect.Core.IThat<TChange> source, System.IO.NotifyFilters unexpected)
+            where TChange : Testably.Abstractions.Testing.FileSystem.ChangeDescription { }
+        public static aweXpect.Results.AndOrResult<TChange, aweXpect.Core.IThat<TChange>> HasChangeType<TChange>(this aweXpect.Core.IThat<TChange> source, System.IO.WatcherChangeTypes expected)
+            where TChange : Testably.Abstractions.Testing.FileSystem.ChangeDescription { }
+        public static aweXpect.Results.AndOrResult<TChange, aweXpect.Core.IThat<TChange>> HasFileSystemType<TChange>(this aweXpect.Core.IThat<TChange> source, Testably.Abstractions.Testing.FileSystemTypes expected)
+            where TChange : Testably.Abstractions.Testing.FileSystem.ChangeDescription { }
+        public static aweXpect.Results.StringEqualityTypeResult<TChange, aweXpect.Core.IThat<TChange>> HasName<TChange>(this aweXpect.Core.IThat<TChange> source, string? expected)
+            where TChange : Testably.Abstractions.Testing.FileSystem.ChangeDescription { }
+        public static aweXpect.Results.AndOrResult<TChange, aweXpect.Core.IThat<TChange>> HasNotifyFilters<TChange>(this aweXpect.Core.IThat<TChange> source, System.IO.NotifyFilters expected)
+            where TChange : Testably.Abstractions.Testing.FileSystem.ChangeDescription { }
+        public static aweXpect.Results.StringEqualityTypeResult<TChange, aweXpect.Core.IThat<TChange>> HasOldName<TChange>(this aweXpect.Core.IThat<TChange> source, string? expected)
+            where TChange : Testably.Abstractions.Testing.FileSystem.ChangeDescription { }
+        public static aweXpect.Results.StringEqualityTypeResult<TChange, aweXpect.Core.IThat<TChange>> HasOldPath<TChange>(this aweXpect.Core.IThat<TChange> source, string? expected)
+            where TChange : Testably.Abstractions.Testing.FileSystem.ChangeDescription { }
+        public static aweXpect.Results.StringEqualityTypeResult<TChange, aweXpect.Core.IThat<TChange>> HasPath<TChange>(this aweXpect.Core.IThat<TChange> source, string expected)
+            where TChange : Testably.Abstractions.Testing.FileSystem.ChangeDescription { }
     }
     public static class DirectoryInfoExtensions
     {
@@ -72,6 +82,13 @@ namespace aweXpect.Testably
         public static aweXpect.Testably.Results.TriggeredNotificationResult TriggeredNotification(this aweXpect.Core.IThat<Testably.Abstractions.Testing.MockFileSystem> subject) { }
         public static aweXpect.Testably.Results.TriggeredNotificationResult TriggeredNotification(this aweXpect.Core.IThat<Testably.Abstractions.Testing.MockFileSystem> subject, System.Func<Testably.Abstractions.Testing.FileSystem.ChangeDescription, bool> predicate, [System.Runtime.CompilerServices.CallerArgumentExpression("predicate")] string doNotPopulateThisValue = "") { }
     }
+    public static class FileSystemWatcherExtensions
+    {
+        public static aweXpect.Testably.Results.DidNotTriggerWatcherResult DidNotTrigger(this aweXpect.Core.IThat<System.IO.Abstractions.IFileSystemWatcher> subject) { }
+        public static aweXpect.Testably.Results.DidNotTriggerWatcherResult DidNotTrigger(this aweXpect.Core.IThat<System.IO.Abstractions.IFileSystemWatcher> subject, System.Func<Testably.Abstractions.Testing.FileSystem.WatcherChangeDescription, bool> predicate, [System.Runtime.CompilerServices.CallerArgumentExpression("predicate")] string doNotPopulateThisValue = "") { }
+        public static aweXpect.Testably.Results.TriggeredWatcherResult Triggered(this aweXpect.Core.IThat<System.IO.Abstractions.IFileSystemWatcher> subject) { }
+        public static aweXpect.Testably.Results.TriggeredWatcherResult Triggered(this aweXpect.Core.IThat<System.IO.Abstractions.IFileSystemWatcher> subject, System.Func<Testably.Abstractions.Testing.FileSystem.WatcherChangeDescription, bool> predicate, [System.Runtime.CompilerServices.CallerArgumentExpression("predicate")] string doNotPopulateThisValue = "") { }
+    }
 }
 namespace aweXpect.Testably.Results
 {
@@ -79,6 +96,11 @@ namespace aweXpect.Testably.Results
     {
         public aweXpect.Testably.Results.DidNotTriggerNotificationResult Which(System.Action<aweXpect.Core.IThat<Testably.Abstractions.Testing.FileSystem.ChangeDescription>> expectation) { }
         public aweXpect.Testably.Results.DidNotTriggerNotificationResult Within(System.TimeSpan timeout) { }
+    }
+    public class DidNotTriggerWatcherResult : aweXpect.Results.AndOrResult<System.IO.Abstractions.IFileSystemWatcher, aweXpect.Core.IThat<System.IO.Abstractions.IFileSystemWatcher>, aweXpect.Testably.Results.DidNotTriggerWatcherResult>
+    {
+        public aweXpect.Testably.Results.DidNotTriggerWatcherResult Which(System.Action<aweXpect.Core.IThat<Testably.Abstractions.Testing.FileSystem.WatcherChangeDescription>> expectation) { }
+        public aweXpect.Testably.Results.DidNotTriggerWatcherResult Within(System.TimeSpan timeout) { }
     }
     public class DirectoryResult<TParent> : aweXpect.Results.AndOrResult<TParent, aweXpect.Core.IThat<TParent>>
         where TParent :  class
@@ -122,5 +144,10 @@ namespace aweXpect.Testably.Results
     {
         public aweXpect.Testably.Results.TriggeredNotificationResult Which(System.Action<aweXpect.Core.IThat<Testably.Abstractions.Testing.FileSystem.ChangeDescription>> expectation) { }
         public aweXpect.Testably.Results.TriggeredNotificationResult Within(System.TimeSpan timeout) { }
+    }
+    public class TriggeredWatcherResult : aweXpect.Results.CountResult<System.IO.Abstractions.IFileSystemWatcher, aweXpect.Core.IThat<System.IO.Abstractions.IFileSystemWatcher>, aweXpect.Testably.Results.TriggeredWatcherResult>
+    {
+        public aweXpect.Testably.Results.TriggeredWatcherResult Which(System.Action<aweXpect.Core.IThat<Testably.Abstractions.Testing.FileSystem.WatcherChangeDescription>> expectation) { }
+        public aweXpect.Testably.Results.TriggeredWatcherResult Within(System.TimeSpan timeout) { }
     }
 }

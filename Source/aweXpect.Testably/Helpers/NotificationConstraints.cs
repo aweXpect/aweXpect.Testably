@@ -16,18 +16,23 @@ namespace aweXpect.Testably.Helpers;
 
 internal static class NotificationConstraints
 {
-	internal sealed class TriggeredNotificationConstraint(
+	internal sealed class TriggeredNotificationConstraint<TSubject, TChange>(
 		string it,
 		ExpectationGrammars grammars,
-		TriggerNotificationFilter filter,
+		string normalExpectation,
+		string negatedExpectation,
+		Func<TSubject, Action<TChange>, Func<TChange, bool>, IAwaitableCallback<TChange>> subscribe,
+		TriggerNotificationFilter<TChange> filter,
 		Quantifier quantifier,
 		NotificationTimeoutOptions options,
-		List<ChangeDescription> matches,
+		List<TChange> matches,
 		bool exitOnFirstMatch = false)
-		: ConstraintResult.WithValue<MockFileSystem>(grammars),
-			IAsyncContextConstraint<MockFileSystem>
+		: ConstraintResult.WithValue<TSubject>(grammars),
+			IAsyncContextConstraint<TSubject>
+		where TSubject : class
+		where TChange : ChangeDescription
 	{
-		public async Task<ConstraintResult> IsMetBy(MockFileSystem actual,
+		public async Task<ConstraintResult> IsMetBy(TSubject actual,
 			IEvaluationContext context,
 			CancellationToken cancellationToken)
 		{
@@ -46,7 +51,8 @@ internal static class NotificationConstraints
 			deadlineCts.CancelAfter(timeout);
 			CancellationToken deadlineToken = deadlineCts.Token;
 
-			using IAwaitableCallback<ChangeDescription> registration = actual.Notify.OnEventOrReplay(
+			using IAwaitableCallback<TChange> registration = subscribe(
+				actual,
 				change =>
 				{
 					if (!filter.IsAsyncMatchSync(change, context, cancellationToken))
@@ -91,7 +97,7 @@ internal static class NotificationConstraints
 
 		protected override void AppendNormalExpectation(StringBuilder stringBuilder, string? indentation = null)
 		{
-			stringBuilder.Append("triggered a notification");
+			stringBuilder.Append(normalExpectation);
 			stringBuilder.Append(filter);
 			stringBuilder.Append(' ').Append(quantifier);
 			stringBuilder.Append(options);
@@ -102,7 +108,7 @@ internal static class NotificationConstraints
 
 		protected override void AppendNegatedExpectation(StringBuilder stringBuilder, string? indentation = null)
 		{
-			stringBuilder.Append("did not trigger a notification");
+			stringBuilder.Append(negatedExpectation);
 			stringBuilder.Append(filter);
 			stringBuilder.Append(options);
 		}
@@ -118,7 +124,7 @@ internal static class NotificationConstraints
 				return;
 			}
 
-			ChangeDescription[] snapshot;
+			TChange[] snapshot;
 			lock (matches)
 			{
 				snapshot = matches.ToArray();
@@ -164,12 +170,13 @@ internal static class NotificationConstraints
 		}
 	}
 
-	internal sealed class TriggerNotificationFilter
+	internal sealed class TriggerNotificationFilter<TChange>
+		where TChange : ChangeDescription
 	{
-		private readonly List<ManualExpectationBuilder<ChangeDescription>> _asyncFilters = new();
-		private readonly List<(Func<ChangeDescription, bool> Predicate, string Description)> _syncPredicates = new();
+		private readonly List<ManualExpectationBuilder<TChange>> _asyncFilters = new();
+		private readonly List<(Func<TChange, bool> Predicate, string Description)> _syncPredicates = new();
 
-		public void Add(Func<ChangeDescription, bool> predicate, string predicateExpression)
+		public void Add(Func<TChange, bool> predicate, string predicateExpression)
 		{
 			if (predicate is null)
 			{
@@ -179,17 +186,17 @@ internal static class NotificationConstraints
 			_syncPredicates.Add((predicate, predicateExpression.Trim()));
 		}
 
-		public void Add(ManualExpectationBuilder<ChangeDescription> builder)
+		public void Add(ManualExpectationBuilder<TChange> builder)
 			=> _asyncFilters.Add(builder);
 
-		public bool IsSyncMatch(ChangeDescription change)
+		public bool IsSyncMatch(TChange change)
 			=> _syncPredicates.All(p => p.Predicate(change));
 
-		public bool IsAsyncMatchSync(ChangeDescription change,
+		public bool IsAsyncMatchSync(TChange change,
 			IEvaluationContext context,
 			CancellationToken cancellationToken)
 		{
-			foreach (ManualExpectationBuilder<ChangeDescription> builder in _asyncFilters)
+			foreach (ManualExpectationBuilder<TChange> builder in _asyncFilters)
 			{
 				ConstraintResult result = builder.IsMetBy(change, context, cancellationToken)
 					.ConfigureAwait(false).GetAwaiter().GetResult();
@@ -211,17 +218,17 @@ internal static class NotificationConstraints
 
 			StringBuilder sb = new();
 			bool firstInGroup = true;
-			foreach ((Func<ChangeDescription, bool> _, string description) in _syncPredicates)
+			foreach ((Func<TChange, bool> _, string description) in _syncPredicates)
 			{
 				sb.Append(firstInGroup ? " matching " : " and ").Append(description);
 				firstInGroup = false;
 			}
 
 			firstInGroup = true;
-			foreach (ManualExpectationBuilder<ChangeDescription> builder in _asyncFilters)
+			foreach (ManualExpectationBuilder<TChange> builder in _asyncFilters)
 			{
 				sb.Append(firstInGroup ? " which " : " and ");
-				builder.AppendExpectation(sb, indentation: "");
+				builder.AppendExpectation(sb, "");
 				firstInGroup = false;
 			}
 
@@ -229,14 +236,15 @@ internal static class NotificationConstraints
 		}
 	}
 
-	internal sealed class HasChangeTypeConstraint(
+	internal sealed class HasChangeTypeConstraint<TChange>(
 		string it,
 		ExpectationGrammars grammars,
 		WatcherChangeTypes expected)
-		: ConstraintResult.WithValue<ChangeDescription>(grammars),
-			IValueConstraint<ChangeDescription>
+		: ConstraintResult.WithValue<TChange>(grammars),
+			IValueConstraint<TChange>
+		where TChange : ChangeDescription
 	{
-		public ConstraintResult IsMetBy(ChangeDescription actual)
+		public ConstraintResult IsMetBy(TChange actual)
 		{
 			Actual = actual;
 			Outcome = actual != null! && (actual.ChangeType & expected) == expected
@@ -276,14 +284,15 @@ internal static class NotificationConstraints
 		}
 	}
 
-	internal sealed class HasFileSystemTypeConstraint(
+	internal sealed class HasFileSystemTypeConstraint<TChange>(
 		string it,
 		ExpectationGrammars grammars,
 		FileSystemTypes expected)
-		: ConstraintResult.WithValue<ChangeDescription>(grammars),
-			IValueConstraint<ChangeDescription>
+		: ConstraintResult.WithValue<TChange>(grammars),
+			IValueConstraint<TChange>
+		where TChange : ChangeDescription
 	{
-		public ConstraintResult IsMetBy(ChangeDescription actual)
+		public ConstraintResult IsMetBy(TChange actual)
 		{
 			Actual = actual;
 			Outcome = actual != null! && (actual.FileSystemType & expected) == expected
@@ -323,14 +332,15 @@ internal static class NotificationConstraints
 		}
 	}
 
-	internal sealed class HasNotifyFiltersConstraint(
+	internal sealed class HasNotifyFiltersConstraint<TChange>(
 		string it,
 		ExpectationGrammars grammars,
 		NotifyFilters expected)
-		: ConstraintResult.WithValue<ChangeDescription>(grammars),
-			IValueConstraint<ChangeDescription>
+		: ConstraintResult.WithValue<TChange>(grammars),
+			IValueConstraint<TChange>
+		where TChange : ChangeDescription
 	{
-		public ConstraintResult IsMetBy(ChangeDescription actual)
+		public ConstraintResult IsMetBy(TChange actual)
 		{
 			Actual = actual;
 			Outcome = actual != null! && (actual.NotifyFilters & expected) == expected
@@ -370,19 +380,20 @@ internal static class NotificationConstraints
 		}
 	}
 
-	internal sealed class HasStringPropertyConstraint(
+	internal sealed class HasStringPropertyConstraint<TChange>(
 		string it,
 		ExpectationGrammars grammars,
-		Func<ChangeDescription, string?> selector,
+		Func<TChange, string?> selector,
 		StringEqualityOptions options,
 		string? expected,
 		string propertyName)
-		: ConstraintResult.WithValue<ChangeDescription>(grammars),
-			IAsyncConstraint<ChangeDescription>
+		: ConstraintResult.WithValue<TChange>(grammars),
+			IAsyncConstraint<TChange>
+		where TChange : ChangeDescription
 	{
 		private string? _actualValue;
 
-		public async Task<ConstraintResult> IsMetBy(ChangeDescription actual,
+		public async Task<ConstraintResult> IsMetBy(TChange actual,
 			CancellationToken cancellationToken)
 		{
 			Actual = actual;

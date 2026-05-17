@@ -17,9 +17,10 @@ public static partial class ChangeDescriptionExtensions
 	/// <remarks>
 	///     The check uses flag containment, because <see cref="FileSystemTypes" /> is a flag enum.
 	/// </remarks>
-	public static AndOrResult<ChangeDescription, IThat<ChangeDescription>> HasFileSystemType(
-		this IThat<ChangeDescription> source,
+	public static AndOrResult<TChange, IThat<TChange>> HasFileSystemType<TChange>(
+		this IThat<TChange> source,
 		FileSystemTypes expected)
+		where TChange : ChangeDescription
 	{
 		if (expected == default)
 		{
@@ -27,9 +28,9 @@ public static partial class ChangeDescriptionExtensions
 				"The expected file system type must include at least one flag.", nameof(expected));
 		}
 
-		return new AndOrResult<ChangeDescription, IThat<ChangeDescription>>(
+		return new AndOrResult<TChange, IThat<TChange>>(
 			source.Get().ExpectationBuilder.AddConstraint((it, grammars)
-				=> new NotificationConstraints.HasFileSystemTypeConstraint(it, grammars, expected)),
+				=> new NotificationConstraints.HasFileSystemTypeConstraint<TChange>(it, grammars, expected)),
 			source);
 	}
 
@@ -37,9 +38,10 @@ public static partial class ChangeDescriptionExtensions
 	///     Verifies that the <see cref="ChangeDescription" /> does not have the <paramref name="unexpected" />
 	///     <see cref="FileSystemTypes" />.
 	/// </summary>
-	public static AndOrResult<ChangeDescription, IThat<ChangeDescription>> DoesNotHaveFileSystemType(
-		this IThat<ChangeDescription> source,
+	public static AndOrResult<TChange, IThat<TChange>> DoesNotHaveFileSystemType<TChange>(
+		this IThat<TChange> source,
 		FileSystemTypes unexpected)
+		where TChange : ChangeDescription
 	{
 		if (unexpected == default)
 		{
@@ -47,9 +49,9 @@ public static partial class ChangeDescriptionExtensions
 				"The unexpected file system type must include at least one flag.", nameof(unexpected));
 		}
 
-		return new AndOrResult<ChangeDescription, IThat<ChangeDescription>>(
+		return new AndOrResult<TChange, IThat<TChange>>(
 			source.Get().ExpectationBuilder.AddConstraint((it, grammars)
-				=> new NotificationConstraints.HasFileSystemTypeConstraint(it, grammars, unexpected).Invert()),
+				=> new NotificationConstraints.HasFileSystemTypeConstraint<TChange>(it, grammars, unexpected).Invert()),
 			source);
 	}
 }

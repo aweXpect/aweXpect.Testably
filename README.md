@@ -166,6 +166,52 @@ await That(fileSystem)
 > `new MockFileSystem(o => o.WithoutNotificationHistory())` only if you don't
 > use these assertions — they throw against a history-disabled file system.
 
+### Watcher events
+
+An individual `IFileSystemWatcher` can also be the subject. The watcher must
+come from a `MockFileSystem`, and `EnableRaisingEvents` must be `true` for any
+event to be observed:
+
+```csharp
+MockFileSystem fileSystem = new();
+using IFileSystemWatcher watcher = fileSystem.FileSystemWatcher.New("/");
+watcher.EnableRaisingEvents = true;
+fileSystem.File.WriteAllText("my-file.txt", "some content");
+
+await That(watcher).Triggered();
+await That(watcher).Triggered(c => c.Name == "my-file.txt");
+```
+
+Only events that originate from this specific watcher count — events fired on
+other watchers of the same `MockFileSystem` are ignored.
+
+`.Within(timeout)` (default 30 s) lets the assertion wait for asynchronous
+events:
+
+```csharp
+_ = Task.Run(() => fileSystem.File.WriteAllText("foo.txt", "x"));
+await That(watcher).Triggered().Within(100.Milliseconds());
+```
+
+`DidNotTrigger` mirrors the same shapes and short-circuits as soon as a
+matching event is observed:
+
+```csharp
+await That(watcher).DidNotTrigger().Within(100.Milliseconds());
+await That(watcher).DidNotTrigger(c => c.Name == "secret.txt");
+```
+
+Both `Triggered` and `DidNotTrigger` accept either a synchronous
+`Func<WatcherChangeDescription, bool>` predicate or a `.Which(c => …)` callback
+that composes inner expectations from `ChangeDescriptionExtensions`:
+
+```csharp
+await That(watcher)
+    .Triggered()
+    .Which(c => c.HasName("my-file.txt").And.HasChangeType(WatcherChangeTypes.Created))
+    .Exactly(1.Times());
+```
+
 ### `ChangeDescription` as a subject
 
 Individual `ChangeDescription` instances can be asserted directly. The

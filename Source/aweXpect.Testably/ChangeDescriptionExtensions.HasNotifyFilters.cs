@@ -17,9 +17,10 @@ public static partial class ChangeDescriptionExtensions
 	/// <remarks>
 	///     The check uses flag containment, because <see cref="NotifyFilters" /> is a flag enum.
 	/// </remarks>
-	public static AndOrResult<ChangeDescription, IThat<ChangeDescription>> HasNotifyFilters(
-		this IThat<ChangeDescription> source,
+	public static AndOrResult<TChange, IThat<TChange>> HasNotifyFilters<TChange>(
+		this IThat<TChange> source,
 		NotifyFilters expected)
+		where TChange : ChangeDescription
 	{
 		if (expected == default)
 		{
@@ -27,9 +28,9 @@ public static partial class ChangeDescriptionExtensions
 				"The expected notify filters must include at least one flag.", nameof(expected));
 		}
 
-		return new AndOrResult<ChangeDescription, IThat<ChangeDescription>>(
+		return new AndOrResult<TChange, IThat<TChange>>(
 			source.Get().ExpectationBuilder.AddConstraint((it, grammars)
-				=> new NotificationConstraints.HasNotifyFiltersConstraint(it, grammars, expected)),
+				=> new NotificationConstraints.HasNotifyFiltersConstraint<TChange>(it, grammars, expected)),
 			source);
 	}
 
@@ -37,9 +38,10 @@ public static partial class ChangeDescriptionExtensions
 	///     Verifies that the <see cref="ChangeDescription" /> does not have the <paramref name="unexpected" />
 	///     <see cref="NotifyFilters" />.
 	/// </summary>
-	public static AndOrResult<ChangeDescription, IThat<ChangeDescription>> DoesNotHaveNotifyFilters(
-		this IThat<ChangeDescription> source,
+	public static AndOrResult<TChange, IThat<TChange>> DoesNotHaveNotifyFilters<TChange>(
+		this IThat<TChange> source,
 		NotifyFilters unexpected)
+		where TChange : ChangeDescription
 	{
 		if (unexpected == default)
 		{
@@ -47,9 +49,9 @@ public static partial class ChangeDescriptionExtensions
 				"The unexpected notify filters must include at least one flag.", nameof(unexpected));
 		}
 
-		return new AndOrResult<ChangeDescription, IThat<ChangeDescription>>(
+		return new AndOrResult<TChange, IThat<TChange>>(
 			source.Get().ExpectationBuilder.AddConstraint((it, grammars)
-				=> new NotificationConstraints.HasNotifyFiltersConstraint(it, grammars, unexpected).Invert()),
+				=> new NotificationConstraints.HasNotifyFiltersConstraint<TChange>(it, grammars, unexpected).Invert()),
 			source);
 	}
 }

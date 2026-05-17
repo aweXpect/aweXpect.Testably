@@ -20,9 +20,10 @@ public static partial class ChangeDescriptionExtensions
 	/// <remarks>
 	///     The check uses flag containment, because <see cref="WatcherChangeTypes" /> is a flag enum.
 	/// </remarks>
-	public static AndOrResult<ChangeDescription, IThat<ChangeDescription>> HasChangeType(
-		this IThat<ChangeDescription> source,
+	public static AndOrResult<TChange, IThat<TChange>> HasChangeType<TChange>(
+		this IThat<TChange> source,
 		WatcherChangeTypes expected)
+		where TChange : ChangeDescription
 	{
 		if (expected == default)
 		{
@@ -30,9 +31,9 @@ public static partial class ChangeDescriptionExtensions
 				"The expected change type must include at least one flag.", nameof(expected));
 		}
 
-		return new AndOrResult<ChangeDescription, IThat<ChangeDescription>>(
+		return new AndOrResult<TChange, IThat<TChange>>(
 			source.Get().ExpectationBuilder.AddConstraint((it, grammars)
-				=> new NotificationConstraints.HasChangeTypeConstraint(it, grammars, expected)),
+				=> new NotificationConstraints.HasChangeTypeConstraint<TChange>(it, grammars, expected)),
 			source);
 	}
 
@@ -40,9 +41,10 @@ public static partial class ChangeDescriptionExtensions
 	///     Verifies that the <see cref="ChangeDescription" /> does not have the <paramref name="unexpected" />
 	///     <see cref="WatcherChangeTypes" />.
 	/// </summary>
-	public static AndOrResult<ChangeDescription, IThat<ChangeDescription>> DoesNotHaveChangeType(
-		this IThat<ChangeDescription> source,
+	public static AndOrResult<TChange, IThat<TChange>> DoesNotHaveChangeType<TChange>(
+		this IThat<TChange> source,
 		WatcherChangeTypes unexpected)
+		where TChange : ChangeDescription
 	{
 		if (unexpected == default)
 		{
@@ -50,9 +52,9 @@ public static partial class ChangeDescriptionExtensions
 				"The unexpected change type must include at least one flag.", nameof(unexpected));
 		}
 
-		return new AndOrResult<ChangeDescription, IThat<ChangeDescription>>(
+		return new AndOrResult<TChange, IThat<TChange>>(
 			source.Get().ExpectationBuilder.AddConstraint((it, grammars)
-				=> new NotificationConstraints.HasChangeTypeConstraint(it, grammars, unexpected).Invert()),
+				=> new NotificationConstraints.HasChangeTypeConstraint<TChange>(it, grammars, unexpected).Invert()),
 			source);
 	}
 }
