@@ -24,10 +24,11 @@ public sealed partial class Statistics
 					await That(Act).DoesNotThrow();
 				}
 
+#if NET8_0_OR_GREATER
 				[Fact]
 				public async Task New_WithDriveNameFilter_ShouldOnlyCountMatching()
 				{
-					MockFileSystem fileSystem = new();
+					MockFileSystem fileSystem = new(o => o.SimulatingOperatingSystem(SimulationMode.Windows));
 					_ = fileSystem.DriveInfo.New("C:");
 					_ = fileSystem.DriveInfo.New("D:");
 
@@ -39,14 +40,16 @@ public sealed partial class Statistics
 
 					await That(Act).DoesNotThrow();
 				}
+#endif
 			}
 
+#if NET8_0_OR_GREATER
 			public sealed class NameTests
 			{
 				[Fact]
 				public async Task Name_Get_ShouldRecordPerDrive()
 				{
-					MockFileSystem fileSystem = new();
+					MockFileSystem fileSystem = new(o => o.SimulatingOperatingSystem(SimulationMode.Windows));
 					_ = fileSystem.DriveInfo.New("C:").Name;
 
 					async Task Act()
@@ -58,6 +61,7 @@ public sealed partial class Statistics
 					await That(Act).DoesNotThrow();
 				}
 			}
+#endif
 		}
 	}
 }
