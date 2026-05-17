@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using System.IO;
 using aweXpect.Core;
 using Testably.Abstractions.Testing;
+using Testably.Abstractions.Testing.FileSystem;
 
 namespace aweXpect.Testably.Tests;
 
@@ -39,8 +41,11 @@ public sealed partial class FileSystem
 				}
 
 				await That(Act).ThrowsException()
-					.WithMessage("*triggered a notification*")
-					.AsWildcard();
+					.WithMessage("""
+					             Expected that sut
+					             triggered a notification at least once within 0:00.100,
+					             but it was not triggered
+					             """);
 			}
 
 			[Fact]
@@ -68,8 +73,11 @@ public sealed partial class FileSystem
 				}
 
 				await That(Act).ThrowsException()
-					.WithMessage("*was <null>*")
-					.AsWildcard();
+					.WithMessage("""
+					             Expected that sut
+					             triggered a notification at least once within 0:00.010,
+					             but it was <null>
+					             """);
 			}
 
 			[Fact]
@@ -104,8 +112,11 @@ public sealed partial class FileSystem
 				}
 
 				await That(Act).ThrowsException()
-					.WithMessage("*triggered a notification*matching*")
-					.AsWildcard();
+					.WithMessage("""
+					             Expected that sut
+					             triggered a notification matching c => c.HasName("other.txt") at least once within 0:00.100,
+					             but it was not triggered
+					             """);
 			}
 
 			[Fact]
@@ -141,6 +152,14 @@ public sealed partial class FileSystem
 			public async Task WithExactlyOnce_WhenTriggeredTwice_ShouldFail()
 			{
 				MockFileSystem sut = new();
+				List<ChangeDescription> created = new();
+				using IAwaitableCallback<ChangeDescription> reg = sut.Notify.OnEvent(c =>
+				{
+					if (c.ChangeType == WatcherChangeTypes.Created)
+					{
+						created.Add(c);
+					}
+				});
 				sut.File.WriteAllText("a.txt", "x");
 				sut.File.WriteAllText("b.txt", "x");
 
@@ -152,8 +171,14 @@ public sealed partial class FileSystem
 				}
 
 				await That(Act).ThrowsException()
-					.WithMessage("*triggered twice*")
-					.AsWildcard();
+					.WithMessage($$"""
+					               Expected that sut
+					               triggered a notification matching c => c.ChangeType == WatcherChangeTypes.Created exactly once within 0:00.100,
+					               but it was triggered twice in [
+					                 {{created[0]}},
+					                 {{created[1]}}
+					               ]
+					               """);
 			}
 
 			[Fact]
@@ -185,8 +210,11 @@ public sealed partial class FileSystem
 				}
 
 				await That(Act).ThrowsException()
-					.WithMessage("*triggered a notification*matching*")
-					.AsWildcard();
+					.WithMessage("""
+					             Expected that sut
+					             triggered a notification matching c => c.Name == "other.txt" at least once within 0:00.100,
+					             but it was not triggered
+					             """);
 			}
 
 			[Fact]

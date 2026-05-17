@@ -1,4 +1,5 @@
 using Testably.Abstractions.Testing;
+using Testably.Abstractions.Testing.FileSystem;
 
 namespace aweXpect.Testably.Tests;
 
@@ -25,6 +26,8 @@ public sealed partial class FileSystem
 			public async Task WhenPriorEventExists_ShouldFailSynchronously()
 			{
 				MockFileSystem sut = new();
+				ChangeDescription? firstEvent = null;
+				using IAwaitableCallback<ChangeDescription> reg = sut.Notify.OnEvent(c => firstEvent ??= c);
 				sut.File.WriteAllText("foo.txt", "x");
 
 				async Task Act()
@@ -33,14 +36,21 @@ public sealed partial class FileSystem
 				}
 
 				await That(Act).ThrowsException()
-					.WithMessage("*did not trigger a notification*")
-					.AsWildcard();
+					.WithMessage($$"""
+					               Expected that sut
+					               did not trigger a notification,
+					               but it was triggered once in [
+					                 {{firstEvent}}
+					               ]
+					               """);
 			}
 
 			[Fact]
 			public async Task WhichWithInnerExpectation_WhenMatchingChange_ShouldFail()
 			{
 				MockFileSystem sut = new();
+				ChangeDescription? firstEvent = null;
+				using IAwaitableCallback<ChangeDescription> reg = sut.Notify.OnEvent(c => firstEvent ??= c);
 				sut.File.WriteAllText("foo.txt", "x");
 
 				async Task Act()
@@ -50,8 +60,13 @@ public sealed partial class FileSystem
 				}
 
 				await That(Act).ThrowsException()
-					.WithMessage("*did not trigger a notification*matching*")
-					.AsWildcard();
+					.WithMessage($$"""
+					               Expected that sut
+					               did not trigger a notification matching c => c.HasName("foo.txt"),
+					               but it was triggered once in [
+					                 {{firstEvent}}
+					               ]
+					               """);
 			}
 
 			[Fact]
@@ -88,6 +103,14 @@ public sealed partial class FileSystem
 			public async Task WithPredicate_WhenMatchingPriorEvent_ShouldFail()
 			{
 				MockFileSystem sut = new();
+				ChangeDescription? firstMatch = null;
+				using IAwaitableCallback<ChangeDescription> reg = sut.Notify.OnEvent(c =>
+				{
+					if (c.Name == "foo.txt")
+					{
+						firstMatch ??= c;
+					}
+				});
 				sut.File.WriteAllText("foo.txt", "x");
 
 				async Task Act()
@@ -96,8 +119,13 @@ public sealed partial class FileSystem
 				}
 
 				await That(Act).ThrowsException()
-					.WithMessage("*did not trigger a notification*")
-					.AsWildcard();
+					.WithMessage($$"""
+					               Expected that sut
+					               did not trigger a notification matching c => c.Name == "foo.txt",
+					               but it was triggered once in [
+					                 {{firstMatch}}
+					               ]
+					               """);
 			}
 
 			[Fact]

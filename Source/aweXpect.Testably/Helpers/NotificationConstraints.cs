@@ -56,6 +56,11 @@ internal static class NotificationConstraints
 
 					lock (matches)
 					{
+						if (exitOnFirstMatch && matches.Count > 0)
+						{
+							return;
+						}
+
 						matches.Add(change);
 						if (exitOnFirstMatch || quantifier.Check(matches.Count, false) is not null)
 						{
