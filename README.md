@@ -108,23 +108,33 @@ await That(fileSystem).HasDirectory("logs").Which.IsEmpty();
 
 ### Notifications
 
-A `MockFileSystem` raises notifications when files or directories change. You
-can verify that a piece of code triggers (or does not trigger) a notification:
+A `MockFileSystem` raises notifications when files or directories change. Run
+the code under test, then assert against the notifications it produced:
 
 ```csharp
 MockFileSystem fileSystem = new();
+fileSystem.File.WriteAllText("my-file.txt", "some content");
 
-await That(fileSystem).TriggeredNotification(_ =>
-{
-    fileSystem.File.WriteAllText("my-file.txt", "some content");
-    return Task.CompletedTask;
-});
+await That(fileSystem).TriggeredNotification();
+await That(fileSystem).TriggeredNotification(c => c.Name == "my-file.txt");
+```
 
-await That(fileSystem).DidNotTriggerNotification(_ =>
-{
-    bool _ = fileSystem.Directory.Exists("/");
-    return Task.CompletedTask;
-}).Within(TimeSpan.FromMilliseconds(100));
+`.Within(timeout)` (default 30 s) lets the assertion wait for asynchronous
+notifications — if a matching notification already fired the assertion
+completes synchronously, otherwise it waits up to the timeout for a late
+arrival:
+
+```csharp
+_ = Task.Run(() => fileSystem.File.WriteAllText("foo.txt", "x"));
+await That(fileSystem).TriggeredNotification().Within(100.Milliseconds());
+```
+
+`DidNotTriggerNotification` mirrors the same shapes and short-circuits as soon
+as a matching notification is observed:
+
+```csharp
+await That(fileSystem).DidNotTriggerNotification().Within(100.Milliseconds());
+await That(fileSystem).DidNotTriggerNotification(c => c.Name == "secret.txt");
 ```
 
 `TriggeredNotification` accepts a `Quantifier` (`AtLeast`, `AtMost`, `Exactly`,
@@ -132,26 +142,27 @@ await That(fileSystem).DidNotTriggerNotification(_ =>
 and `.Matching(predicate)` narrows the assertion to specific changes:
 
 ```csharp
-await That(fileSystem).TriggeredNotification(_ =>
-{
-    fileSystem.File.WriteAllText("a.txt", "x");
-    fileSystem.File.WriteAllText("b.txt", "y");
-    return Task.CompletedTask;
-}).Exactly(2.Times())
-  .Matching(c => c.ChangeType == WatcherChangeTypes.Created);
+fileSystem.File.WriteAllText("a.txt", "x");
+fileSystem.File.WriteAllText("b.txt", "y");
+
+await That(fileSystem).TriggeredNotification()
+    .Matching(c => c.ChangeType == WatcherChangeTypes.Created)
+    .Exactly(2.Times());
 ```
 
-Both `TriggeredNotification` and `DidNotTriggerNotification` honour a
-`.Within(timeout)` (default 30 s) and expose `.Which` for further assertions on
-the list of captured `ChangeDescription`s:
+Both `TriggeredNotification` and `DidNotTriggerNotification` expose `.Which`
+for further assertions on the list of captured `ChangeDescription`s:
 
 ```csharp
-await That(fileSystem).TriggeredNotification(_ =>
-{
-    fileSystem.File.WriteAllText("a.txt", "x");
-    return Task.CompletedTask;
-}).Which.HasCount().EqualTo(1);
+fileSystem.File.WriteAllText("a.txt", "x");
+
+await That(fileSystem).TriggeredNotification().Which.HasCount().EqualTo(1);
 ```
+
+> Replay of historical notifications relies on the `MockFileSystem` notification
+> history. Disable it via
+> `new MockFileSystem(o => o.WithoutNotificationHistory())` only if you don't
+> use these assertions — they throw against a history-disabled file system.
 
 ### `ChangeDescription` as a subject
 

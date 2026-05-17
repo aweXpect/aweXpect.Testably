@@ -59,8 +59,8 @@ namespace aweXpect.Testably
     }
     public static class FileSystemExtensions
     {
-        public static aweXpect.Testably.Results.DidNotTriggerNotificationResult DidNotTriggerNotification(this aweXpect.Core.IThat<Testably.Abstractions.Testing.MockFileSystem> subject, System.Func<System.Threading.Tasks.Task> triggerAction) { }
-        public static aweXpect.Testably.Results.DidNotTriggerNotificationResult DidNotTriggerNotification(this aweXpect.Core.IThat<Testably.Abstractions.Testing.MockFileSystem> subject, System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task> triggerAction) { }
+        public static aweXpect.Testably.Results.DidNotTriggerNotificationResult DidNotTriggerNotification(this aweXpect.Core.IThat<Testably.Abstractions.Testing.MockFileSystem> subject) { }
+        public static aweXpect.Testably.Results.DidNotTriggerNotificationResult DidNotTriggerNotification(this aweXpect.Core.IThat<Testably.Abstractions.Testing.MockFileSystem> subject, System.Func<Testably.Abstractions.Testing.FileSystem.ChangeDescription, bool> predicate, [System.Runtime.CompilerServices.CallerArgumentExpression("predicate")] string doNotPopulateThisValue = "") { }
         public static aweXpect.Results.AndOrResult<TFileSystem, aweXpect.Core.IThat<TFileSystem>> DoesNotHaveDirectory<TFileSystem>(this aweXpect.Core.IThat<TFileSystem> subject, string path)
             where TFileSystem :  class, System.IO.Abstractions.IFileSystem { }
         public static aweXpect.Results.AndOrResult<TFileSystem, aweXpect.Core.IThat<TFileSystem>> DoesNotHaveFile<TFileSystem>(this aweXpect.Core.IThat<TFileSystem> subject, string path)
@@ -69,8 +69,8 @@ namespace aweXpect.Testably
             where TFileSystem :  class, System.IO.Abstractions.IFileSystem { }
         public static aweXpect.Testably.Results.FileResult<TFileSystem> HasFile<TFileSystem>(this aweXpect.Core.IThat<TFileSystem> subject, string path)
             where TFileSystem :  class, System.IO.Abstractions.IFileSystem { }
-        public static aweXpect.Testably.Results.TriggeredNotificationResult TriggeredNotification(this aweXpect.Core.IThat<Testably.Abstractions.Testing.MockFileSystem> subject, System.Func<System.Threading.Tasks.Task> triggerAction) { }
-        public static aweXpect.Testably.Results.TriggeredNotificationResult TriggeredNotification(this aweXpect.Core.IThat<Testably.Abstractions.Testing.MockFileSystem> subject, System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task> triggerAction) { }
+        public static aweXpect.Testably.Results.TriggeredNotificationResult TriggeredNotification(this aweXpect.Core.IThat<Testably.Abstractions.Testing.MockFileSystem> subject) { }
+        public static aweXpect.Testably.Results.TriggeredNotificationResult TriggeredNotification(this aweXpect.Core.IThat<Testably.Abstractions.Testing.MockFileSystem> subject, System.Func<Testably.Abstractions.Testing.FileSystem.ChangeDescription, bool> predicate, [System.Runtime.CompilerServices.CallerArgumentExpression("predicate")] string doNotPopulateThisValue = "") { }
     }
 }
 namespace aweXpect.Testably.Results

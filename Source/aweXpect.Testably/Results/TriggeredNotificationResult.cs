@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using aweXpect.Core;
 using aweXpect.Options;
 using aweXpect.Results;
@@ -12,7 +11,7 @@ using Testably.Abstractions.Testing.FileSystem;
 namespace aweXpect.Testably.Results;
 
 /// <summary>
-///     The result for <see cref="FileSystemExtensions.TriggeredNotification(IThat{MockFileSystem}, Func{Task})" />.
+///     The result for <see cref="FileSystemExtensions.TriggeredNotification(IThat{MockFileSystem})" />.
 /// </summary>
 public class TriggeredNotificationResult
 	: CountResult<MockFileSystem, IThat<MockFileSystem>, TriggeredNotificationResult>

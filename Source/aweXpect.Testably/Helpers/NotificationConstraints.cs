@@ -18,7 +18,6 @@ internal static class NotificationConstraints
 	internal sealed class TriggeredNotificationConstraint(
 		string it,
 		ExpectationGrammars grammars,
-		Func<CancellationToken, Task> action,
 		TriggerNotificationFilter filter,
 		Quantifier quantifier,
 		NotificationTimeoutOptions options,
@@ -27,8 +26,6 @@ internal static class NotificationConstraints
 		: ConstraintResult.WithValue<MockFileSystem>(grammars),
 			IAsyncConstraint<MockFileSystem>
 	{
-		private Exception? _actionException;
-
 		public async Task<ConstraintResult> IsMetBy(MockFileSystem actual, CancellationToken cancellationToken)
 		{
 			Actual = actual;
@@ -46,7 +43,7 @@ internal static class NotificationConstraints
 			deadlineCts.CancelAfter(timeout);
 			CancellationToken deadlineToken = deadlineCts.Token;
 
-			using IAwaitableCallback<ChangeDescription> registration = actual.Notify.OnEvent(
+			using IAwaitableCallback<ChangeDescription> registration = actual.Notify.OnEventOrReplay(
 				change =>
 				{
 					lock (captured)
@@ -59,21 +56,6 @@ internal static class NotificationConstraints
 					}
 				},
 				filter.IsMatch);
-
-			try
-			{
-				await action(deadlineToken).ConfigureAwait(false);
-			}
-			catch (OperationCanceledException) when (deadlineToken.IsCancellationRequested)
-			{
-				// Deadline expired during the trigger action; evaluate what was captured so far.
-			}
-			catch (Exception ex)
-			{
-				_actionException = ex;
-				Outcome = Outcome.Failure;
-				return this;
-			}
 
 			if (!deadlineToken.IsCancellationRequested && !earlyExit.Task.IsCompleted)
 			{
@@ -115,14 +97,6 @@ internal static class NotificationConstraints
 
 		private void AppendCount(StringBuilder stringBuilder, string? indentation)
 		{
-			if (_actionException is not null)
-			{
-				stringBuilder.Append(it).Append(" threw ");
-				Formatter.Format(stringBuilder, _actionException.GetType());
-				stringBuilder.Append(": ").Append(_actionException.Message);
-				return;
-			}
-
 			int count;
 			ChangeDescription[] snapshot;
 			lock (captured)
