@@ -62,7 +62,7 @@ public sealed partial class FileSystem
 				await That(Act).ThrowsException()
 					.WithMessage($$"""
 					               Expected that sut
-					               did not trigger a notification matching c => c.HasName("foo.txt"),
+					               did not trigger a notification which has name equal to "foo.txt",
 					               but it was triggered once in [
 					                 {{firstEvent}}
 					               ]

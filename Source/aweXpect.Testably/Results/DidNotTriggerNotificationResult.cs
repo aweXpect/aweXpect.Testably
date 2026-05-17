@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.CompilerServices;
 using aweXpect.Core;
 using aweXpect.Results;
 using aweXpect.Testably.Helpers;
@@ -37,22 +36,20 @@ public class DidNotTriggerNotificationResult
 	///     The <paramref name="expectation" /> is applied as an additional per-change filter, so any
 	///     assertions from <see cref="ChangeDescriptionExtensions" /> (e.g. <c>.HasName(...)</c>,
 	///     <c>.HasChangeType(...)</c>) compose naturally — the assertion fails if any notification
-	///     satisfies all of them.
+	///     satisfies all of them. The expectation text is taken from the inner expectation builder,
+	///     so it reads like <c>matching has name equal to "foo.txt"</c> rather than the raw lambda
+	///     source.
 	/// </remarks>
-	public DidNotTriggerNotificationResult Which(
-		Action<IThat<ChangeDescription>> expectation,
-		[CallerArgumentExpression("expectation")]
-		string doNotPopulateThisValue = "")
+	public DidNotTriggerNotificationResult Which(Action<IThat<ChangeDescription>> expectation)
 	{
 		if (expectation is null)
 		{
 			throw new ArgumentNullException(nameof(expectation));
 		}
 
-		ManualExpectationBuilder<ChangeDescription> manualBuilder =
-			new(_expectationBuilder);
+		ManualExpectationBuilder<ChangeDescription> manualBuilder = new(_expectationBuilder);
 		expectation(new ThatSubject<ChangeDescription>(manualBuilder));
-		_filter.Add(manualBuilder, doNotPopulateThisValue);
+		_filter.Add(manualBuilder);
 		return this;
 	}
 

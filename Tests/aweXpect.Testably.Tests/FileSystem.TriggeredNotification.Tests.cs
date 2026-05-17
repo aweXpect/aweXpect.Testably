@@ -31,6 +31,94 @@ public sealed partial class FileSystem
 			}
 
 			[Fact]
+			public async Task WhenLiveEventMatchesPredicate_ShouldSucceedWithinTimeout()
+			{
+				MockFileSystem sut = new();
+				_ = Task.Run(async () =>
+				{
+					await Task.Delay(20);
+					sut.File.WriteAllText("foo.txt", "x");
+				});
+
+				async Task Act()
+				{
+					await That(sut).TriggeredNotification(c => c.Name == "foo.txt")
+						.Within(TimeSpan.FromSeconds(2));
+				}
+
+				await That(Act).DoesNotThrow();
+			}
+
+			[Fact]
+			public async Task WhenLiveEventDoesNotMatchPredicate_ShouldFailAfterTimeout()
+			{
+				MockFileSystem sut = new();
+				_ = Task.Run(async () =>
+				{
+					await Task.Delay(20);
+					sut.File.WriteAllText("foo.txt", "x");
+				});
+
+				async Task Act()
+				{
+					await That(sut).TriggeredNotification(c => c.Name == "other.txt")
+						.Within(TimeSpan.FromMilliseconds(100));
+				}
+
+				await That(Act).ThrowsException()
+					.WithMessage("""
+					             Expected that sut
+					             triggered a notification matching c => c.Name == "other.txt" at least once within 0:00.100,
+					             but it was not triggered
+					             """);
+			}
+
+			[Fact]
+			public async Task WhenLiveEventMatchesWhich_ShouldSucceedWithinTimeout()
+			{
+				MockFileSystem sut = new();
+				_ = Task.Run(async () =>
+				{
+					await Task.Delay(20);
+					sut.File.WriteAllText("foo.txt", "x");
+				});
+
+				async Task Act()
+				{
+					await That(sut).TriggeredNotification()
+						.Which(c => c.HasName("foo.txt"))
+						.Within(TimeSpan.FromSeconds(2));
+				}
+
+				await That(Act).DoesNotThrow();
+			}
+
+			[Fact]
+			public async Task WhenLiveEventDoesNotMatchWhich_ShouldFailAfterTimeout()
+			{
+				MockFileSystem sut = new();
+				_ = Task.Run(async () =>
+				{
+					await Task.Delay(20);
+					sut.File.WriteAllText("foo.txt", "x");
+				});
+
+				async Task Act()
+				{
+					await That(sut).TriggeredNotification()
+						.Which(c => c.HasName("other.txt"))
+						.Within(TimeSpan.FromMilliseconds(100));
+				}
+
+				await That(Act).ThrowsException()
+					.WithMessage("""
+					             Expected that sut
+					             triggered a notification which has name equal to "other.txt" at least once within 0:00.100,
+					             but it was not triggered
+					             """);
+			}
+
+			[Fact]
 			public async Task WhenNoPriorEvent_ShouldFailAfterTimeout()
 			{
 				MockFileSystem sut = new();
@@ -114,7 +202,7 @@ public sealed partial class FileSystem
 				await That(Act).ThrowsException()
 					.WithMessage("""
 					             Expected that sut
-					             triggered a notification matching c => c.HasName("other.txt") at least once within 0:00.100,
+					             triggered a notification which has name equal to "other.txt" at least once within 0:00.100,
 					             but it was not triggered
 					             """);
 			}

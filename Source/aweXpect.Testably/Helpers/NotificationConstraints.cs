@@ -77,6 +77,8 @@ internal static class NotificationConstraints
 					Task.Delay(Timeout.InfiniteTimeSpan, deadlineToken)).ConfigureAwait(false);
 			}
 
+			cancellationToken.ThrowIfCancellationRequested();
+
 			int matchCount;
 			lock (matches)
 			{
@@ -165,24 +167,23 @@ internal static class NotificationConstraints
 	internal sealed class TriggerNotificationFilter
 	{
 		private readonly List<ManualExpectationBuilder<ChangeDescription>> _asyncFilters = new();
-
-		private readonly StringBuilder _description = new();
-		private readonly List<Func<ChangeDescription, bool>> _syncPredicates = new();
+		private readonly List<(Func<ChangeDescription, bool> Predicate, string Description)> _syncPredicates = new();
 
 		public void Add(Func<ChangeDescription, bool> predicate, string predicateExpression)
 		{
-			_syncPredicates.Add(predicate ?? throw new ArgumentNullException(nameof(predicate)));
-			AppendDescription(predicateExpression);
+			if (predicate is null)
+			{
+				throw new ArgumentNullException(nameof(predicate));
+			}
+
+			_syncPredicates.Add((predicate, predicateExpression.Trim()));
 		}
 
-		public void Add(ManualExpectationBuilder<ChangeDescription> builder, string expressionDescription)
-		{
-			_asyncFilters.Add(builder);
-			AppendDescription(expressionDescription);
-		}
+		public void Add(ManualExpectationBuilder<ChangeDescription> builder)
+			=> _asyncFilters.Add(builder);
 
 		public bool IsSyncMatch(ChangeDescription change)
-			=> _syncPredicates.All(p => p(change));
+			=> _syncPredicates.All(p => p.Predicate(change));
 
 		public bool IsAsyncMatchSync(ChangeDescription change,
 			IEvaluationContext context,
@@ -201,11 +202,31 @@ internal static class NotificationConstraints
 			return true;
 		}
 
-		public override string ToString() => _description.ToString();
+		public override string ToString()
+		{
+			if (_syncPredicates.Count == 0 && _asyncFilters.Count == 0)
+			{
+				return "";
+			}
 
-		private void AppendDescription(string text) => _description
-			.Append(_syncPredicates.Count + _asyncFilters.Count == 1 ? " matching " : " and ")
-			.Append(text.Trim());
+			StringBuilder sb = new();
+			bool firstInGroup = true;
+			foreach ((Func<ChangeDescription, bool> _, string description) in _syncPredicates)
+			{
+				sb.Append(firstInGroup ? " matching " : " and ").Append(description);
+				firstInGroup = false;
+			}
+
+			firstInGroup = true;
+			foreach (ManualExpectationBuilder<ChangeDescription> builder in _asyncFilters)
+			{
+				sb.Append(firstInGroup ? " which " : " and ");
+				builder.AppendExpectation(sb, indentation: "");
+				firstInGroup = false;
+			}
+
+			return sb.ToString();
+		}
 	}
 
 	internal sealed class HasChangeTypeConstraint(

@@ -23,6 +23,24 @@ public sealed partial class ChangeDescriptionTests
 			}
 
 			[Fact]
+			public async Task DoesNotHaveFileSystemType_WhenItMatches_ShouldFail()
+			{
+				ChangeDescription change = Capture(fs => fs.File.WriteAllText("foo.txt", ""));
+
+				async Task Act()
+				{
+					await That(change).DoesNotHaveFileSystemType(FileSystemTypes.File);
+				}
+
+				await That(Act).ThrowsException()
+					.WithMessage("""
+					             Expected that change
+					             does not have file system type File,
+					             but it did
+					             """);
+			}
+
+			[Fact]
 			public async Task DoesNotHaveFileSystemType_WhenUnexpectedIsDefault_ShouldThrowArgumentException()
 			{
 				ChangeDescription change = Capture(fs => fs.File.WriteAllText("foo.txt", ""));

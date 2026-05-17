@@ -23,6 +23,24 @@ public sealed partial class ChangeDescriptionTests
 			}
 
 			[Fact]
+			public async Task DoesNotHaveChangeType_WhenChangeTypeMatches_ShouldFail()
+			{
+				ChangeDescription change = Capture(fs => fs.File.WriteAllText("foo.txt", ""));
+
+				async Task Act()
+				{
+					await That(change).DoesNotHaveChangeType(WatcherChangeTypes.Created);
+				}
+
+				await That(Act).ThrowsException()
+					.WithMessage("""
+					             Expected that change
+					             does not have change type Created,
+					             but it did
+					             """);
+			}
+
+			[Fact]
 			public async Task DoesNotHaveChangeType_WhenUnexpectedIsDefault_ShouldThrowArgumentException()
 			{
 				ChangeDescription change = Capture(fs => fs.File.WriteAllText("foo.txt", ""));

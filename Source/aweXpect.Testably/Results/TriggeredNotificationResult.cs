@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.CompilerServices;
 using aweXpect.Core;
 using aweXpect.Options;
 using aweXpect.Results;
@@ -39,22 +38,20 @@ public class TriggeredNotificationResult
 	///     The <paramref name="expectation" /> is applied as an additional per-change filter, so any
 	///     assertions from <see cref="ChangeDescriptionExtensions" /> (e.g. <c>.HasName(...)</c>,
 	///     <c>.HasChangeType(...)</c>) compose naturally — only notifications that satisfy all of
-	///     them count toward the quantifier.
+	///     them count toward the quantifier. The expectation text is taken from the inner
+	///     expectation builder, so it reads like <c>matching has name equal to "foo.txt"</c> rather
+	///     than the raw lambda source.
 	/// </remarks>
-	public TriggeredNotificationResult Which(
-		Action<IThat<ChangeDescription>> expectation,
-		[CallerArgumentExpression("expectation")]
-		string doNotPopulateThisValue = "")
+	public TriggeredNotificationResult Which(Action<IThat<ChangeDescription>> expectation)
 	{
 		if (expectation is null)
 		{
 			throw new ArgumentNullException(nameof(expectation));
 		}
 
-		ManualExpectationBuilder<ChangeDescription> manualBuilder =
-			new(_expectationBuilder);
+		ManualExpectationBuilder<ChangeDescription> manualBuilder = new(_expectationBuilder);
 		expectation(new ThatSubject<ChangeDescription>(manualBuilder));
-		_filter.Add(manualBuilder, doNotPopulateThisValue);
+		_filter.Add(manualBuilder);
 		return this;
 	}
 
