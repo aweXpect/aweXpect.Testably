@@ -21,9 +21,11 @@ public sealed partial class FileSystem
 						.WithFile("bar.txt").Which(f => f.HasStringContent("some-content")));
 
 					async Task Act()
-						=> await That(sut).HasDirectory(path)
+					{
+						await That(sut).HasDirectory(path)
 							.WithFiles(files => files.All().ComplyWith(file
 								=> file.HasContent("SOME-CONTENT")));
+					}
 
 					await That(Act).ThrowsException()
 						.WithMessage($"""
@@ -45,8 +47,10 @@ public sealed partial class FileSystem
 						.WithFile("bar.txt").Which(f => f.HasStringContent("some-content")));
 
 					async Task Act()
-						=> await That(sut).HasDirectory(path)
+					{
+						await That(sut).HasDirectory(path)
 							.WithFiles(f => f.All().ComplyWith(x => x.HasContent("SOME-CONTENT").IgnoringCase()));
+					}
 
 					await That(Act).DoesNotThrow();
 				}
@@ -60,9 +64,11 @@ public sealed partial class FileSystem
 						.WithFile("bar.txt").Which(f => f.HasStringContent("some-content")));
 
 					async Task Act()
-						=> await That(sut).HasDirectory(path)
+					{
+						await That(sut).HasDirectory(path)
 							.WithFiles(files => files.All().ComplyWith(file
 								=> file.DoesNotComplyWith(it => it.HasContent("SOME-CONTENT"))));
+					}
 
 					await That(Act).DoesNotThrow();
 				}
@@ -76,9 +82,11 @@ public sealed partial class FileSystem
 						.WithFile("bar.txt").Which(f => f.HasStringContent("some-content")));
 
 					async Task Act()
-						=> await That(sut).HasDirectory(path)
+					{
+						await That(sut).HasDirectory(path)
 							.WithFiles(f
 								=> f.All().ComplyWith(x => x.DoesNotComplyWith(it => it.HasContent("some-content"))));
+					}
 
 					await That(Act).ThrowsException()
 						.WithMessage($"""
@@ -99,7 +107,9 @@ public sealed partial class FileSystem
 					sut.Initialize().WithSubdirectory(path);
 
 					async Task Act()
-						=> await That(sut).HasDirectory(path).WithFiles(f => f.IsEmpty());
+					{
+						await That(sut).HasDirectory(path).WithFiles(f => f.IsEmpty());
+					}
 
 					await That(Act).DoesNotThrow();
 				}
@@ -113,7 +123,9 @@ public sealed partial class FileSystem
 						.WithFile("bar.txt").Which(f => f.HasStringContent("some-content")));
 
 					async Task Act()
-						=> await That(sut).HasDirectory(path).WithFiles(f => f.IsEmpty());
+					{
+						await That(sut).HasDirectory(path).WithFiles(f => f.IsEmpty());
+					}
 
 					await That(Act).ThrowsException()
 						.WithMessage($"""

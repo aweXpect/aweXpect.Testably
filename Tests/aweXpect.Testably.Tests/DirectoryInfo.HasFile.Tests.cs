@@ -1,0 +1,86 @@
+using System.IO.Abstractions;
+using Testably.Abstractions.Testing;
+
+namespace aweXpect.Testably.Tests;
+
+public sealed partial class DirectoryInfo
+{
+	public sealed class HasFile
+	{
+		public sealed class Tests
+		{
+			[Fact]
+			public async Task ChainedWhich_HasLength_ShouldSucceed()
+			{
+				MockFileSystem fileSystem = new();
+				fileSystem.Initialize().WithSubdirectory("foo").Initialized(d => d
+					.WithFile("bar.txt").Which(f => f.HasStringContent("abc")));
+				IDirectoryInfo dirInfo = fileSystem.DirectoryInfo.New("foo");
+
+				async Task Act()
+				{
+					await That(dirInfo).HasFile("bar.txt").Which.HasLength(3);
+				}
+
+				await That(Act).DoesNotThrow();
+			}
+
+			[Fact]
+			public async Task ChainedWhich_HasLength_WhenFails_ShouldFail()
+			{
+				MockFileSystem fileSystem = new();
+				fileSystem.Initialize().WithSubdirectory("foo").Initialized(d => d
+					.WithFile("bar.txt").Which(f => f.HasStringContent("abc")));
+				IDirectoryInfo dirInfo = fileSystem.DirectoryInfo.New("foo");
+
+				async Task Act()
+				{
+					await That(dirInfo).HasFile("bar.txt").Which.HasLength(99);
+				}
+
+				await That(Act).ThrowsException()
+					.WithMessage("""
+					             Expected that dirInfo
+					             has file 'bar.txt' which has length 99,
+					             but it was 3
+					             """);
+			}
+
+			[Fact]
+			public async Task WhenFileExists_ShouldSucceed()
+			{
+				MockFileSystem fileSystem = new();
+				fileSystem.Initialize().WithSubdirectory("foo").Initialized(d => d
+					.WithFile("bar.txt"));
+				IDirectoryInfo dirInfo = fileSystem.DirectoryInfo.New("foo");
+
+				async Task Act()
+				{
+					await That(dirInfo).HasFile("bar.txt");
+				}
+
+				await That(Act).DoesNotThrow();
+			}
+
+			[Fact]
+			public async Task WhenFileIsMissing_ShouldFail()
+			{
+				MockFileSystem fileSystem = new();
+				fileSystem.Directory.CreateDirectory("foo");
+				IDirectoryInfo dirInfo = fileSystem.DirectoryInfo.New("foo");
+
+				async Task Act()
+				{
+					await That(dirInfo).HasFile("bar.txt");
+				}
+
+				await That(Act).ThrowsException()
+					.WithMessage("""
+					             Expected that dirInfo
+					             has file 'bar.txt',
+					             but it did not exist
+					             """);
+			}
+		}
+	}
+}

@@ -24,7 +24,9 @@ public sealed partial class FileInfo
 					IFileInfo fileInfo = fileSystem.FileInfo.New("foo.txt");
 
 					async Task Act()
-						=> await That(fileInfo).HasContent().NotEqualTo(expected);
+					{
+						await That(fileInfo).HasContent().NotEqualTo(expected);
+					}
 
 					await That(Act).DoesNotThrow();
 				}
@@ -40,7 +42,9 @@ public sealed partial class FileInfo
 					IFileInfo fileInfo = fileSystem.FileInfo.New("foo.txt");
 
 					async Task Act()
-						=> await That(fileInfo).HasContent().NotEqualTo(content);
+					{
+						await That(fileInfo).HasContent().NotEqualTo(content);
+					}
 
 					await That(Act).ThrowsException()
 						.WithMessage("""
@@ -63,7 +67,9 @@ public sealed partial class FileInfo
 					IFileInfo fileInfo = fileSystem.FileInfo.New("foo.txt");
 
 					async Task Act()
-						=> await That(fileInfo).HasContent().NotEqualTo("bar");
+					{
+						await That(fileInfo).HasContent().NotEqualTo("bar");
+					}
 
 					await That(Act).DoesNotThrow();
 				}
@@ -79,7 +85,9 @@ public sealed partial class FileInfo
 					IFileInfo fileInfo = fileSystem.FileInfo.New("foo.txt");
 
 					async Task Act()
-						=> await That(fileInfo).HasContent().NotEqualTo(content);
+					{
+						await That(fileInfo).HasContent().NotEqualTo(content);
+					}
 
 					await That(Act).ThrowsException()
 						.WithMessage("""
@@ -105,7 +113,9 @@ public sealed partial class FileInfo
 					IFileInfo fileInfo = fileSystem.FileInfo.New("foo.txt");
 
 					async Task Act()
-						=> await That(fileInfo).HasContent().NotEqualTo("b?").AsWildcard();
+					{
+						await That(fileInfo).HasContent().NotEqualTo("b?").AsWildcard();
+					}
 
 					await That(Act).DoesNotThrow();
 				}
@@ -120,7 +130,9 @@ public sealed partial class FileInfo
 					IFileInfo fileInfo = fileSystem.FileInfo.New("foo.txt");
 
 					async Task Act()
-						=> await That(fileInfo).HasContent().NotEqualTo("ba?").AsWildcard();
+					{
+						await That(fileInfo).HasContent().NotEqualTo("ba?").AsWildcard();
+					}
 
 					await That(Act).ThrowsException()
 						.WithMessage("""

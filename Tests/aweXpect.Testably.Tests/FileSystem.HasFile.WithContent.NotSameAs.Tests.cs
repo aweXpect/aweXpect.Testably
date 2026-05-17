@@ -24,7 +24,9 @@ public sealed partial class FileSystem
 						sut.File.WriteAllText(expectedPath, "bar");
 
 						async Task Act()
-							=> await That(sut).HasFile(path).WithContent().NotSameAs(expectedPath);
+						{
+							await That(sut).HasFile(path).WithContent().NotSameAs(expectedPath);
+						}
 
 						await That(Act).DoesNotThrow();
 					}
@@ -42,7 +44,9 @@ public sealed partial class FileSystem
 						sut.File.WriteAllText(expectedPath, content);
 
 						async Task Act()
-							=> await That(sut).HasFile(path).WithContent().NotSameAs(expectedPath);
+						{
+							await That(sut).HasFile(path).WithContent().NotSameAs(expectedPath);
+						}
 
 						await That(Act).ThrowsException()
 							.WithMessage($"""
@@ -69,7 +73,9 @@ public sealed partial class FileSystem
 						sut.File.WriteAllText(expectedPath, "b?");
 
 						async Task Act()
-							=> await That(sut).HasFile(path).WithContent().NotSameAs(expectedPath).AsWildcard();
+						{
+							await That(sut).HasFile(path).WithContent().NotSameAs(expectedPath).AsWildcard();
+						}
 
 						await That(Act).DoesNotThrow();
 					}
@@ -86,7 +92,9 @@ public sealed partial class FileSystem
 						sut.File.WriteAllText(expectedPath, "ba?");
 
 						async Task Act()
-							=> await That(sut).HasFile(path).WithContent().NotSameAs(expectedPath).AsWildcard();
+						{
+							await That(sut).HasFile(path).WithContent().NotSameAs(expectedPath).AsWildcard();
+						}
 
 						await That(Act).ThrowsException()
 							.WithMessage($"""

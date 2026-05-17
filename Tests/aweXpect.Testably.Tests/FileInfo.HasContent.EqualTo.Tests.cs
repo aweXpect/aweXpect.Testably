@@ -24,7 +24,9 @@ public sealed partial class FileInfo
 					IFileInfo fileInfo = fileSystem.FileInfo.New("foo.txt");
 
 					async Task Act()
-						=> await That(fileInfo).HasContent().EqualTo(expected);
+					{
+						await That(fileInfo).HasContent().EqualTo(expected);
+					}
 
 					await That(Act).ThrowsException()
 						.WithMessage("""
@@ -45,7 +47,9 @@ public sealed partial class FileInfo
 					IFileInfo fileInfo = fileSystem.FileInfo.New("foo.txt");
 
 					async Task Act()
-						=> await That(fileInfo).HasContent().EqualTo(content);
+					{
+						await That(fileInfo).HasContent().EqualTo(content);
+					}
 
 					await That(Act).DoesNotThrow();
 				}
@@ -63,7 +67,9 @@ public sealed partial class FileInfo
 					IFileInfo fileInfo = fileSystem.FileInfo.New("foo.txt");
 
 					async Task Act()
-						=> await That(fileInfo).HasContent().EqualTo("bar");
+					{
+						await That(fileInfo).HasContent().EqualTo("bar");
+					}
 
 					await That(Act).ThrowsException()
 						.WithMessage("""
@@ -91,7 +97,9 @@ public sealed partial class FileInfo
 					IFileInfo fileInfo = fileSystem.FileInfo.New("foo.txt");
 
 					async Task Act()
-						=> await That(fileInfo).HasContent().EqualTo(content);
+					{
+						await That(fileInfo).HasContent().EqualTo(content);
+					}
 
 					await That(Act).DoesNotThrow();
 				}
@@ -109,7 +117,9 @@ public sealed partial class FileInfo
 					IFileInfo fileInfo = fileSystem.FileInfo.New("foo.txt");
 
 					async Task Act()
-						=> await That(fileInfo).HasContent().EqualTo("b?").AsWildcard();
+					{
+						await That(fileInfo).HasContent().EqualTo("b?").AsWildcard();
+					}
 
 					await That(Act).ThrowsException()
 						.WithMessage("""
@@ -136,7 +146,9 @@ public sealed partial class FileInfo
 					IFileInfo fileInfo = fileSystem.FileInfo.New("foo.txt");
 
 					async Task Act()
-						=> await That(fileInfo).HasContent().EqualTo("ba?").AsWildcard();
+					{
+						await That(fileInfo).HasContent().EqualTo("ba?").AsWildcard();
+					}
 
 					await That(Act).DoesNotThrow();
 				}

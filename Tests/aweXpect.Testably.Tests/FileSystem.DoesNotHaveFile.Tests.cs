@@ -18,7 +18,9 @@ public sealed partial class FileSystem
 				sut.File.WriteAllText(path, "");
 
 				async Task Act()
-					=> await That(sut).DoesNotHaveFile(path);
+				{
+					await That(sut).DoesNotHaveFile(path);
+				}
 
 				await That(Act).ThrowsException()
 					.WithMessage($"""
@@ -35,7 +37,9 @@ public sealed partial class FileSystem
 				IFileSystem sut = new MockFileSystem();
 
 				async Task Act()
-					=> await That(sut).DoesNotHaveFile(path);
+				{
+					await That(sut).DoesNotHaveFile(path);
+				}
 
 				await That(Act).DoesNotThrow();
 			}
@@ -48,7 +52,9 @@ public sealed partial class FileSystem
 				sut.Directory.CreateDirectory(path);
 
 				async Task Act()
-					=> await That(sut).DoesNotHaveFile(path);
+				{
+					await That(sut).DoesNotHaveFile(path);
+				}
 
 				await That(Act).DoesNotThrow();
 			}

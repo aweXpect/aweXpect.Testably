@@ -21,7 +21,9 @@ public sealed partial class FileSystem
 					sut.File.WriteAllText(path, "baz");
 
 					async Task Act()
-						=> await That(sut).HasFile(path).WithContent("bar");
+					{
+						await That(sut).HasFile(path).WithContent("bar");
+					}
 
 					await That(Act).ThrowsException()
 						.WithMessage($"""
@@ -48,7 +50,9 @@ public sealed partial class FileSystem
 					sut.File.WriteAllText(path, content);
 
 					async Task Act()
-						=> await That(sut).HasFile(path).WithContent(content);
+					{
+						await That(sut).HasFile(path).WithContent(content);
+					}
 
 					await That(Act).DoesNotThrow();
 				}
@@ -67,7 +71,9 @@ public sealed partial class FileSystem
 					sut.File.WriteAllBytes(path, content);
 
 					async Task Act()
-						=> await That(sut).HasFile(path).WithContent(expected);
+					{
+						await That(sut).HasFile(path).WithContent(expected);
+					}
 
 					await That(Act).ThrowsException()
 						.WithMessage($"""
@@ -87,7 +93,9 @@ public sealed partial class FileSystem
 					sut.File.WriteAllBytes(path, content);
 
 					async Task Act()
-						=> await That(sut).HasFile(path).WithContent(content);
+					{
+						await That(sut).HasFile(path).WithContent(content);
+					}
 
 					await That(Act).DoesNotThrow();
 				}
@@ -104,7 +112,9 @@ public sealed partial class FileSystem
 					sut.File.WriteAllText(path, "baz");
 
 					async Task Act()
-						=> await That(sut).HasFile(path).WithContent("b?").AsWildcard();
+					{
+						await That(sut).HasFile(path).WithContent("b?").AsWildcard();
+					}
 
 					await That(Act).ThrowsException()
 						.WithMessage($"""
@@ -130,7 +140,9 @@ public sealed partial class FileSystem
 					sut.File.WriteAllText(path, "bar");
 
 					async Task Act()
-						=> await That(sut).HasFile(path).WithContent("ba?").AsWildcard();
+					{
+						await That(sut).HasFile(path).WithContent("ba?").AsWildcard();
+					}
 
 					await That(Act).DoesNotThrow();
 				}

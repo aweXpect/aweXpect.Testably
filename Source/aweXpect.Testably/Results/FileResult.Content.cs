@@ -1,4 +1,6 @@
-﻿using System.Linq;
+using System;
+using System.IO.Abstractions;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
@@ -14,128 +16,140 @@ namespace aweXpect.Testably.Results;
 /// <summary>
 ///     The result for additional verifications on a file.
 /// </summary>
-public partial class FileResult<TFileSystem>
+public partial class FileResult<TParent>
 {
 	/// <summary>
 	///     The result for additional verifications on a file content.
 	/// </summary>
-	public class Content(
-		ExpectationBuilder expectationBuilder,
-		FileResult<TFileSystem> subject,
-		string path)
+	public class Content
 	{
+		private readonly ExpectationBuilder _expectationBuilder;
+		private readonly Func<TParent, (IFileSystem fs, string fullPath)> _resolver;
+		private readonly FileResult<TParent> _subject;
+
+		internal Content(
+			ExpectationBuilder expectationBuilder,
+			FileResult<TParent> subject,
+			Func<TParent, (IFileSystem fs, string fullPath)> resolver)
+		{
+			_expectationBuilder = expectationBuilder;
+			_subject = subject;
+			_resolver = resolver;
+		}
+
 		/// <summary>
 		///     …is equal to the <paramref name="expected" /> binary.
 		/// </summary>
-		public AndOrResult<TFileSystem, FileResult<TFileSystem>> EqualTo(
+		public AndOrResult<TParent, FileResult<TParent>> EqualTo(
 			byte[] expected,
 			[CallerArgumentExpression("expected")] string doNotPopulateThisValue = "")
 			=> new(
-				expectationBuilder.And(" ").AddConstraint((it, grammars)
+				_expectationBuilder.And(" ").AddConstraint((it, grammars)
 					=> new HasBinaryContentEqualToConstraint(
 						it,
 						grammars,
-						path,
+						_resolver,
 						expected,
 						doNotPopulateThisValue)),
-				subject);
+				_subject);
 
 		/// <summary>
 		///     …is equal to the <paramref name="expected" /> string.
 		/// </summary>
-		public StringEqualityTypeResult<TFileSystem, FileResult<TFileSystem>> EqualTo(
+		public StringEqualityTypeResult<TParent, FileResult<TParent>> EqualTo(
 			string expected)
 		{
 			StringEqualityOptions options = new();
-			return new StringEqualityTypeResult<TFileSystem, FileResult<TFileSystem>>(
-				expectationBuilder.And(" ").AddConstraint((eb, it, grammars)
+			return new StringEqualityTypeResult<TParent, FileResult<TParent>>(
+				_expectationBuilder.And(" ").AddConstraint((eb, it, grammars)
 					=> new HasStringContentEqualToConstraint(
 						eb,
 						it,
 						grammars,
-						path,
+						_resolver,
 						options,
 						expected)),
-				subject, options);
+				_subject, options);
 		}
 
 		/// <summary>
 		///     …differs from the <paramref name="unexpected" /> binary.
 		/// </summary>
-		public AndOrResult<TFileSystem, FileResult<TFileSystem>> NotEqualTo(
+		public AndOrResult<TParent, FileResult<TParent>> NotEqualTo(
 			byte[] unexpected,
 			[CallerArgumentExpression("unexpected")]
 			string doNotPopulateThisValue = "")
 			=> new(
-				expectationBuilder.And(" ").AddConstraint((it, grammars)
+				_expectationBuilder.And(" ").AddConstraint((it, grammars)
 					=> new HasBinaryContentEqualToConstraint(
 							it,
 							grammars,
-							path,
+							_resolver,
 							unexpected,
 							doNotPopulateThisValue)
 						.Invert()),
-				subject);
+				_subject);
 
 		/// <summary>
 		///     …differs from the <paramref name="unexpected" /> string.
 		/// </summary>
-		public StringEqualityTypeResult<TFileSystem, FileResult<TFileSystem>> NotEqualTo(
+		public StringEqualityTypeResult<TParent, FileResult<TParent>> NotEqualTo(
 			string unexpected)
 		{
 			StringEqualityOptions options = new();
-			return new StringEqualityTypeResult<TFileSystem, FileResult<TFileSystem>>(
-				expectationBuilder.And(" ").AddConstraint((eb, it, grammars)
+			return new StringEqualityTypeResult<TParent, FileResult<TParent>>(
+				_expectationBuilder.And(" ").AddConstraint((eb, it, grammars)
 					=> new HasStringContentEqualToConstraint(
 						eb,
 						it,
 						grammars,
-						path,
+						_resolver,
 						options,
 						unexpected).Invert()),
-				subject, options);
+				_subject, options);
 		}
 
 		/// <summary>
 		///     …has the same content as the file on the <paramref name="filePath" />.
 		/// </summary>
-		public StringEqualityTypeResult<TFileSystem, FileResult<TFileSystem>> SameAs(
+		public StringEqualityTypeResult<TParent, FileResult<TParent>> SameAs(
 			string filePath)
 		{
 			StringEqualityOptions options = new();
-			return new StringEqualityTypeResult<TFileSystem, FileResult<TFileSystem>>(
-				expectationBuilder.And(" ").AddConstraint((eb, it, grammars)
-					=> new HasContentSameAsConstraint(eb, it, grammars, path, options, filePath)),
-				subject, options);
+			return new StringEqualityTypeResult<TParent, FileResult<TParent>>(
+				_expectationBuilder.And(" ").AddConstraint((eb, it, grammars)
+					=> new HasContentSameAsConstraint(eb, it, grammars, _resolver, options, filePath)),
+				_subject, options);
 		}
 
 		/// <summary>
 		///     …does not have the same content as the file on the <paramref name="filePath" />.
 		/// </summary>
-		public StringEqualityTypeResult<TFileSystem, FileResult<TFileSystem>> NotSameAs(
+		public StringEqualityTypeResult<TParent, FileResult<TParent>> NotSameAs(
 			string filePath)
 		{
 			StringEqualityOptions options = new();
-			return new StringEqualityTypeResult<TFileSystem, FileResult<TFileSystem>>(
-				expectationBuilder.And(" ").AddConstraint((eb, it, grammars)
-					=> new HasContentSameAsConstraint(eb, it, grammars, path, options, filePath).Invert()),
-				subject, options);
+			return new StringEqualityTypeResult<TParent, FileResult<TParent>>(
+				_expectationBuilder.And(" ").AddConstraint((eb, it, grammars)
+					=> new HasContentSameAsConstraint(eb, it, grammars, _resolver, options, filePath).Invert()),
+				_subject, options);
 		}
 	}
 
 	private sealed class HasBinaryContentEqualToConstraint(
 		string it,
 		ExpectationGrammars grammars,
-		string path,
+		Func<TParent, (IFileSystem fs, string fullPath)> resolver,
 		byte[] expected,
 		string expectedExpression)
-		: ConstraintResult.WithValue<TFileSystem>(grammars),
-			IValueConstraint<TFileSystem>
+		: ConstraintResult.WithValue<TParent>(grammars),
+			IValueConstraint<TParent>
 	{
-		/// <inheritdoc />
-		public ConstraintResult IsMetBy(TFileSystem actual)
+		public ConstraintResult IsMetBy(TParent actual)
 		{
-			byte[] content = actual.File.ReadAllBytes(path);
+			Actual = actual;
+			(IFileSystem fs, string fullPath) = resolver(actual);
+			byte[] content = fs.File.ReadAllBytes(fullPath);
 			Outcome = content.SequenceEqual(expected) ? Outcome.Success : Outcome.Failure;
 			return this;
 		}
@@ -157,18 +171,19 @@ public partial class FileResult<TFileSystem>
 		ExpectationBuilder expectationBuilder,
 		string it,
 		ExpectationGrammars grammars,
-		string path,
+		Func<TParent, (IFileSystem fs, string fullPath)> resolver,
 		StringEqualityOptions options,
 		string expected)
-		: ConstraintResult.WithValue<TFileSystem>(grammars),
-			IAsyncConstraint<TFileSystem>
+		: ConstraintResult.WithValue<TParent>(grammars),
+			IAsyncConstraint<TParent>
 	{
 		private string? _fileContent;
 
-		/// <inheritdoc />
-		public async Task<ConstraintResult> IsMetBy(TFileSystem actual, CancellationToken cancellationToken)
+		public async Task<ConstraintResult> IsMetBy(TParent actual, CancellationToken cancellationToken)
 		{
-			_fileContent = actual.File.ReadAllText(path);
+			Actual = actual;
+			(IFileSystem fs, string fullPath) = resolver(actual);
+			_fileContent = fs.File.ReadAllText(fullPath);
 			Outcome = await options.AreConsideredEqual(_fileContent, expected) ? Outcome.Success : Outcome.Failure;
 			if (Outcome == Outcome.Failure)
 			{
@@ -196,23 +211,24 @@ public partial class FileResult<TFileSystem>
 		ExpectationBuilder expectationBuilder,
 		string it,
 		ExpectationGrammars grammars,
-		string path,
+		Func<TParent, (IFileSystem fs, string fullPath)> resolver,
 		StringEqualityOptions options,
 		string expectedPath)
-		: ConstraintResult.WithValue<TFileSystem>(grammars),
-			IAsyncConstraint<TFileSystem>
+		: ConstraintResult.WithValue<TParent>(grammars),
+			IAsyncConstraint<TParent>
 	{
 		private string? _expectedContent;
 		private string? _fileContent;
-		private string? _fullPath;
+		private string? _fullExpectedPath;
 		private bool _isExpectedFound;
 
-		/// <inheritdoc />
-		public async Task<ConstraintResult> IsMetBy(TFileSystem actual, CancellationToken cancellationToken)
+		public async Task<ConstraintResult> IsMetBy(TParent actual, CancellationToken cancellationToken)
 		{
-			_fileContent = actual.File.ReadAllText(path);
-			_fullPath = actual.Path.GetFullPath(expectedPath);
-			_isExpectedFound = actual.File.Exists(expectedPath);
+			Actual = actual;
+			(IFileSystem fs, string fullPath) = resolver(actual);
+			_fileContent = fs.File.ReadAllText(fullPath);
+			_fullExpectedPath = fs.Path.GetFullPath(expectedPath);
+			_isExpectedFound = fs.File.Exists(expectedPath);
 			if (!_isExpectedFound)
 			{
 				expectationBuilder.UpdateContexts(contexts => contexts
@@ -221,7 +237,7 @@ public partial class FileResult<TFileSystem>
 				return this;
 			}
 
-			_expectedContent = actual.File.ReadAllText(expectedPath);
+			_expectedContent = fs.File.ReadAllText(expectedPath);
 			Outcome = await options.AreConsideredEqual(_fileContent, _expectedContent) ? Outcome.Success : Outcome.Failure;
 			if (Outcome == Outcome.Failure)
 			{
@@ -233,13 +249,13 @@ public partial class FileResult<TFileSystem>
 		}
 
 		protected override void AppendNormalExpectation(StringBuilder stringBuilder, string? indentation = null)
-			=> stringBuilder.Append("with the same content as file '").Append(_fullPath).Append('\'');
+			=> stringBuilder.Append("with the same content as file '").Append(_fullExpectedPath).Append('\'');
 
 		protected override void AppendNormalResult(StringBuilder stringBuilder, string? indentation = null)
 		{
 			if (!_isExpectedFound)
 			{
-				stringBuilder.Append(it).Append(" did not contain any file at '").Append(_fullPath).Append('\'');
+				stringBuilder.Append(it).Append(" did not contain any file at '").Append(_fullExpectedPath).Append('\'');
 			}
 			else
 			{
@@ -248,13 +264,13 @@ public partial class FileResult<TFileSystem>
 		}
 
 		protected override void AppendNegatedExpectation(StringBuilder stringBuilder, string? indentation = null)
-			=> stringBuilder.Append("with not the same content as file '").Append(_fullPath).Append('\'');
+			=> stringBuilder.Append("with not the same content as file '").Append(_fullExpectedPath).Append('\'');
 
 		protected override void AppendNegatedResult(StringBuilder stringBuilder, string? indentation = null)
 		{
 			if (!_isExpectedFound)
 			{
-				stringBuilder.Append(it).Append(" did not contain any file at '").Append(_fullPath).Append('\'');
+				stringBuilder.Append(it).Append(" did not contain any file at '").Append(_fullExpectedPath).Append('\'');
 			}
 			else
 			{

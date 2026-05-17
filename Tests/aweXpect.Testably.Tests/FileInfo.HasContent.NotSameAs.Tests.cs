@@ -23,7 +23,9 @@ public sealed partial class FileInfo
 					IFileInfo fileInfo = fileSystem.FileInfo.New("foo.txt");
 
 					async Task Act()
-						=> await That(fileInfo).HasContent().NotSameAs(expectedPath);
+					{
+						await That(fileInfo).HasContent().NotSameAs(expectedPath);
+					}
 
 					await That(Act).DoesNotThrow();
 				}
@@ -42,7 +44,9 @@ public sealed partial class FileInfo
 					IFileInfo fileInfo = fileSystem.FileInfo.New("foo.txt");
 
 					async Task Act()
-						=> await That(fileInfo).HasContent().NotSameAs(expectedPath);
+					{
+						await That(fileInfo).HasContent().NotSameAs(expectedPath);
+					}
 
 					await That(Act).ThrowsException()
 						.WithMessage($"""
@@ -70,7 +74,9 @@ public sealed partial class FileInfo
 					IFileInfo fileInfo = fileSystem.FileInfo.New("foo.txt");
 
 					async Task Act()
-						=> await That(fileInfo).HasContent().NotSameAs(expectedPath).AsWildcard();
+					{
+						await That(fileInfo).HasContent().NotSameAs(expectedPath).AsWildcard();
+					}
 
 					await That(Act).DoesNotThrow();
 				}
@@ -88,7 +94,9 @@ public sealed partial class FileInfo
 					IFileInfo fileInfo = fileSystem.FileInfo.New("foo.txt");
 
 					async Task Act()
-						=> await That(fileInfo).HasContent().NotSameAs(expectedPath).AsWildcard();
+					{
+						await That(fileInfo).HasContent().NotSameAs(expectedPath).AsWildcard();
+					}
 
 					await That(Act).ThrowsException()
 						.WithMessage($"""

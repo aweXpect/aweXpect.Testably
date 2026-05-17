@@ -1,0 +1,29 @@
+using System;
+using System.Collections.Generic;
+using System.IO.Abstractions;
+using aweXpect.Core;
+using aweXpect.Results;
+using aweXpect.Testably.Helpers;
+
+namespace aweXpect.Testably;
+
+public static partial class DirectoryInfoExtensions
+{
+	/// <summary>
+	///     Verifies that the files of the <see cref="IDirectoryInfo" /> satisfy the <paramref name="expectations" />.
+	/// </summary>
+	public static AndOrResult<IDirectoryInfo, IThat<IDirectoryInfo>> WithFiles(
+		this IThat<IDirectoryInfo> source,
+		Action<IThat<IEnumerable<IFileInfo>>> expectations)
+	{
+		ExpectationBuilder builder = source.Get().ExpectationBuilder
+			.ForMember(
+				MemberAccessor<IDirectoryInfo, IEnumerable<IFileInfo>>.FromFunc(
+					d => d.EnumerateFiles(), "files "),
+				(member, expectation) => expectation.Append(" whose ").Append(member))
+			.AddExpectations(
+				e => expectations(new ThatSubject<IEnumerable<IFileInfo>>(e)),
+				grammars => grammars | ExpectationGrammars.Nested | ExpectationGrammars.Plural);
+		return new AndOrResult<IDirectoryInfo, IThat<IDirectoryInfo>>(builder, source);
+	}
+}

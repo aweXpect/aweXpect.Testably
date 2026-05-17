@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO.Abstractions;
 using System.Linq;
@@ -10,25 +10,42 @@ namespace aweXpect.Testably.Results;
 /// <summary>
 ///     The result for additional verifications on a directory.
 /// </summary>
-public class DirectoryResult<TFileSystem>(
-	ExpectationBuilder expectationBuilder,
-	IThat<TFileSystem> subject,
-	string path)
-	: AndOrResult<IFileSystem, IThat<TFileSystem>>(expectationBuilder, subject)
-	where TFileSystem : IFileSystem
+public partial class DirectoryResult<TParent>
+	: AndOrResult<TParent, IThat<TParent>>
+	where TParent : class
 {
-	private readonly ExpectationBuilder _expectationBuilder = expectationBuilder;
+	private readonly ExpectationBuilder _expectationBuilder;
+	private readonly string _path;
+	private readonly Func<TParent, (IFileSystem fs, string fullPath)> _resolver;
+
+	internal DirectoryResult(
+		ExpectationBuilder expectationBuilder,
+		IThat<TParent> subject,
+		string path,
+		Func<TParent, (IFileSystem fs, string fullPath)> resolver)
+		: base(expectationBuilder, subject)
+	{
+		_expectationBuilder = expectationBuilder;
+		_path = path;
+		_resolver = resolver;
+	}
 
 	/// <summary>
 	///     Verifies that the files of the directory satisfy the <paramref name="expectations" />.
 	/// </summary>
-	public DirectoryResult<TFileSystem> WithFiles(
+	public DirectoryResult<TParent> WithFiles(
 		Action<IThat<IEnumerable<IFileInfo>>> expectations)
 	{
+		Func<TParent, (IFileSystem fs, string fullPath)> resolver = _resolver;
 		_expectationBuilder
 			.ForMember(
-				MemberAccessor<TFileSystem, IEnumerable<IFileInfo>>.FromFunc(
-					f => f.Directory.EnumerateFiles(path).Select(p => f.FileInfo.New(p)), "files "),
+				MemberAccessor<TParent, IEnumerable<IFileInfo>>.FromFunc(
+					p =>
+					{
+						(IFileSystem fs, string fullPath) = resolver(p);
+						return fs.Directory.EnumerateFiles(fullPath).Select(x => fs.FileInfo.New(x));
+					},
+					"files "),
 				(member, expectation) => expectation.Append(" whose ").Append(member))
 			.AddExpectations(
 				e => expectations(new ThatSubject<IEnumerable<IFileInfo>>(e)),
@@ -39,13 +56,19 @@ public class DirectoryResult<TFileSystem>(
 	/// <summary>
 	///     Verifies that the subdirectories of the directory satisfy the <paramref name="expectations" />.
 	/// </summary>
-	public DirectoryResult<TFileSystem> WithDirectories(
+	public DirectoryResult<TParent> WithDirectories(
 		Action<IThat<IEnumerable<IDirectoryInfo>>> expectations)
 	{
+		Func<TParent, (IFileSystem fs, string fullPath)> resolver = _resolver;
 		_expectationBuilder
 			.ForMember(
-				MemberAccessor<TFileSystem, IEnumerable<IDirectoryInfo>>.FromFunc(
-					f => f.Directory.EnumerateDirectories(path).Select(p => f.DirectoryInfo.New(p)), "subdirectories "),
+				MemberAccessor<TParent, IEnumerable<IDirectoryInfo>>.FromFunc(
+					p =>
+					{
+						(IFileSystem fs, string fullPath) = resolver(p);
+						return fs.Directory.EnumerateDirectories(fullPath).Select(x => fs.DirectoryInfo.New(x));
+					},
+					"subdirectories "),
 				(member, expectation) => expectation.Append(" whose ").Append(member))
 			.AddExpectations(
 				e => expectations(new ThatSubject<IEnumerable<IDirectoryInfo>>(e)),

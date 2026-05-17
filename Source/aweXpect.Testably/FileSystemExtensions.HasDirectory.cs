@@ -1,4 +1,5 @@
-﻿using System.IO.Abstractions;
+using System;
+using System.IO.Abstractions;
 using System.Text;
 using aweXpect.Core;
 using aweXpect.Core.Constraints;
@@ -15,32 +16,48 @@ public static partial class FileSystemExtensions
 	/// </summary>
 	public static DirectoryResult<TFileSystem> HasDirectory<TFileSystem>(
 		this IThat<TFileSystem> subject, string path)
-		where TFileSystem : IFileSystem
-		=> new(subject.Get().ExpectationBuilder.AddConstraint((it, grammars)
-				=> new HasDirectoryConstraint<TFileSystem>(it, grammars, path)),
+		where TFileSystem : class, IFileSystem
+	{
+		Func<TFileSystem, (IFileSystem fs, string fullPath)> resolver = fs => (fs, path);
+		return new DirectoryResult<TFileSystem>(
+			subject.Get().ExpectationBuilder.AddConstraint((it, grammars)
+				=> new HasDirectoryConstraint<TFileSystem>(it, grammars, path, resolver)),
 			subject,
-			path);
+			path,
+			resolver);
+	}
 
 	/// <summary>
 	///     Verifies that the <see cref="IFileSystem" /> does not have a directory at the given <paramref name="path" />.
 	/// </summary>
 	public static AndOrResult<TFileSystem, IThat<TFileSystem>> DoesNotHaveDirectory<TFileSystem>(
 		this IThat<TFileSystem> subject, string path)
-		where TFileSystem : IFileSystem
-		=> new(subject.Get().ExpectationBuilder.AddConstraint((it, grammars)
-				=> new HasDirectoryConstraint<TFileSystem>(it, grammars, path).Invert()),
-			subject);
-
-	private sealed class HasDirectoryConstraint<TFileSystem>(string it, ExpectationGrammars grammars, string path)
-		: ConstraintResult.WithValue<TFileSystem>(grammars),
-			IValueConstraint<TFileSystem>
-		where TFileSystem : IFileSystem
+		where TFileSystem : class, IFileSystem
 	{
-		/// <inheritdoc />
-		public ConstraintResult IsMetBy(TFileSystem actual)
+		Func<TFileSystem, (IFileSystem fs, string fullPath)> resolver = fs => (fs, path);
+		return new AndOrResult<TFileSystem, IThat<TFileSystem>>(
+			subject.Get().ExpectationBuilder.AddConstraint((it, grammars)
+				=> new HasDirectoryConstraint<TFileSystem>(it, grammars, path, resolver).Invert()),
+			subject);
+	}
+
+	internal sealed class HasDirectoryConstraint<TParent>(
+		string it,
+		ExpectationGrammars grammars,
+		string path,
+		Func<TParent, (IFileSystem fs, string fullPath)> resolver)
+		: ConstraintResult.WithValue<TParent>(grammars),
+			IValueConstraint<TParent>
+		where TParent : class
+	{
+		private IFileSystem? _fs;
+		private string? _fullPath;
+
+		public ConstraintResult IsMetBy(TParent actual)
 		{
 			Actual = actual;
-			Outcome = actual.Directory.Exists(path) ? Outcome.Success : Outcome.Failure;
+			(_fs, _fullPath) = resolver(actual);
+			Outcome = _fs.Directory.Exists(_fullPath) ? Outcome.Success : Outcome.Failure;
 			return this;
 		}
 
@@ -49,7 +66,7 @@ public static partial class FileSystemExtensions
 
 		protected override void AppendNormalResult(StringBuilder stringBuilder, string? indentation = null)
 		{
-			if (Actual?.File.Exists(path) == true)
+			if (_fs?.File.Exists(_fullPath) == true)
 			{
 				stringBuilder.Append(it).Append(" was a file");
 			}

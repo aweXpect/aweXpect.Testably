@@ -20,7 +20,9 @@ public sealed partial class FileSystem
 					sut.File.WriteAllText(path, "baz");
 
 					async Task Act()
-						=> await That(sut).HasFile(path).WhoseContent(c => c.IsEmpty());
+					{
+						await That(sut).HasFile(path).WhoseContent(c => c.IsEmpty());
+					}
 
 					await That(Act).ThrowsException()
 						.WithMessage($"""
@@ -39,7 +41,9 @@ public sealed partial class FileSystem
 					sut.File.WriteAllText(path, "");
 
 					async Task Act()
-						=> await That(sut).HasFile(path).WhoseContent(c => c.IsEmpty());
+					{
+						await That(sut).HasFile(path).WhoseContent(c => c.IsEmpty());
+					}
 
 					await That(Act).DoesNotThrow();
 				}
