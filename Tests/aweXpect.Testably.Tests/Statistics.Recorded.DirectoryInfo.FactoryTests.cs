@@ -25,6 +25,25 @@ public sealed partial class Statistics
 				}
 
 				[Fact]
+				public async Task WithPathFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.DirectoryInfo.New(p => p == "foo").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to DirectoryInfo.New with path matching p => p == "foo" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
 				public async Task WithPathFilter_ShouldOnlyCountMatching()
 				{
 					MockFileSystem fileSystem = new();
@@ -55,6 +74,25 @@ public sealed partial class Statistics
 					}
 
 					await That(Act).DoesNotThrow();
+				}
+
+				[Fact]
+				public async Task WithDirectoryInfoFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.DirectoryInfo.Wrap(_ => true).Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to DirectoryInfo.Wrap with directoryInfo matching _ => true exactly once,
+						             but it was recorded 0 times
+						             """);
 				}
 			}
 		}

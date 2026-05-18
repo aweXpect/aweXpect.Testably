@@ -44,7 +44,7 @@ public sealed partial class Statistics
 					await That(Act).ThrowsException()
 						.WithMessage("""
 						             Expected that fileSystem.Statistics
-						             recorded exactly once call to DirectoryInfo["bar"].Create,
+						             recorded a call to DirectoryInfo["bar"].Create exactly once,
 						             but it was recorded 0 times
 						             """);
 				}
@@ -52,6 +52,25 @@ public sealed partial class Statistics
 
 			public sealed class CreateSubdirectoryTests
 			{
+				[Fact]
+				public async Task CreateSubdirectory_WithPathFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.DirectoryInfo["foo"].CreateSubdirectory(p => p == "bar").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to DirectoryInfo["foo"].CreateSubdirectory with path matching p => p == "bar" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
 				[Fact]
 				public async Task WithPathFilter_ShouldOnlyCountMatching()
 				{
@@ -73,6 +92,25 @@ public sealed partial class Statistics
 
 			public sealed class DeleteTests
 			{
+				[Fact]
+				public async Task Delete_WithRecursiveFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.DirectoryInfo["foo"].Delete(b => b).Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to DirectoryInfo["foo"].Delete with recursive matching b => b exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
 				[Fact]
 				public async Task WithRecursiveFilter_ShouldOnlyMatchOneArgOverload()
 				{
@@ -96,6 +134,63 @@ public sealed partial class Statistics
 
 			public sealed class EnumerateDirectoriesTests
 			{
+				[Fact]
+				public async Task EnumerateDirectories_WithSearchOptionFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.DirectoryInfo["foo"]
+							.EnumerateDirectories(searchOption: o => o == SearchOption.AllDirectories).Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to DirectoryInfo["foo"].EnumerateDirectories with searchOption matching o => o == SearchOption.AllDirectories exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
+				public async Task EnumerateDirectories_WithSearchPatternFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.DirectoryInfo["foo"].EnumerateDirectories(p => p == "bar").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to DirectoryInfo["foo"].EnumerateDirectories with searchPattern matching p => p == "bar" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
+				public async Task WithSearchOptionFilter_ShouldOnlyMatchTwoArgOverload()
+				{
+					MockFileSystem fileSystem = new();
+					IDirectoryInfo di = fileSystem.DirectoryInfo.New("root");
+					di.Create();
+					_ = di.EnumerateDirectories().ToList();
+					_ = di.EnumerateDirectories("*", SearchOption.AllDirectories).ToList();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.DirectoryInfo["root"]
+							.EnumerateDirectories(searchOption: o => o == SearchOption.AllDirectories).Once();
+					}
+
+					await That(Act).DoesNotThrow();
+				}
 #if NET8_0_OR_GREATER
 				[Fact]
 				public async Task WithEnumerationOptionsFilter_ShouldOnlyMatchEnumerationOverload()
@@ -115,25 +210,27 @@ public sealed partial class Statistics
 
 					await That(Act).DoesNotThrow();
 				}
-#endif
+
 				[Fact]
-				public async Task WithSearchOptionFilter_ShouldOnlyMatchTwoArgOverload()
+				public async Task EnumerateDirectories_WithEnumerationOptionsFilter_NoMatch_ShouldFailWithMessage()
 				{
 					MockFileSystem fileSystem = new();
-					IDirectoryInfo di = fileSystem.DirectoryInfo.New("root");
-					di.Create();
-					_ = di.EnumerateDirectories().ToList();
-					_ = di.EnumerateDirectories("*", SearchOption.AllDirectories).ToList();
 
 					async Task Act()
 					{
 						await That(fileSystem.Statistics).Recorded()
-							.DirectoryInfo["root"]
-							.EnumerateDirectories(searchOption: o => o == SearchOption.AllDirectories).Once();
+							.DirectoryInfo["foo"]
+							.EnumerateDirectories(enumerationOptions: o => o != null).Once();
 					}
 
-					await That(Act).DoesNotThrow();
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to DirectoryInfo["foo"].EnumerateDirectories with enumerationOptions matching o => o != null exactly once,
+						             but it was recorded 0 times
+						             """);
 				}
+#endif
 			}
 
 			public sealed class ExistsTests
@@ -156,6 +253,25 @@ public sealed partial class Statistics
 
 			public sealed class MoveToTests
 			{
+				[Fact]
+				public async Task MoveTo_WithDestDirNameFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.DirectoryInfo["foo"].MoveTo(p => p == "bar").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to DirectoryInfo["foo"].MoveTo with destDirName matching p => p == "bar" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
 				[Fact]
 				public async Task WithDestDirNameFilter_ShouldOnlyCountMatching()
 				{
@@ -214,6 +330,66 @@ public sealed partial class Statistics
 
 			public sealed class EnumerateFilesTests
 			{
+#if NET8_0_OR_GREATER
+				[Fact]
+				public async Task EnumerateFiles_WithEnumerationOptionsFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.DirectoryInfo["foo"].EnumerateFiles(enumerationOptions: o => o != null).Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to DirectoryInfo["foo"].EnumerateFiles with enumerationOptions matching o => o != null exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+#endif
+
+				[Fact]
+				public async Task EnumerateFiles_WithSearchOptionFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.DirectoryInfo["foo"]
+							.EnumerateFiles(searchOption: o => o == SearchOption.AllDirectories).Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to DirectoryInfo["foo"].EnumerateFiles with searchOption matching o => o == SearchOption.AllDirectories exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
+				public async Task EnumerateFiles_WithSearchPatternFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.DirectoryInfo["foo"].EnumerateFiles(p => p == "bar").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to DirectoryInfo["foo"].EnumerateFiles with searchPattern matching p => p == "bar" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
 				[Fact]
 				public async Task WithSearchOptionFilter_ShouldRecord()
 				{
@@ -235,6 +411,66 @@ public sealed partial class Statistics
 
 			public sealed class EnumerateFileSystemInfosTests
 			{
+#if NET8_0_OR_GREATER
+				[Fact]
+				public async Task EnumerateFileSystemInfos_WithEnumerationOptionsFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.DirectoryInfo["foo"].EnumerateFileSystemInfos(enumerationOptions: o => o != null).Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to DirectoryInfo["foo"].EnumerateFileSystemInfos with enumerationOptions matching o => o != null exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+#endif
+
+				[Fact]
+				public async Task EnumerateFileSystemInfos_WithSearchOptionFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.DirectoryInfo["foo"]
+							.EnumerateFileSystemInfos(searchOption: o => o == SearchOption.AllDirectories).Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to DirectoryInfo["foo"].EnumerateFileSystemInfos with searchOption matching o => o == SearchOption.AllDirectories exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
+				public async Task EnumerateFileSystemInfos_WithSearchPatternFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.DirectoryInfo["foo"].EnumerateFileSystemInfos(p => p == "bar").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to DirectoryInfo["foo"].EnumerateFileSystemInfos with searchPattern matching p => p == "bar" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
 				[Fact]
 				public async Task WhenCalled_ShouldRecord()
 				{
@@ -255,6 +491,66 @@ public sealed partial class Statistics
 
 			public sealed class GetDirectoriesTests
 			{
+#if NET8_0_OR_GREATER
+				[Fact]
+				public async Task GetDirectories_WithEnumerationOptionsFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.DirectoryInfo["foo"].GetDirectories(enumerationOptions: o => o != null).Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to DirectoryInfo["foo"].GetDirectories with enumerationOptions matching o => o != null exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+#endif
+
+				[Fact]
+				public async Task GetDirectories_WithSearchOptionFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.DirectoryInfo["foo"]
+							.GetDirectories(searchOption: o => o == SearchOption.AllDirectories).Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to DirectoryInfo["foo"].GetDirectories with searchOption matching o => o == SearchOption.AllDirectories exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
+				public async Task GetDirectories_WithSearchPatternFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.DirectoryInfo["foo"].GetDirectories(p => p == "bar").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to DirectoryInfo["foo"].GetDirectories with searchPattern matching p => p == "bar" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
 				[Fact]
 				public async Task WhenCalled_ShouldRecord()
 				{
@@ -275,6 +571,66 @@ public sealed partial class Statistics
 
 			public sealed class GetFilesTests
 			{
+#if NET8_0_OR_GREATER
+				[Fact]
+				public async Task GetFiles_WithEnumerationOptionsFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.DirectoryInfo["foo"].GetFiles(enumerationOptions: o => o != null).Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to DirectoryInfo["foo"].GetFiles with enumerationOptions matching o => o != null exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+#endif
+
+				[Fact]
+				public async Task GetFiles_WithSearchOptionFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.DirectoryInfo["foo"]
+							.GetFiles(searchOption: o => o == SearchOption.AllDirectories).Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to DirectoryInfo["foo"].GetFiles with searchOption matching o => o == SearchOption.AllDirectories exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
+				public async Task GetFiles_WithSearchPatternFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.DirectoryInfo["foo"].GetFiles(p => p == "bar").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to DirectoryInfo["foo"].GetFiles with searchPattern matching p => p == "bar" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
 				[Fact]
 				public async Task WithSearchPatternFilter_ShouldRecord()
 				{
@@ -295,6 +651,66 @@ public sealed partial class Statistics
 
 			public sealed class GetFileSystemInfosTests
 			{
+#if NET8_0_OR_GREATER
+				[Fact]
+				public async Task GetFileSystemInfos_WithEnumerationOptionsFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.DirectoryInfo["foo"].GetFileSystemInfos(enumerationOptions: o => o != null).Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to DirectoryInfo["foo"].GetFileSystemInfos with enumerationOptions matching o => o != null exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+#endif
+
+				[Fact]
+				public async Task GetFileSystemInfos_WithSearchOptionFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.DirectoryInfo["foo"]
+							.GetFileSystemInfos(searchOption: o => o == SearchOption.AllDirectories).Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to DirectoryInfo["foo"].GetFileSystemInfos with searchOption matching o => o == SearchOption.AllDirectories exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
+				public async Task GetFileSystemInfos_WithSearchPatternFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.DirectoryInfo["foo"].GetFileSystemInfos(p => p == "bar").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to DirectoryInfo["foo"].GetFileSystemInfos with searchPattern matching p => p == "bar" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
 				[Fact]
 				public async Task WhenCalled_ShouldRecord()
 				{
@@ -393,6 +809,25 @@ public sealed partial class Statistics
 					}
 
 					await That(Act).DoesNotThrow();
+				}
+
+				[Fact]
+				public async Task FullName_Get_WhenNotAccessed_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.DirectoryInfo["foo"].FullName.Get().Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a get of DirectoryInfo["foo"].FullName exactly once,
+						             but it was recorded 0 times
+						             """);
 				}
 
 				[Fact]
@@ -528,70 +963,28 @@ public sealed partial class Statistics
 #endif
 			}
 
-			public sealed class FailureMessageTests
-			{
-				[Fact]
-				public async Task EnumerateFiles_WithFilter_WhenNotCalled_ShouldFailWithMessage()
-				{
-					MockFileSystem fileSystem = new();
-
-					async Task Act()
-					{
-						await That(fileSystem.Statistics).Recorded()
-							.DirectoryInfo["root"]
-							.EnumerateFiles(searchOption: o => o == SearchOption.AllDirectories).Once();
-					}
-
-					await That(Act).ThrowsException()
-						.WithMessage("""
-						             Expected that fileSystem.Statistics
-						             recorded exactly once call to DirectoryInfo["root"].EnumerateFiles with searchOption matching o => o == SearchOption.AllDirectories,
-						             but it was recorded 0 times
-						             """);
-				}
-
-				[Fact]
-				public async Task FullName_Get_WhenNotAccessed_ShouldFailWithMessage()
-				{
-					MockFileSystem fileSystem = new();
-
-					async Task Act()
-					{
-						await That(fileSystem.Statistics).Recorded()
-							.DirectoryInfo["foo"].FullName.Get().Once();
-					}
-
-					await That(Act).ThrowsException()
-						.WithMessage("""
-						             Expected that fileSystem.Statistics
-						             recorded exactly once get of DirectoryInfo["foo"].FullName,
-						             but it was recorded 0 times
-						             """);
-				}
-
-				[Fact]
-				public async Task GetDirectories_WhenNotCalled_ShouldFailWithMessage()
-				{
-					MockFileSystem fileSystem = new();
-
-					async Task Act()
-					{
-						await That(fileSystem.Statistics).Recorded()
-							.DirectoryInfo["root"].GetDirectories().Once();
-					}
-
-					await That(Act).ThrowsException()
-						.WithMessage("""
-						             Expected that fileSystem.Statistics
-						             recorded exactly once call to DirectoryInfo["root"].GetDirectories,
-						             but it was recorded 0 times
-						             """);
-				}
-			}
-
 #if NET8_0_OR_GREATER
 			public sealed class CreateAsSymbolicLinkTests
 			{
+				[Fact]
+				public async Task CreateAsSymbolicLink_WithPathToTargetFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.DirectoryInfo["foo"].CreateAsSymbolicLink(p => p == "bar").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to DirectoryInfo["foo"].CreateAsSymbolicLink with pathToTarget matching p => p == "bar" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
 				[Fact]
 				public async Task WhenCalled_ShouldRecord()
 				{
@@ -612,6 +1005,25 @@ public sealed partial class Statistics
 
 			public sealed class ResolveLinkTargetTests
 			{
+				[Fact]
+				public async Task ResolveLinkTarget_WithReturnFinalTargetFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.DirectoryInfo["foo"].ResolveLinkTarget(b => b).Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to DirectoryInfo["foo"].ResolveLinkTarget with returnFinalTarget matching b => b exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
 				[Fact]
 				public async Task WhenCalled_ShouldRecord()
 				{

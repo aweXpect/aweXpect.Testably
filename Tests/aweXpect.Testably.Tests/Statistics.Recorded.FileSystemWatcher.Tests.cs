@@ -13,6 +13,44 @@ public sealed partial class Statistics
 			public sealed class FactoryTests
 			{
 				[Fact]
+				public async Task New_WithFilterFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.FileSystemWatcher.New(filter: f => f == "*.txt").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to FileSystemWatcher.New with filter matching f => f == "*.txt" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
+				public async Task New_WithPathFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.FileSystemWatcher.New(p => p == "a").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to FileSystemWatcher.New with path matching p => p == "a" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
 				public async Task New_WithPathFilter_ShouldOnlyCountMatching()
 				{
 					MockFileSystem fileSystem = new();
@@ -28,6 +66,25 @@ public sealed partial class Statistics
 					}
 
 					await That(Act).DoesNotThrow();
+				}
+
+				[Fact]
+				public async Task Wrap_WithFileSystemWatcherFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.FileSystemWatcher.Wrap(_ => true).Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to FileSystemWatcher.Wrap with fileSystemWatcher matching _ => true exactly once,
+						             but it was recorded 0 times
+						             """);
 				}
 			}
 
@@ -94,6 +151,46 @@ public sealed partial class Statistics
 
 			public sealed class WaitForChangedTests
 			{
+				[Fact]
+				public async Task WaitForChanged_WithChangeTypeFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.FileSystemWatcher["watch"]
+							.WaitForChanged(c => c == WatcherChangeTypes.All).Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to FileSystemWatcher["watch"].WaitForChanged with changeType matching c => c == WatcherChangeTypes.All exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
+				public async Task WaitForChanged_WithTimeoutFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.FileSystemWatcher["watch"]
+							.WaitForChanged(timeout: t => t == 0).Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to FileSystemWatcher["watch"].WaitForChanged with timeout matching t => t == 0 exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
 				[Fact]
 				public async Task WhenCalledWithTimeout_ShouldRecord()
 				{
@@ -292,7 +389,7 @@ public sealed partial class Statistics
 					await That(Act).ThrowsException()
 						.WithMessage("""
 						             Expected that fileSystem.Statistics
-						             recorded exactly once set of FileSystemWatcher["watch"].EnableRaisingEvents,
+						             recorded a set of FileSystemWatcher["watch"].EnableRaisingEvents exactly once,
 						             but it was recorded 0 times
 						             """);
 				}
@@ -312,7 +409,7 @@ public sealed partial class Statistics
 					await That(Act).ThrowsException()
 						.WithMessage("""
 						             Expected that fileSystem.Statistics
-						             recorded exactly once call to FileSystemWatcher["watch"].EndInit,
+						             recorded a call to FileSystemWatcher["watch"].EndInit exactly once,
 						             but it was recorded 0 times
 						             """);
 				}
@@ -332,7 +429,7 @@ public sealed partial class Statistics
 					await That(Act).ThrowsException()
 						.WithMessage("""
 						             Expected that fileSystem.Statistics
-						             recorded exactly once get of FileSystemWatcher["watch"].Path,
+						             recorded a get of FileSystemWatcher["watch"].Path exactly once,
 						             but it was recorded 0 times
 						             """);
 				}
@@ -353,7 +450,7 @@ public sealed partial class Statistics
 					await That(Act).ThrowsException()
 						.WithMessage("""
 						             Expected that fileSystem.Statistics
-						             recorded exactly once call to FileSystemWatcher["watch"].WaitForChanged with timeout matching t => t == 0,
+						             recorded a call to FileSystemWatcher["watch"].WaitForChanged with timeout matching t => t == 0 exactly once,
 						             but it was recorded 0 times
 						             """);
 				}

@@ -43,7 +43,7 @@ public sealed partial class Statistics
 					await That(Act).ThrowsException()
 						.WithMessage("""
 						             Expected that fileSystem.Statistics
-						             recorded exactly once call to FileInfo["bar.txt"].AppendText,
+						             recorded a call to FileInfo["bar.txt"].AppendText exactly once,
 						             but it was recorded 0 times
 						             """);
 				}
@@ -51,6 +51,44 @@ public sealed partial class Statistics
 
 			public sealed class CopyToTests
 			{
+				[Fact]
+				public async Task CopyTo_WithDestFileNameFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.FileInfo["foo.txt"].CopyTo(d => d == "a.txt").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to FileInfo["foo.txt"].CopyTo with destFileName matching d => d == "a.txt" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
+				public async Task CopyTo_WithOverwriteFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.FileInfo["foo.txt"].CopyTo(overwrite: o => o).Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to FileInfo["foo.txt"].CopyTo with overwrite matching o => o exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
 				[Fact]
 				public async Task WhenCopiedTwice_ShouldRecordTwice()
 				{
@@ -91,6 +129,25 @@ public sealed partial class Statistics
 #if NET8_0_OR_GREATER
 			public sealed class CreateAsSymbolicLinkTests
 			{
+				[Fact]
+				public async Task CreateAsSymbolicLink_WithPathToTargetFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.FileInfo["link.txt"].CreateAsSymbolicLink(t => t == "target.txt").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to FileInfo["link.txt"].CreateAsSymbolicLink with pathToTarget matching t => t == "target.txt" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
 				[Fact]
 				public async Task WhenCalled_ShouldRecord()
 				{
@@ -165,7 +222,7 @@ public sealed partial class Statistics
 					await That(Act).ThrowsException()
 						.WithMessage("""
 						             Expected that fileSystem.Statistics
-						             recorded exactly once set of FileInfo["foo.txt"].IsReadOnly,
+						             recorded a set of FileInfo["foo.txt"].IsReadOnly exactly once,
 						             but it was recorded 0 times
 						             """);
 				}
@@ -209,6 +266,63 @@ public sealed partial class Statistics
 
 			public sealed class OpenTests
 			{
+				[Fact]
+				public async Task Open_WithAccessFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.FileInfo["foo.txt"].Open(access: a => a == FileAccess.Read).Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to FileInfo["foo.txt"].Open with access matching a => a == FileAccess.Read exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
+				public async Task Open_WithModeFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.FileInfo["foo.txt"].Open(m => m == FileMode.Open).Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to FileInfo["foo.txt"].Open with mode matching m => m == FileMode.Open exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
+				public async Task Open_WithShareFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.FileInfo["foo.txt"].Open(share: s => s == FileShare.None).Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to FileInfo["foo.txt"].Open with share matching s => s == FileShare.None exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
 				[Fact]
 				public async Task WithModeFilter_ShouldOnlyMatchOverloadsTakingFileMode()
 				{
@@ -273,6 +387,63 @@ public sealed partial class Statistics
 
 			public sealed class ReplaceTests
 			{
+				[Fact]
+				public async Task Replace_WithDestinationBackupFileNameFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.FileInfo["foo.txt"].Replace(destinationBackupFileName: b => b == "backup.txt").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to FileInfo["foo.txt"].Replace with destinationBackupFileName matching b => b == "backup.txt" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
+				public async Task Replace_WithDestinationFileNameFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.FileInfo["foo.txt"].Replace(d => d == "dest.txt").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to FileInfo["foo.txt"].Replace with destinationFileName matching d => d == "dest.txt" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
+				public async Task Replace_WithIgnoreMetadataErrorsFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.FileInfo["foo.txt"].Replace(ignoreMetadataErrors: i => i).Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to FileInfo["foo.txt"].Replace with ignoreMetadataErrors matching i => i exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
 				[Fact]
 				public async Task WithIgnoreMetadataErrorsFilter_ShouldOnlyMatchThreeArgOverload()
 				{
@@ -404,6 +575,44 @@ public sealed partial class Statistics
 			public sealed class MoveToTests
 			{
 				[Fact]
+				public async Task MoveTo_WithDestFileNameFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.FileInfo["foo.txt"].MoveTo(d => d == "bar.txt").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to FileInfo["foo.txt"].MoveTo with destFileName matching d => d == "bar.txt" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
+				public async Task MoveTo_WithOverwriteFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.FileInfo["foo.txt"].MoveTo(overwrite: o => o).Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to FileInfo["foo.txt"].MoveTo with overwrite matching o => o exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
 				public async Task WithDestFileNameFilter_ShouldOnlyCountMatching()
 				{
 					MockFileSystem fileSystem = new();
@@ -461,6 +670,25 @@ public sealed partial class Statistics
 #if NET8_0_OR_GREATER
 			public sealed class ResolveLinkTargetTests
 			{
+				[Fact]
+				public async Task ResolveLinkTarget_WithReturnFinalTargetFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.FileInfo["link.txt"].ResolveLinkTarget(r => r).Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to FileInfo["link.txt"].ResolveLinkTarget with returnFinalTarget matching r => r exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
 				[Fact]
 				public async Task WhenCalled_ShouldRecord()
 				{
@@ -694,66 +922,6 @@ public sealed partial class Statistics
 					await That(Act).DoesNotThrow();
 				}
 #endif
-			}
-
-			public sealed class FailureMessageTests
-			{
-				[Fact]
-				public async Task Attributes_Get_WhenNotAccessed_ShouldFailWithMessage()
-				{
-					MockFileSystem fileSystem = new();
-
-					async Task Act()
-					{
-						await That(fileSystem.Statistics).Recorded()
-							.FileInfo["foo.txt"].Attributes.Get().Once();
-					}
-
-					await That(Act).ThrowsException()
-						.WithMessage("""
-						             Expected that fileSystem.Statistics
-						             recorded exactly once get of FileInfo["foo.txt"].Attributes,
-						             but it was recorded 0 times
-						             """);
-				}
-
-				[Fact]
-				public async Task Create_WhenNotCalled_ShouldFailWithMessage()
-				{
-					MockFileSystem fileSystem = new();
-
-					async Task Act()
-					{
-						await That(fileSystem.Statistics).Recorded()
-							.FileInfo["foo.txt"].Create().Once();
-					}
-
-					await That(Act).ThrowsException()
-						.WithMessage("""
-						             Expected that fileSystem.Statistics
-						             recorded exactly once call to FileInfo["foo.txt"].Create,
-						             but it was recorded 0 times
-						             """);
-				}
-
-				[Fact]
-				public async Task MoveTo_WithFilter_WhenNotCalled_ShouldFailWithMessage()
-				{
-					MockFileSystem fileSystem = new();
-
-					async Task Act()
-					{
-						await That(fileSystem.Statistics).Recorded()
-							.FileInfo["foo.txt"].MoveTo(d => d == "bar.txt").Once();
-					}
-
-					await That(Act).ThrowsException()
-						.WithMessage("""
-						             Expected that fileSystem.Statistics
-						             recorded exactly once call to FileInfo["foo.txt"].MoveTo with destFileName matching d => d == "bar.txt",
-						             but it was recorded 0 times
-						             """);
-				}
 			}
 		}
 	}

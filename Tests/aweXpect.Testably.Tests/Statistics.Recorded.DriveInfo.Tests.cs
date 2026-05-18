@@ -40,6 +40,44 @@ public sealed partial class Statistics
 
 					await That(Act).DoesNotThrow();
 				}
+
+				[Fact]
+				public async Task New_WithDriveNameFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new(o => o.SimulatingOperatingSystem(SimulationMode.Windows));
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.DriveInfo.New(n => n == "C:").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to DriveInfo.New with driveName matching n => n == "C:" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
+				public async Task Wrap_WithDriveInfoFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.DriveInfo.Wrap(_ => true).Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to DriveInfo.Wrap with driveInfo matching _ => true exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
 #endif
 			}
 
@@ -198,7 +236,7 @@ public sealed partial class Statistics
 					await That(Act).ThrowsException()
 						.WithMessage("""
 						             Expected that fileSystem.Statistics
-						             recorded exactly once get of DriveInfo["C:"].DriveFormat,
+						             recorded a get of DriveInfo["C:"].DriveFormat exactly once,
 						             but it was recorded 0 times
 						             """);
 				}

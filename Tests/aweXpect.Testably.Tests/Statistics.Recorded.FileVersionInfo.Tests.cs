@@ -11,6 +11,25 @@ public sealed partial class Statistics
 			public sealed class FactoryTests
 			{
 				[Fact]
+				public async Task GetVersionInfo_WithFileNameFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.FileVersionInfo.GetVersionInfo(f => f == "a.exe").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to FileVersionInfo.GetVersionInfo with fileName matching f => f == "a.exe" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
 				public async Task GetVersionInfo_WithFileNameFilter_ShouldOnlyCountMatching()
 				{
 					MockFileSystem fileSystem = new();
@@ -478,7 +497,7 @@ public sealed partial class Statistics
 					await That(Act).ThrowsException()
 						.WithMessage("""
 						             Expected that fileSystem.Statistics
-						             recorded exactly once get of FileVersionInfo["a.exe"].Comments,
+						             recorded a get of FileVersionInfo["a.exe"].Comments exactly once,
 						             but it was recorded 0 times
 						             """);
 				}

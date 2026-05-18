@@ -11,6 +11,25 @@ public sealed partial class Statistics
 			public sealed class FactoryTests
 			{
 				[Fact]
+				public async Task New_WithFileNameFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.FileInfo.New(f => f == "foo.txt").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to FileInfo.New with fileName matching f => f == "foo.txt" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
 				public async Task WhenFactoryCalled_ShouldRecord()
 				{
 					MockFileSystem fileSystem = new();
@@ -22,6 +41,25 @@ public sealed partial class Statistics
 					}
 
 					await That(Act).DoesNotThrow();
+				}
+
+				[Fact]
+				public async Task Wrap_WithFileInfoFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.FileInfo.Wrap(_ => true).Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to FileInfo.Wrap with fileInfo matching _ => true exactly once,
+						             but it was recorded 0 times
+						             """);
 				}
 			}
 		}

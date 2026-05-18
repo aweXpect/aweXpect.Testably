@@ -84,19 +84,19 @@ internal static class StatisticsConstraints
 
 		private void AppendExpectation(StringBuilder stringBuilder, bool negated)
 		{
-			string prefix = negated ? "did not record " : "recorded ";
 			if (quantifier.IsNever)
 			{
 				stringBuilder.Append(negated ? "recorded at least one call to " : "recorded no call to ")
 					.Append(bucketDescription).Append('.').Append(methodName);
+				AppendMatcherDescription(stringBuilder);
 			}
 			else
 			{
-				stringBuilder.Append(prefix).Append(quantifier).Append(" call to ")
+				stringBuilder.Append(negated ? "did not record a call to " : "recorded a call to ")
 					.Append(bucketDescription).Append('.').Append(methodName);
+				AppendMatcherDescription(stringBuilder);
+				stringBuilder.Append(' ').Append(quantifier);
 			}
-
-			AppendMatcherDescription(stringBuilder);
 		}
 
 		private void AppendMatcherDescription(StringBuilder stringBuilder)
@@ -183,9 +183,9 @@ internal static class StatisticsConstraints
 			}
 			else
 			{
-				stringBuilder.Append(negated ? "did not record " : "recorded ").Append(quantifier)
-					.Append(' ').Append(accessVerb)
-					.Append(bucketDescription).Append('.').Append(propertyName);
+				stringBuilder.Append(negated ? "did not record a " : "recorded a ").Append(accessVerb)
+					.Append(bucketDescription).Append('.').Append(propertyName)
+					.Append(' ').Append(quantifier);
 			}
 		}
 

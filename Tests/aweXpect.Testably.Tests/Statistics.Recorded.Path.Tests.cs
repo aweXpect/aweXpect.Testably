@@ -29,6 +29,82 @@ public sealed partial class Statistics
 			public sealed class CombineTests
 			{
 				[Fact]
+				public async Task Combine_WithPath1Filter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.Path.Combine(p => p == "foo").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to Path.Combine with path1 matching p => p == "foo" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
+				public async Task Combine_WithPath2Filter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.Path.Combine(path2: p => p == "foo").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to Path.Combine with path2 matching p => p == "foo" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
+				public async Task Combine_WithPath3Filter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.Path.Combine(path3: p => p == "foo").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to Path.Combine with path3 matching p => p == "foo" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
+				public async Task Combine_WithPath4Filter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.Path.Combine(path4: p => p == "foo").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to Path.Combine with path4 matching p => p == "foo" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
 				public async Task FilterOnPath3_ShouldOnlyMatchThreeArgOverload()
 				{
 					MockFileSystem fileSystem = new();
@@ -81,6 +157,25 @@ public sealed partial class Statistics
 			public sealed class GetFileNameTests
 			{
 				[Fact]
+				public async Task GetFileName_WithPathFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.Path.GetFileName(p => p == "foo").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to Path.GetFileName with path matching p => p == "foo" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
 				public async Task WhenCalled_ShouldRecord()
 				{
 					MockFileSystem fileSystem = new();
@@ -108,7 +203,7 @@ public sealed partial class Statistics
 					await That(Act).ThrowsException()
 						.WithMessage("""
 						             Expected that fileSystem.Statistics
-						             recorded exactly once call to Path.GetFileName,
+						             recorded a call to Path.GetFileName exactly once,
 						             but it was recorded 0 times
 						             """);
 				}
@@ -117,6 +212,44 @@ public sealed partial class Statistics
 #if NET8_0_OR_GREATER
 			public sealed class GetRelativePathTests
 			{
+				[Fact]
+				public async Task GetRelativePath_WithPathFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.Path.GetRelativePath(path: p => p == "foo").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to Path.GetRelativePath with path matching p => p == "foo" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
+				public async Task GetRelativePath_WithRelativeToFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.Path.GetRelativePath(r => r == "foo").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to Path.GetRelativePath with relativeTo matching r => r == "foo" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
 				[Fact]
 				public async Task WhenCalled_ShouldRecord()
 				{
@@ -173,6 +306,25 @@ public sealed partial class Statistics
 			public sealed class TrimEndingDirectorySeparatorTests
 			{
 				[Fact]
+				public async Task TrimEndingDirectorySeparator_WithPathFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.Path.TrimEndingDirectorySeparator(p => p == "foo").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to Path.TrimEndingDirectorySeparator with path matching p => p == "foo" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
 				public async Task WhenCalled_ShouldRecord()
 				{
 					MockFileSystem fileSystem = new();
@@ -210,6 +362,44 @@ public sealed partial class Statistics
 			public sealed class ChangeExtensionTests
 			{
 				[Fact]
+				public async Task ChangeExtension_WithExtensionFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.Path.ChangeExtension(extension: e => e == "foo").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to Path.ChangeExtension with extension matching e => e == "foo" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
+				public async Task ChangeExtension_WithPathFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.Path.ChangeExtension(p => p == "foo").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to Path.ChangeExtension with path matching p => p == "foo" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
 				public async Task WhenCalled_ShouldRecord()
 				{
 					MockFileSystem fileSystem = new();
@@ -227,6 +417,25 @@ public sealed partial class Statistics
 
 			public sealed class GetDirectoryNameTests
 			{
+				[Fact]
+				public async Task GetDirectoryName_WithPathFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.Path.GetDirectoryName(p => p == "foo").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to Path.GetDirectoryName with path matching p => p == "foo" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
 				[Fact]
 				public async Task WhenCalled_ShouldRecord()
 				{
@@ -246,6 +455,25 @@ public sealed partial class Statistics
 			public sealed class GetExtensionTests
 			{
 				[Fact]
+				public async Task GetExtension_WithPathFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.Path.GetExtension(p => p == "foo").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to Path.GetExtension with path matching p => p == "foo" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
 				public async Task WhenCalled_ShouldRecord()
 				{
 					MockFileSystem fileSystem = new();
@@ -264,6 +492,25 @@ public sealed partial class Statistics
 			public sealed class GetFileNameWithoutExtensionTests
 			{
 				[Fact]
+				public async Task GetFileNameWithoutExtension_WithPathFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.Path.GetFileNameWithoutExtension(p => p == "foo").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to Path.GetFileNameWithoutExtension with path matching p => p == "foo" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
 				public async Task WhenCalled_ShouldRecord()
 				{
 					MockFileSystem fileSystem = new();
@@ -281,6 +528,44 @@ public sealed partial class Statistics
 
 			public sealed class GetFullPathTests
 			{
+				[Fact]
+				public async Task GetFullPath_WithBasePathFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.Path.GetFullPath(basePath: b => b == "foo").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to Path.GetFullPath with basePath matching b => b == "foo" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
+				public async Task GetFullPath_WithPathFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.Path.GetFullPath(p => p == "foo").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to Path.GetFullPath with path matching p => p == "foo" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
 				[Fact]
 				public async Task WhenCalled_ShouldRecord()
 				{
@@ -318,6 +603,24 @@ public sealed partial class Statistics
 			public sealed class GetInvalidPathCharsTests
 			{
 				[Fact]
+				public async Task GetInvalidPathChars_WhenNotCalled_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded().Path.GetInvalidPathChars().Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to Path.GetInvalidPathChars exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
 				public async Task WhenCalled_ShouldRecord()
 				{
 					MockFileSystem fileSystem = new();
@@ -335,6 +638,25 @@ public sealed partial class Statistics
 
 			public sealed class GetPathRootTests
 			{
+				[Fact]
+				public async Task GetPathRoot_WithPathFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.Path.GetPathRoot(p => p == "foo").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to Path.GetPathRoot with path matching p => p == "foo" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
 				[Fact]
 				public async Task WhenCalled_ShouldRecord()
 				{
@@ -392,6 +714,25 @@ public sealed partial class Statistics
 			public sealed class HasExtensionTests
 			{
 				[Fact]
+				public async Task HasExtension_WithPathFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.Path.HasExtension(p => p == "foo").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to Path.HasExtension with path matching p => p == "foo" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
 				public async Task WhenCalled_ShouldRecord()
 				{
 					MockFileSystem fileSystem = new();
@@ -410,6 +751,25 @@ public sealed partial class Statistics
 			public sealed class IsPathRootedTests
 			{
 				[Fact]
+				public async Task IsPathRooted_WithPathFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.Path.IsPathRooted(p => p == "foo").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to Path.IsPathRooted with path matching p => p == "foo" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
 				public async Task WhenCalled_ShouldRecord()
 				{
 					MockFileSystem fileSystem = new();
@@ -425,49 +785,28 @@ public sealed partial class Statistics
 				}
 			}
 
-			public sealed class FailureMessageTests
+#if NET8_0_OR_GREATER
+			public sealed class EndsInDirectorySeparatorTests
 			{
 				[Fact]
-				public async Task ChangeExtension_WithFilter_WhenNotCalled_ShouldFailWithMessage()
+				public async Task EndsInDirectorySeparator_WithPathFilter_NoMatch_ShouldFailWithMessage()
 				{
 					MockFileSystem fileSystem = new();
 
 					async Task Act()
 					{
 						await That(fileSystem.Statistics).Recorded()
-							.Path.ChangeExtension(p => p == "foo.txt", e => e == ".bin").Once();
+							.Path.EndsInDirectorySeparator(p => p == "foo").Once();
 					}
 
 					await That(Act).ThrowsException()
 						.WithMessage("""
 						             Expected that fileSystem.Statistics
-						             recorded exactly once call to Path.ChangeExtension with path matching p => p == "foo.txt", extension matching e => e == ".bin",
+						             recorded a call to Path.EndsInDirectorySeparator with path matching p => p == "foo" exactly once,
 						             but it was recorded 0 times
 						             """);
 				}
 
-				[Fact]
-				public async Task GetInvalidPathChars_WhenNotCalled_ShouldFailWithMessage()
-				{
-					MockFileSystem fileSystem = new();
-
-					async Task Act()
-					{
-						await That(fileSystem.Statistics).Recorded().Path.GetInvalidPathChars().Once();
-					}
-
-					await That(Act).ThrowsException()
-						.WithMessage("""
-						             Expected that fileSystem.Statistics
-						             recorded exactly once call to Path.GetInvalidPathChars,
-						             but it was recorded 0 times
-						             """);
-				}
-			}
-
-#if NET8_0_OR_GREATER
-			public sealed class EndsInDirectorySeparatorTests
-			{
 				[Fact]
 				public async Task WhenCalled_ShouldRecord()
 				{
@@ -487,6 +826,25 @@ public sealed partial class Statistics
 			public sealed class ExistsTests
 			{
 				[Fact]
+				public async Task Exists_WithPathFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.Path.Exists(p => p == "foo").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to Path.Exists with path matching p => p == "foo" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
 				public async Task WhenCalled_ShouldRecord()
 				{
 					MockFileSystem fileSystem = new();
@@ -505,6 +863,25 @@ public sealed partial class Statistics
 #if NET8_0_OR_GREATER
 			public sealed class IsPathFullyQualifiedTests
 			{
+				[Fact]
+				public async Task IsPathFullyQualified_WithPathFilter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.Path.IsPathFullyQualified(p => p == "foo").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to Path.IsPathFullyQualified with path matching p => p == "foo" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
 				[Fact]
 				public async Task WhenCalled_ShouldRecord()
 				{
@@ -536,6 +913,82 @@ public sealed partial class Statistics
 					}
 
 					await That(Act).DoesNotThrow();
+				}
+
+				[Fact]
+				public async Task Join_WithPath1Filter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.Path.Join(p => p == "foo").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to Path.Join with path1 matching p => p == "foo" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
+				public async Task Join_WithPath2Filter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.Path.Join(path2: p => p == "foo").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to Path.Join with path2 matching p => p == "foo" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
+				public async Task Join_WithPath3Filter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.Path.Join(path3: p => p == "foo").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to Path.Join with path3 matching p => p == "foo" exactly once,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
+				public async Task Join_WithPath4Filter_NoMatch_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.Path.Join(path4: p => p == "foo").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded a call to Path.Join with path4 matching p => p == "foo" exactly once,
+						             but it was recorded 0 times
+						             """);
 				}
 
 				[Fact]
