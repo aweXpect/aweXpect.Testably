@@ -32,9 +32,17 @@ public sealed partial class FileSystem
 						              has directory '{path}' whose files have content equal to "SOME-CONTENT" for all items,
 						              but not all were
 
-						              File content:
-						              some-content
-						              """);
+						              Not matching items:
+						              [
+						                foo\bar.txt,
+						                (… and maybe others)
+						              ]
+
+						              Collection:
+						              [
+						                foo\bar.txt
+						              ]
+						              """).IgnoringNewlineStyle();
 				}
 
 				[Fact]
@@ -93,9 +101,17 @@ public sealed partial class FileSystem
 						              has directory '{path}' whose files have content not equal to "some-content" for all items,
 						              but not all were
 
-						              File content:
-						              some-content
-						              """);
+						              Not matching items:
+						              [
+						                foo\bar.txt,
+						                (… and maybe others)
+						              ]
+
+						              Collection:
+						              [
+						                foo\bar.txt
+						              ]
+						              """).IgnoringNewlineStyle();
 				}
 
 				[Fact]
