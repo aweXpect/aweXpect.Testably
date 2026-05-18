@@ -34,13 +34,13 @@ public sealed partial class FileSystem
 
 						              Not matching items:
 						              [
-						                foo\bar.txt,
+						                foo{Path.DirectorySeparatorChar}bar.txt,
 						                (… and maybe others)
 						              ]
 
 						              Collection:
 						              [
-						                foo\bar.txt
+						                foo{Path.DirectorySeparatorChar}bar.txt
 						              ]
 						              """).IgnoringNewlineStyle();
 				}
@@ -103,13 +103,13 @@ public sealed partial class FileSystem
 
 						              Not matching items:
 						              [
-						                foo\bar.txt,
+						                foo{Path.DirectorySeparatorChar}bar.txt,
 						                (… and maybe others)
 						              ]
 
 						              Collection:
 						              [
-						                foo\bar.txt
+						                foo{Path.DirectorySeparatorChar}bar.txt
 						              ]
 						              """).IgnoringNewlineStyle();
 				}
