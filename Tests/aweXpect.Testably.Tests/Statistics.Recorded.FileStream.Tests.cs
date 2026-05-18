@@ -541,6 +541,66 @@ public sealed partial class Statistics
 					await That(Act).DoesNotThrow();
 				}
 			}
+
+			public sealed class FailureMessageTests
+			{
+				[Fact]
+				public async Task Close_WhenNotCalled_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.FileStream["a.txt"].Close().Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded exactly once call to FileStream["a.txt"].Close,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
+				public async Task Length_Get_WhenNotAccessed_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.FileStream["a.txt"].Length.Get().Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded exactly once get of FileStream["a.txt"].Length,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
+				public async Task Read_WithFilter_WhenNotCalled_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.FileStream["a.txt"].Read(count: c => c == 5).Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded exactly once call to FileStream["a.txt"].Read with count matching c => c == 5,
+						             but it was recorded 0 times
+						             """);
+				}
+			}
 		}
 	}
 }

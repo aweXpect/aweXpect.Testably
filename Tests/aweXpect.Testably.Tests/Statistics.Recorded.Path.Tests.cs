@@ -425,6 +425,46 @@ public sealed partial class Statistics
 				}
 			}
 
+			public sealed class FailureMessageTests
+			{
+				[Fact]
+				public async Task ChangeExtension_WithFilter_WhenNotCalled_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.Path.ChangeExtension(p => p == "foo.txt", e => e == ".bin").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded exactly once call to Path.ChangeExtension with path matching p => p == "foo.txt", extension matching e => e == ".bin",
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
+				public async Task GetInvalidPathChars_WhenNotCalled_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded().Path.GetInvalidPathChars().Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded exactly once call to Path.GetInvalidPathChars,
+						             but it was recorded 0 times
+						             """);
+				}
+			}
+
 #if NET8_0_OR_GREATER
 			public sealed class EndsInDirectorySeparatorTests
 			{

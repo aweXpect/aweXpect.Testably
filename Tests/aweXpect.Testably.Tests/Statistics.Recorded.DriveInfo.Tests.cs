@@ -183,6 +183,25 @@ public sealed partial class Statistics
 
 					await That(Act).DoesNotThrow();
 				}
+
+				[Fact]
+				public async Task WhenNotAccessed_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new(o => o.SimulatingOperatingSystem(SimulationMode.Windows));
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.DriveInfo["C:"].DriveFormat.Get().Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded exactly once get of DriveInfo["C:"].DriveFormat,
+						             but it was recorded 0 times
+						             """);
+				}
 			}
 #endif
 		}

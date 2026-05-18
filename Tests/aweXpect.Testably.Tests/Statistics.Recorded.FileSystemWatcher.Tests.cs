@@ -274,6 +274,90 @@ public sealed partial class Statistics
 					await That(Act).DoesNotThrow();
 				}
 			}
+
+			public sealed class FailureMessageTests
+			{
+				[Fact]
+				public async Task EnableRaisingEvents_Set_WhenNotCalled_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+					fileSystem.Directory.CreateDirectory("watch");
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.FileSystemWatcher["watch"].EnableRaisingEvents.Set().Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded exactly once set of FileSystemWatcher["watch"].EnableRaisingEvents,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
+				public async Task EndInit_WhenNotCalled_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+					fileSystem.Directory.CreateDirectory("watch");
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.FileSystemWatcher["watch"].EndInit().Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded exactly once call to FileSystemWatcher["watch"].EndInit,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
+				public async Task Path_Get_WhenNotAccessed_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+					fileSystem.Directory.CreateDirectory("watch");
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.FileSystemWatcher["watch"].Path.Get().Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded exactly once get of FileSystemWatcher["watch"].Path,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
+				public async Task WaitForChanged_WithFilter_WhenNotCalled_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+					fileSystem.Directory.CreateDirectory("watch");
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.FileSystemWatcher["watch"]
+							.WaitForChanged(timeout: t => t == 0).Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded exactly once call to FileSystemWatcher["watch"].WaitForChanged with timeout matching t => t == 0,
+						             but it was recorded 0 times
+						             """);
+				}
+			}
 		}
 	}
 }

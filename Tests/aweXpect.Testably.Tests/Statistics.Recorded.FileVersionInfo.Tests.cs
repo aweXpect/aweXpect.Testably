@@ -462,6 +462,26 @@ public sealed partial class Statistics
 
 					await That(Act).DoesNotThrow();
 				}
+
+				[Fact]
+				public async Task WhenNotAccessed_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+					fileSystem.File.WriteAllText("a.exe", "");
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.FileVersionInfo["a.exe"].Comments.Get().Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded exactly once get of FileVersionInfo["a.exe"].Comments,
+						             but it was recorded 0 times
+						             """);
+				}
 			}
 		}
 	}

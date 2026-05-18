@@ -695,6 +695,66 @@ public sealed partial class Statistics
 				}
 #endif
 			}
+
+			public sealed class FailureMessageTests
+			{
+				[Fact]
+				public async Task Attributes_Get_WhenNotAccessed_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.FileInfo["foo.txt"].Attributes.Get().Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded exactly once get of FileInfo["foo.txt"].Attributes,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
+				public async Task Create_WhenNotCalled_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.FileInfo["foo.txt"].Create().Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded exactly once call to FileInfo["foo.txt"].Create,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
+				public async Task MoveTo_WithFilter_WhenNotCalled_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.FileInfo["foo.txt"].MoveTo(d => d == "bar.txt").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded exactly once call to FileInfo["foo.txt"].MoveTo with destFileName matching d => d == "bar.txt",
+						             but it was recorded 0 times
+						             """);
+				}
+			}
 		}
 	}
 }

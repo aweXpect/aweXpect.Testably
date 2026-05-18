@@ -528,6 +528,67 @@ public sealed partial class Statistics
 #endif
 			}
 
+			public sealed class FailureMessageTests
+			{
+				[Fact]
+				public async Task EnumerateFiles_WithFilter_WhenNotCalled_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.DirectoryInfo["root"]
+							.EnumerateFiles(searchOption: o => o == SearchOption.AllDirectories).Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded exactly once call to DirectoryInfo["root"].EnumerateFiles with searchOption matching o => o == SearchOption.AllDirectories,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
+				public async Task FullName_Get_WhenNotAccessed_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.DirectoryInfo["foo"].FullName.Get().Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded exactly once get of DirectoryInfo["foo"].FullName,
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
+				public async Task GetDirectories_WhenNotCalled_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.DirectoryInfo["root"].GetDirectories().Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded exactly once call to DirectoryInfo["root"].GetDirectories,
+						             but it was recorded 0 times
+						             """);
+				}
+			}
+
 #if NET8_0_OR_GREATER
 			public sealed class CreateAsSymbolicLinkTests
 			{

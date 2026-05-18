@@ -389,6 +389,47 @@ public sealed partial class Statistics
 			}
 #endif
 
+			public sealed class FailureMessageTests
+			{
+				[Fact]
+				public async Task Exists_WithFilter_WhenNotCalled_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.Directory.Exists(p => p == "foo").Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded exactly once call to Directory.Exists with path matching p => p == "foo",
+						             but it was recorded 0 times
+						             """);
+				}
+
+				[Fact]
+				public async Task GetDirectoryRoot_WhenNotCalled_ShouldFailWithMessage()
+				{
+					MockFileSystem fileSystem = new();
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.Directory.GetDirectoryRoot().Once();
+					}
+
+					await That(Act).ThrowsException()
+						.WithMessage("""
+						             Expected that fileSystem.Statistics
+						             recorded exactly once call to Directory.GetDirectoryRoot,
+						             but it was recorded 0 times
+						             """);
+				}
+			}
+
 #if NET8_0_OR_GREATER
 			public sealed class CreateSymbolicLinkTests
 			{
