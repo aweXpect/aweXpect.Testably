@@ -31,25 +31,6 @@ public sealed partial class FileSystem
 			}
 
 			[Fact]
-			public async Task WhenLiveEventMatchesPredicate_ShouldSucceedWithinTimeout()
-			{
-				MockFileSystem sut = new();
-				_ = Task.Run(async () =>
-				{
-					await Task.Delay(20);
-					sut.File.WriteAllText("foo.txt", "x");
-				});
-
-				async Task Act()
-				{
-					await That(sut).TriggeredNotification(c => c.Name == "foo.txt")
-						.Within(TimeSpan.FromSeconds(30));
-				}
-
-				await That(Act).DoesNotThrow();
-			}
-
-			[Fact]
 			public async Task WhenLiveEventDoesNotMatchPredicate_ShouldFailAfterTimeout()
 			{
 				MockFileSystem sut = new();
@@ -71,26 +52,6 @@ public sealed partial class FileSystem
 					             triggered a notification matching c => c.Name == "other.txt" at least once within 0:00.100,
 					             but it was not triggered
 					             """);
-			}
-
-			[Fact]
-			public async Task WhenLiveEventMatchesWhich_ShouldSucceedWithinTimeout()
-			{
-				MockFileSystem sut = new();
-				_ = Task.Run(async () =>
-				{
-					await Task.Delay(20);
-					sut.File.WriteAllText("foo.txt", "x");
-				});
-
-				async Task Act()
-				{
-					await That(sut).TriggeredNotification()
-						.Which(c => c.HasName("foo.txt"))
-						.Within(TimeSpan.FromSeconds(30));
-				}
-
-				await That(Act).DoesNotThrow();
 			}
 
 			[Fact]
@@ -116,6 +77,45 @@ public sealed partial class FileSystem
 					             triggered a notification which has name equal to "other.txt" at least once within 0:00.100,
 					             but it was not triggered
 					             """);
+			}
+
+			[Fact]
+			public async Task WhenLiveEventMatchesPredicate_ShouldSucceedWithinTimeout()
+			{
+				MockFileSystem sut = new();
+				_ = Task.Run(async () =>
+				{
+					await Task.Delay(20);
+					sut.File.WriteAllText("foo.txt", "x");
+				});
+
+				async Task Act()
+				{
+					await That(sut).TriggeredNotification(c => c.Name == "foo.txt")
+						.Within(TimeSpan.FromSeconds(30));
+				}
+
+				await That(Act).DoesNotThrow();
+			}
+
+			[Fact]
+			public async Task WhenLiveEventMatchesWhich_ShouldSucceedWithinTimeout()
+			{
+				MockFileSystem sut = new();
+				_ = Task.Run(async () =>
+				{
+					await Task.Delay(20);
+					sut.File.WriteAllText("foo.txt", "x");
+				});
+
+				async Task Act()
+				{
+					await That(sut).TriggeredNotification()
+						.Which(c => c.HasName("foo.txt"))
+						.Within(TimeSpan.FromSeconds(30));
+				}
+
+				await That(Act).DoesNotThrow();
 			}
 
 			[Fact]
@@ -172,8 +172,12 @@ public sealed partial class FileSystem
 			public async Task WhichWithInnerExpectation_ComposesWithQuantifier()
 			{
 				MockFileSystem sut = new();
+				using IAwaitableCallback<ChangeDescription> reg = sut.Notify.OnEvent(
+					_ => { },
+					c => c.ChangeType == WatcherChangeTypes.Created);
 				sut.File.WriteAllText("a.txt", "x");
 				sut.File.WriteAllText("b.txt", "x");
+				_ = reg.Wait(2, TimeSpan.FromSeconds(30));
 
 				async Task Act()
 				{
@@ -240,16 +244,12 @@ public sealed partial class FileSystem
 			public async Task WithExactlyOnce_WhenTriggeredTwice_ShouldFail()
 			{
 				MockFileSystem sut = new();
-				List<ChangeDescription> created = new();
-				using IAwaitableCallback<ChangeDescription> reg = sut.Notify.OnEvent(c =>
-				{
-					if (c.ChangeType == WatcherChangeTypes.Created)
-					{
-						created.Add(c);
-					}
-				});
+				using IAwaitableCallback<ChangeDescription> reg = sut.Notify.OnEvent(
+					_ => { },
+					c => c.ChangeType == WatcherChangeTypes.Created);
 				sut.File.WriteAllText("a.txt", "x");
 				sut.File.WriteAllText("b.txt", "x");
+				ChangeDescription[] created = reg.Wait(2, TimeSpan.FromSeconds(30));
 
 				async Task Act()
 				{
@@ -273,7 +273,11 @@ public sealed partial class FileSystem
 			public async Task WithPredicate_NarrowsAssertion()
 			{
 				MockFileSystem sut = new();
+				using IAwaitableCallback<ChangeDescription> reg = sut.Notify.OnEvent(
+					_ => { },
+					c => c.ChangeType == WatcherChangeTypes.Created);
 				sut.File.WriteAllText("foo.txt", "x");
+				_ = reg.Wait(1, TimeSpan.FromSeconds(30));
 
 				async Task Act()
 				{
