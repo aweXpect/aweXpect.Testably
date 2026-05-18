@@ -35,7 +35,7 @@ public sealed partial class Statistics
 					async Task Act()
 					{
 						await That(fileSystem.Statistics).Recorded()
-							.DriveInfo.New(driveName: n => n == "C:").Once();
+							.DriveInfo.New(n => n == "C:").Once();
 					}
 
 					await That(Act).DoesNotThrow();
@@ -56,6 +56,129 @@ public sealed partial class Statistics
 					{
 						await That(fileSystem.Statistics).Recorded()
 							.DriveInfo["C:"].Name.Get().Once();
+					}
+
+					await That(Act).DoesNotThrow();
+				}
+			}
+
+			public sealed class PropertyTests
+			{
+				[Fact]
+				public async Task AvailableFreeSpace_Get_ShouldRecord()
+				{
+					MockFileSystem fileSystem = new(o => o.SimulatingOperatingSystem(SimulationMode.Windows));
+					_ = fileSystem.DriveInfo.New("C:").AvailableFreeSpace;
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.DriveInfo["C:"].AvailableFreeSpace.Get().Once();
+					}
+
+					await That(Act).DoesNotThrow();
+				}
+
+				[Fact]
+				public async Task DriveFormat_Get_ShouldRecord()
+				{
+					MockFileSystem fileSystem = new(o => o.SimulatingOperatingSystem(SimulationMode.Windows));
+					_ = fileSystem.DriveInfo.New("C:").DriveFormat;
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.DriveInfo["C:"].DriveFormat.Get().Once();
+					}
+
+					await That(Act).DoesNotThrow();
+				}
+
+				[Fact]
+				public async Task DriveType_Get_ShouldRecord()
+				{
+					MockFileSystem fileSystem = new(o => o.SimulatingOperatingSystem(SimulationMode.Windows));
+					_ = fileSystem.DriveInfo.New("C:").DriveType;
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.DriveInfo["C:"].DriveType.Get().Once();
+					}
+
+					await That(Act).DoesNotThrow();
+				}
+
+				[Fact]
+				public async Task IsReady_Get_ShouldRecord()
+				{
+					MockFileSystem fileSystem = new(o => o.SimulatingOperatingSystem(SimulationMode.Windows));
+					_ = fileSystem.DriveInfo.New("C:").IsReady;
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.DriveInfo["C:"].IsReady.Get().Once();
+					}
+
+					await That(Act).DoesNotThrow();
+				}
+
+				[Fact]
+				public async Task RootDirectory_Get_ShouldRecord()
+				{
+					MockFileSystem fileSystem = new(o => o.SimulatingOperatingSystem(SimulationMode.Windows));
+					_ = fileSystem.DriveInfo.New("C:").RootDirectory;
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.DriveInfo["C:"].RootDirectory.Get().Once();
+					}
+
+					await That(Act).DoesNotThrow();
+				}
+
+				[Fact]
+				public async Task TotalFreeSpace_Get_ShouldRecord()
+				{
+					MockFileSystem fileSystem = new(o => o.SimulatingOperatingSystem(SimulationMode.Windows));
+					_ = fileSystem.DriveInfo.New("C:").TotalFreeSpace;
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.DriveInfo["C:"].TotalFreeSpace.Get().Once();
+					}
+
+					await That(Act).DoesNotThrow();
+				}
+
+				[Fact]
+				public async Task TotalSize_Get_ShouldRecord()
+				{
+					MockFileSystem fileSystem = new(o => o.SimulatingOperatingSystem(SimulationMode.Windows));
+					_ = fileSystem.DriveInfo.New("C:").TotalSize;
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.DriveInfo["C:"].TotalSize.Get().Once();
+					}
+
+					await That(Act).DoesNotThrow();
+				}
+
+				[Fact]
+				public async Task VolumeLabel_Get_ShouldRecord()
+				{
+					MockFileSystem fileSystem = new(o => o.SimulatingOperatingSystem(SimulationMode.Windows));
+					_ = fileSystem.DriveInfo.New("C:").VolumeLabel;
+
+					async Task Act()
+					{
+						await That(fileSystem.Statistics).Recorded()
+							.DriveInfo["C:"].VolumeLabel.Get().Once();
 					}
 
 					await That(Act).DoesNotThrow();
