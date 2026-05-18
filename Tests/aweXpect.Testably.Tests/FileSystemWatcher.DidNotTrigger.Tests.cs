@@ -34,8 +34,9 @@ public sealed partial class FileSystemWatcher
 			public async Task WhenEventFired_ShouldFail()
 			{
 				MockFileSystem fs = new();
-				fs.Directory.CreateDirectory("/");
-				using IFileSystemWatcher sut = fs.FileSystemWatcher.New("/");
+				fs.Directory.CreateDirectory("/x");
+				fs.Directory.SetCurrentDirectory("/x");
+				using IFileSystemWatcher sut = fs.FileSystemWatcher.New("/x");
 				sut.EnableRaisingEvents = true;
 				using IAwaitableCallback<WatcherChangeDescription> reg = fs.Watcher.OnTriggered(
 					_ => { },
@@ -62,8 +63,9 @@ public sealed partial class FileSystemWatcher
 			public async Task WhenNoEvent_ShouldSucceed()
 			{
 				MockFileSystem fs = new();
-				fs.Directory.CreateDirectory("/");
-				using IFileSystemWatcher sut = fs.FileSystemWatcher.New("/");
+				fs.Directory.CreateDirectory("/x");
+				fs.Directory.SetCurrentDirectory("/x");
+				using IFileSystemWatcher sut = fs.FileSystemWatcher.New("/x");
 				sut.EnableRaisingEvents = true;
 
 				async Task Act()
@@ -78,8 +80,9 @@ public sealed partial class FileSystemWatcher
 			public async Task WhichWithInnerExpectation_WhenMatchingChange_ShouldFail()
 			{
 				MockFileSystem fs = new();
-				fs.Directory.CreateDirectory("/");
-				using IFileSystemWatcher sut = fs.FileSystemWatcher.New("/");
+				fs.Directory.CreateDirectory("/x");
+				fs.Directory.SetCurrentDirectory("/x");
+				using IFileSystemWatcher sut = fs.FileSystemWatcher.New("/x");
 				sut.EnableRaisingEvents = true;
 				using IAwaitableCallback<WatcherChangeDescription> reg = fs.Watcher.OnTriggered(
 					_ => { },
@@ -107,8 +110,9 @@ public sealed partial class FileSystemWatcher
 			public async Task WhichWithInnerExpectation_WhenNoMatchingChange_ShouldSucceed()
 			{
 				MockFileSystem fs = new();
-				fs.Directory.CreateDirectory("/");
-				using IFileSystemWatcher sut = fs.FileSystemWatcher.New("/");
+				fs.Directory.CreateDirectory("/x");
+				fs.Directory.SetCurrentDirectory("/x");
+				using IFileSystemWatcher sut = fs.FileSystemWatcher.New("/x");
 				sut.EnableRaisingEvents = true;
 				fs.File.WriteAllText("foo.txt", "x");
 
@@ -126,8 +130,9 @@ public sealed partial class FileSystemWatcher
 			public async Task WhichWithNullExpectation_ShouldThrowArgumentNullException()
 			{
 				MockFileSystem fs = new();
-				fs.Directory.CreateDirectory("/");
-				using IFileSystemWatcher sut = fs.FileSystemWatcher.New("/");
+				fs.Directory.CreateDirectory("/x");
+				fs.Directory.SetCurrentDirectory("/x");
+				using IFileSystemWatcher sut = fs.FileSystemWatcher.New("/x");
 				sut.EnableRaisingEvents = true;
 
 				async Task Act()
@@ -143,8 +148,9 @@ public sealed partial class FileSystemWatcher
 			public async Task WithPredicate_WhenMatchingEvent_ShouldFail()
 			{
 				MockFileSystem fs = new();
-				fs.Directory.CreateDirectory("/");
-				using IFileSystemWatcher sut = fs.FileSystemWatcher.New("/");
+				fs.Directory.CreateDirectory("/x");
+				fs.Directory.SetCurrentDirectory("/x");
+				using IFileSystemWatcher sut = fs.FileSystemWatcher.New("/x");
 				sut.EnableRaisingEvents = true;
 				using IAwaitableCallback<WatcherChangeDescription> reg = fs.Watcher.OnTriggered(
 					_ => { },
@@ -171,8 +177,9 @@ public sealed partial class FileSystemWatcher
 			public async Task WithPredicate_WhenNoMatchingEvent_ShouldSucceed()
 			{
 				MockFileSystem fs = new();
-				fs.Directory.CreateDirectory("/");
-				using IFileSystemWatcher sut = fs.FileSystemWatcher.New("/");
+				fs.Directory.CreateDirectory("/x");
+				fs.Directory.SetCurrentDirectory("/x");
+				using IFileSystemWatcher sut = fs.FileSystemWatcher.New("/x");
 				sut.EnableRaisingEvents = true;
 				fs.File.WriteAllText("foo.txt", "x");
 
