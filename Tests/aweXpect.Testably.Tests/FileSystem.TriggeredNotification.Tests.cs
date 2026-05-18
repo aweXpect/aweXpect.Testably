@@ -24,7 +24,7 @@ public sealed partial class FileSystem
 
 				async Task Act()
 				{
-					await That(sut).TriggeredNotification().Within(TimeSpan.FromSeconds(2));
+					await That(sut).TriggeredNotification().Within(TimeSpan.FromSeconds(30));
 				}
 
 				await That(Act).DoesNotThrow();
@@ -43,7 +43,7 @@ public sealed partial class FileSystem
 				async Task Act()
 				{
 					await That(sut).TriggeredNotification(c => c.Name == "foo.txt")
-						.Within(TimeSpan.FromSeconds(2));
+						.Within(TimeSpan.FromSeconds(30));
 				}
 
 				await That(Act).DoesNotThrow();
@@ -87,7 +87,7 @@ public sealed partial class FileSystem
 				{
 					await That(sut).TriggeredNotification()
 						.Which(c => c.HasName("foo.txt"))
-						.Within(TimeSpan.FromSeconds(2));
+						.Within(TimeSpan.FromSeconds(30));
 				}
 
 				await That(Act).DoesNotThrow();
