@@ -230,3 +230,27 @@ await That(change).HasNotifyFilters(NotifyFilters.LastWrite);
 await That(change).HasName("my-file.txt").And.HasPath("/abs/my-file.txt");
 await That(renamedChange).HasOldName("old.txt").And.HasOldPath("/abs/old.txt");
 ```
+
+## Time system
+
+### Timers
+
+A `MockTimeSystem` exposes timers as `ITimerMock`. You can assert how often the
+timer callback was executed without blocking the test thread:
+
+```csharp
+MockTimeSystem timeSystem = new();
+ITimerMock timer = (ITimerMock)timeSystem.Timer.New(
+    _ => { }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(10));
+
+await That(timer).Executed(3.Times()).Within(5.Seconds());
+```
+
+`Executed()` accepts a `Quantifier` (`AtLeast`, `AtMost`, `Exactly`,
+`Between`, …) and exposes `.Within(timeout)` for asynchronous execution. The
+assertion polls `ITimerMock.ExecutionCount` until the quantifier is satisfied
+or the timeout expires — 30 seconds by default.
+
+```csharp
+await That(timer).Executed().AtLeast(2.Times()).Within(100.Milliseconds());
+```
