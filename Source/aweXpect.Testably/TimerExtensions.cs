@@ -22,20 +22,6 @@ public static class TimerExtensions
 		this IThat<ITimerMock> subject)
 		=> ExecutedCore(subject, null);
 
-	/// <summary>
-	///     Verifies that the <see cref="ITimerMock" /> callback was executed exactly
-	///     <paramref name="times" />.
-	/// </summary>
-	/// <remarks>
-	///     Convenience for <c>.Executed().Exactly(times)</c>. Polls
-	///     <see cref="ITimerMock.ExecutionCount" /> until either the quantifier is satisfied or the
-	///     timeout expires — 30 seconds by default; use <c>.Within(timeout)</c> to override.
-	/// </remarks>
-	public static TimerExecutedResult Executed(
-		this IThat<ITimerMock> subject,
-		Times times)
-		=> ExecutedCore(subject, times);
-
 	private static TimerExecutedResult ExecutedCore(
 		IThat<ITimerMock> subject,
 		Times? times)
