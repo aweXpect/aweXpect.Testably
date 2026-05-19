@@ -20,6 +20,17 @@ public static partial class FileInfoExtensions
 				=> new HasAttributeConstraint(it, grammars, expected)),
 			source);
 
+	/// <summary>
+	///     Verifies that the <see cref="IFileInfo" /> does not have the <paramref name="unexpected" />
+	///     <see cref="FileAttributes" />.
+	/// </summary>
+	public static AndOrResult<IFileInfo, IThat<IFileInfo>> DoesNotHaveAttribute(this IThat<IFileInfo> source,
+		FileAttributes unexpected)
+		=> new(
+			source.Get().ExpectationBuilder.AddConstraint((it, grammars)
+				=> new HasAttributeConstraint(it, grammars, unexpected).Invert()),
+			source);
+
 	private sealed class HasAttributeConstraint(string it, ExpectationGrammars grammars, FileAttributes expected)
 		: ConstraintResult.WithValue<IFileInfo>(grammars),
 			IValueConstraint<IFileInfo>
