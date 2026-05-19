@@ -83,6 +83,11 @@ namespace aweXpect.Testably
     {
         public static aweXpect.Testably.Recorded.RecordedFileSystemStatistics Recorded(this aweXpect.Core.IThat<Testably.Abstractions.Testing.Statistics.IFileSystemStatistics> subject) { }
     }
+    public static class TimerExtensions
+    {
+        public static aweXpect.Testably.Results.TimerExecutedResult Executed(this aweXpect.Core.IThat<Testably.Abstractions.Testing.TimeSystem.ITimerMock> subject) { }
+        public static aweXpect.Testably.Results.TimerExecutedResult Executed(this aweXpect.Core.IThat<Testably.Abstractions.Testing.TimeSystem.ITimerMock> subject, aweXpect.Core.Times times) { }
+    }
 }
 namespace aweXpect.Testably.Recorded
 {
@@ -456,6 +461,10 @@ namespace aweXpect.Testably.Results
     }
     public sealed class RecordedMethodCallResult : aweXpect.Results.CountResult<Testably.Abstractions.Testing.Statistics.IFileSystemStatistics, aweXpect.Core.IThat<Testably.Abstractions.Testing.Statistics.IFileSystemStatistics>, aweXpect.Testably.Results.RecordedMethodCallResult> { }
     public sealed class RecordedPropertyAccessResult : aweXpect.Results.CountResult<Testably.Abstractions.Testing.Statistics.IFileSystemStatistics, aweXpect.Core.IThat<Testably.Abstractions.Testing.Statistics.IFileSystemStatistics>, aweXpect.Testably.Results.RecordedPropertyAccessResult> { }
+    public class TimerExecutedResult : aweXpect.Results.CountResult<Testably.Abstractions.Testing.TimeSystem.ITimerMock, aweXpect.Core.IThat<Testably.Abstractions.Testing.TimeSystem.ITimerMock>, aweXpect.Testably.Results.TimerExecutedResult>
+    {
+        public aweXpect.Testably.Results.TimerExecutedResult Within(System.TimeSpan timeout) { }
+    }
     public class TriggeredNotificationResult : aweXpect.Results.CountResult<Testably.Abstractions.Testing.MockFileSystem, aweXpect.Core.IThat<Testably.Abstractions.Testing.MockFileSystem>, aweXpect.Testably.Results.TriggeredNotificationResult>
     {
         public aweXpect.Testably.Results.TriggeredNotificationResult Which(System.Action<aweXpect.Core.IThat<Testably.Abstractions.Testing.FileSystem.ChangeDescription>> expectation) { }
