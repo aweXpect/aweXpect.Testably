@@ -47,6 +47,23 @@ public sealed partial class FileInfo
 
 				await That(Act).DoesNotThrow();
 			}
+
+			[Fact]
+			public async Task WhenExpectedIsDefault_ShouldThrowArgumentException()
+			{
+				MockFileSystem fileSystem = new();
+				string path = "foo.txt";
+				fileSystem.File.WriteAllText(path, "");
+				IFileInfo fileInfo = fileSystem.FileInfo.New(path);
+
+				async Task Act()
+				{
+					await That(fileInfo).HasAttribute(default);
+				}
+
+				await That(Act).Throws<ArgumentException>()
+					.WithParamName("expected");
+			}
 		}
 	}
 }
