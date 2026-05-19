@@ -121,7 +121,11 @@ public sealed class Timer
 				}
 
 				await That(Act).ThrowsException()
-					.WithMessage("*did not execute at least once within 0:00.100*").AsWildcard();
+					.WithMessage("""
+					             Expected that sut
+					             did not execute at least once within 0:00.100,
+					             but it was executed *
+					             """).AsWildcard();
 			}
 
 			[Fact]
@@ -143,7 +147,11 @@ public sealed class Timer
 				}
 
 				await That(Act).ThrowsException()
-					.WithMessage("*did not execute at least 3 times within 0:00.100*").AsWildcard();
+					.WithMessage("""
+					             Expected that sut
+					             did not execute at least 3 times within 0:00.100,
+					             but it was executed *
+					             """).AsWildcard();
 			}
 
 			[Fact]
