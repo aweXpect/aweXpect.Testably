@@ -82,6 +82,22 @@ namespace aweXpect.Testably
         public static aweXpect.Testably.Results.TriggeredWatcherResult Triggered(this aweXpect.Core.IThat<System.IO.Abstractions.IFileSystemWatcher> subject) { }
         public static aweXpect.Testably.Results.TriggeredWatcherResult Triggered(this aweXpect.Core.IThat<System.IO.Abstractions.IFileSystemWatcher> subject, System.Func<Testably.Abstractions.Testing.FileSystem.WatcherChangeDescription, bool> predicate, [System.Runtime.CompilerServices.CallerArgumentExpression("predicate")] string doNotPopulateThisValue = "") { }
     }
+    public static class FileVersionInfoExtensions
+    {
+        public static aweXpect.Results.StringEqualityTypeResult<System.IO.Abstractions.IFileVersionInfo, aweXpect.Core.IThat<System.IO.Abstractions.IFileVersionInfo>> HasCompanyName(this aweXpect.Core.IThat<System.IO.Abstractions.IFileVersionInfo> source, string? expected) { }
+        public static aweXpect.Results.StringEqualityTypeResult<System.IO.Abstractions.IFileVersionInfo, aweXpect.Core.IThat<System.IO.Abstractions.IFileVersionInfo>> HasFileDescription(this aweXpect.Core.IThat<System.IO.Abstractions.IFileVersionInfo> source, string? expected) { }
+        public static aweXpect.Results.StringEqualityTypeResult<System.IO.Abstractions.IFileVersionInfo, aweXpect.Core.IThat<System.IO.Abstractions.IFileVersionInfo>> HasFileVersion(this aweXpect.Core.IThat<System.IO.Abstractions.IFileVersionInfo> source, string? expected) { }
+        public static aweXpect.Results.StringEqualityTypeResult<System.IO.Abstractions.IFileVersionInfo, aweXpect.Core.IThat<System.IO.Abstractions.IFileVersionInfo>> HasLanguage(this aweXpect.Core.IThat<System.IO.Abstractions.IFileVersionInfo> source, string? expected) { }
+        public static aweXpect.Results.StringEqualityTypeResult<System.IO.Abstractions.IFileVersionInfo, aweXpect.Core.IThat<System.IO.Abstractions.IFileVersionInfo>> HasOriginalFilename(this aweXpect.Core.IThat<System.IO.Abstractions.IFileVersionInfo> source, string? expected) { }
+        public static aweXpect.Results.StringEqualityTypeResult<System.IO.Abstractions.IFileVersionInfo, aweXpect.Core.IThat<System.IO.Abstractions.IFileVersionInfo>> HasProductName(this aweXpect.Core.IThat<System.IO.Abstractions.IFileVersionInfo> source, string? expected) { }
+        public static aweXpect.Results.StringEqualityTypeResult<System.IO.Abstractions.IFileVersionInfo, aweXpect.Core.IThat<System.IO.Abstractions.IFileVersionInfo>> HasProductVersion(this aweXpect.Core.IThat<System.IO.Abstractions.IFileVersionInfo> source, string? expected) { }
+        public static aweXpect.Results.AndOrResult<System.IO.Abstractions.IFileVersionInfo, aweXpect.Core.IThat<System.IO.Abstractions.IFileVersionInfo>> IsDebug(this aweXpect.Core.IThat<System.IO.Abstractions.IFileVersionInfo> source) { }
+        public static aweXpect.Results.AndOrResult<System.IO.Abstractions.IFileVersionInfo, aweXpect.Core.IThat<System.IO.Abstractions.IFileVersionInfo>> IsNotDebug(this aweXpect.Core.IThat<System.IO.Abstractions.IFileVersionInfo> source) { }
+        public static aweXpect.Results.AndOrResult<System.IO.Abstractions.IFileVersionInfo, aweXpect.Core.IThat<System.IO.Abstractions.IFileVersionInfo>> IsNotPatched(this aweXpect.Core.IThat<System.IO.Abstractions.IFileVersionInfo> source) { }
+        public static aweXpect.Results.AndOrResult<System.IO.Abstractions.IFileVersionInfo, aweXpect.Core.IThat<System.IO.Abstractions.IFileVersionInfo>> IsNotPreRelease(this aweXpect.Core.IThat<System.IO.Abstractions.IFileVersionInfo> source) { }
+        public static aweXpect.Results.AndOrResult<System.IO.Abstractions.IFileVersionInfo, aweXpect.Core.IThat<System.IO.Abstractions.IFileVersionInfo>> IsPatched(this aweXpect.Core.IThat<System.IO.Abstractions.IFileVersionInfo> source) { }
+        public static aweXpect.Results.AndOrResult<System.IO.Abstractions.IFileVersionInfo, aweXpect.Core.IThat<System.IO.Abstractions.IFileVersionInfo>> IsPreRelease(this aweXpect.Core.IThat<System.IO.Abstractions.IFileVersionInfo> source) { }
+    }
     public static class StatisticsExtensions
     {
         public static aweXpect.Testably.Recorded.RecordedFileSystemStatistics Recorded(this aweXpect.Core.IThat<Testably.Abstractions.Testing.Statistics.IFileSystemStatistics> subject) { }

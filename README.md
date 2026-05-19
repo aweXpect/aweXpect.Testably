@@ -106,6 +106,36 @@ await That(fileSystem).HasFile("my-file.txt").Which.HasLength(12).And.HasContent
 await That(fileSystem).HasDirectory("logs").Which.IsEmpty();
 ```
 
+### IFileVersionInfo
+
+`IFileVersionInfo` instances obtained via `MockFileSystem.FileVersionInfo.GetVersionInfo`
+can be asserted directly. The configured values come from
+`MockFileSystem.WithFileVersionInfo(glob, builder)`:
+
+```csharp
+MockFileSystem fileSystem = new();
+fileSystem.WithFileVersionInfo("*.dll", v => v
+    .SetCompanyName("Acme")
+    .SetProductName("Anvil")
+    .SetFileVersion("1.2.3.4")
+    .SetIsDebug(true));
+fileSystem.File.WriteAllText("Acme.dll", "");
+
+IFileVersionInfo info = fileSystem.FileVersionInfo.GetVersionInfo("Acme.dll");
+
+await That(info).HasCompanyName("Acme").And.HasProductName("Anvil");
+await That(info).HasFileVersion("1.2.3.4");
+await That(info).IsDebug().And.IsNotPreRelease();
+```
+
+The following common fields have dedicated assertions:
+`HasCompanyName`, `HasProductName`, `HasFileDescription`, `HasFileVersion`,
+`HasProductVersion`, `HasOriginalFilename`, `HasLanguage`, plus the bool pairs
+`IsDebug` / `IsNotDebug`, `IsPreRelease` / `IsNotPreRelease`,
+`IsPatched` / `IsNotPatched`. For the remaining properties (e.g. `Comments`,
+`LegalCopyright`, `FileMajorPart`), assert on them directly via
+`await That(info.LegalCopyright).IsEqualTo("…")`.
+
 ### Notifications
 
 A `MockFileSystem` raises notifications when files or directories change. Run
