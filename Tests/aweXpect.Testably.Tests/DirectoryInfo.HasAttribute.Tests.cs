@@ -20,13 +20,13 @@ public sealed partial class DirectoryInfo
 
 				async Task Act()
 				{
-					await That(dirInfo).HasAttribute(FileAttributes.Hidden);
+					await That(dirInfo).HasAttribute(FileAttributes.ReadOnly);
 				}
 
 				await That(Act).ThrowsException()
 					.WithMessage("""
 					             Expected that dirInfo
-					             has attribute Hidden,
+					             has attribute ReadOnly,
 					             but it was Directory
 					             """);
 			}
@@ -37,12 +37,11 @@ public sealed partial class DirectoryInfo
 				MockFileSystem fileSystem = new();
 				string path = "foo";
 				fileSystem.Directory.CreateDirectory(path);
-				fileSystem.File.SetAttributes(path, FileAttributes.Directory | FileAttributes.Hidden);
 				IDirectoryInfo dirInfo = fileSystem.DirectoryInfo.New(path);
 
 				async Task Act()
 				{
-					await That(dirInfo).HasAttribute(FileAttributes.Hidden);
+					await That(dirInfo).HasAttribute(FileAttributes.Directory);
 				}
 
 				await That(Act).DoesNotThrow();
