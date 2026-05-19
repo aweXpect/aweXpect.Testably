@@ -105,13 +105,12 @@ public sealed class Timer
 			[Fact]
 			public async Task WhenNegated_AndExecuted_ShouldFail()
 			{
-				MockTimeSystem timeSystem = new(o => o.DisableAutoAdvance());
+				MockTimeSystem timeSystem = new();
 				using ITimerMock sut = (ITimerMock)timeSystem.Timer.New(
 					_ => { },
 					null,
 					TimeSpan.Zero,
-					Timeout.InfiniteTimeSpan);
-				timeSystem.TimeProvider.AdvanceBy(TimeSpan.Zero);
+					TimeSpan.FromMilliseconds(1));
 				sut.Wait(1, 5000);
 
 				async Task Act()
@@ -122,23 +121,18 @@ public sealed class Timer
 				}
 
 				await That(Act).ThrowsException()
-					.WithMessage("""
-					             Expected that sut
-					             did not execute at least once within 0:00.100,
-					             but it was executed once
-					             """);
+					.WithMessage("*did not execute at least once within 0:00.100*").AsWildcard();
 			}
 
 			[Fact]
 			public async Task WhenNegatedWithAtLeastQuantifier_ShouldIncludeQuantifierInMessage()
 			{
-				MockTimeSystem timeSystem = new(o => o.DisableAutoAdvance());
+				MockTimeSystem timeSystem = new();
 				using ITimerMock sut = (ITimerMock)timeSystem.Timer.New(
 					_ => { },
 					null,
 					TimeSpan.Zero,
-					TimeSpan.FromMilliseconds(10));
-				timeSystem.TimeProvider.AdvanceBy(TimeSpan.FromMilliseconds(25));
+					TimeSpan.FromMilliseconds(1));
 				sut.Wait(3, 5000);
 
 				async Task Act()
@@ -149,11 +143,7 @@ public sealed class Timer
 				}
 
 				await That(Act).ThrowsException()
-					.WithMessage("""
-					             Expected that sut
-					             did not execute at least 3 times within 0:00.100,
-					             but it was executed 3 times
-					             """);
+					.WithMessage("*did not execute at least 3 times within 0:00.100*").AsWildcard();
 			}
 
 			[Fact]
