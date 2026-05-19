@@ -59,29 +59,6 @@ public partial class FileResult<TParent>
 			this);
 
 	/// <summary>
-	///     Verifies that the string content of the file satisfies the <paramref name="expectations" />.
-	/// </summary>
-	public StringEqualityTypeResult<TParent, FileResult<TParent>> WhoseContent(
-		Action<IThat<string?>> expectations)
-	{
-		StringEqualityOptions options = new();
-		Func<TParent, (IFileSystem fs, string fullPath)> resolver = _resolver;
-		return new StringEqualityTypeResult<TParent, FileResult<TParent>>(
-			_expectationBuilder
-				.ForMember(
-					MemberAccessor<TParent, string>.FromFunc(
-						p =>
-						{
-							(IFileSystem fs, string fullPath) = resolver(p);
-							return fs.File.ReadAllText(fullPath);
-						},
-						"content "),
-					(member, expectation) => expectation.Append(" whose ").Append(member))
-				.AddExpectations(e => expectations(new ThatSubject<string?>(e))),
-			this, options);
-	}
-
-	/// <summary>
 	///     Verifies that the creation time of the file matches the <paramref name="expected" /> value.
 	/// </summary>
 	/// <remarks>
