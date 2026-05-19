@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.IO.Abstractions;
 using System.Text;
@@ -15,10 +16,37 @@ public static partial class FileInfoExtensions
 	/// </summary>
 	public static AndOrResult<IFileInfo, IThat<IFileInfo>> HasAttribute(this IThat<IFileInfo> source,
 		FileAttributes expected)
-		=> new(
+	{
+		if (expected == default)
+		{
+			throw new ArgumentException(
+				"The expected file attributes must include at least one flag.", nameof(expected));
+		}
+
+		return new AndOrResult<IFileInfo, IThat<IFileInfo>>(
 			source.Get().ExpectationBuilder.AddConstraint((it, grammars)
 				=> new HasAttributeConstraint(it, grammars, expected)),
 			source);
+	}
+
+	/// <summary>
+	///     Verifies that the <see cref="IFileInfo" /> does not have the <paramref name="unexpected" />
+	///     <see cref="FileAttributes" />.
+	/// </summary>
+	public static AndOrResult<IFileInfo, IThat<IFileInfo>> DoesNotHaveAttribute(this IThat<IFileInfo> source,
+		FileAttributes unexpected)
+	{
+		if (unexpected == default)
+		{
+			throw new ArgumentException(
+				"The unexpected file attributes must include at least one flag.", nameof(unexpected));
+		}
+
+		return new AndOrResult<IFileInfo, IThat<IFileInfo>>(
+			source.Get().ExpectationBuilder.AddConstraint((it, grammars)
+				=> new HasAttributeConstraint(it, grammars, unexpected).Invert()),
+			source);
+	}
 
 	private sealed class HasAttributeConstraint(string it, ExpectationGrammars grammars, FileAttributes expected)
 		: ConstraintResult.WithValue<IFileInfo>(grammars),

@@ -6,12 +6,12 @@ namespace aweXpect.Testably.Tests;
 
 public sealed partial class FileInfo
 {
-	public sealed class HasAttribute
+	public sealed class DoesNotHaveAttribute
 	{
 		public sealed class Tests
 		{
 			[Fact]
-			public async Task WhenAttributeIsAbsent_ShouldFail()
+			public async Task WhenAttributeIsAbsent_ShouldSucceed()
 			{
 				MockFileSystem fileSystem = new();
 				string path = "foo.txt";
@@ -20,19 +20,14 @@ public sealed partial class FileInfo
 
 				async Task Act()
 				{
-					await That(fileInfo).HasAttribute(FileAttributes.ReadOnly);
+					await That(fileInfo).DoesNotHaveAttribute(FileAttributes.ReadOnly);
 				}
 
-				await That(Act).ThrowsException()
-					.WithMessage("""
-					             Expected that fileInfo
-					             has attribute ReadOnly,
-					             but it was Normal
-					             """);
+				await That(Act).DoesNotThrow();
 			}
 
 			[Fact]
-			public async Task WhenAttributeIsPresent_ShouldSucceed()
+			public async Task WhenAttributeIsPresent_ShouldFail()
 			{
 				MockFileSystem fileSystem = new();
 				string path = "foo.txt";
@@ -42,14 +37,33 @@ public sealed partial class FileInfo
 
 				async Task Act()
 				{
-					await That(fileInfo).HasAttribute(FileAttributes.ReadOnly);
+					await That(fileInfo).DoesNotHaveAttribute(FileAttributes.ReadOnly);
+				}
+
+				await That(Act).ThrowsException()
+					.WithMessage("""
+					             Expected that fileInfo
+					             does not have attribute ReadOnly,
+					             but it did
+					             """);
+			}
+
+			[Fact]
+			public async Task WhenFileDoesNotExist_ShouldSucceed()
+			{
+				MockFileSystem fileSystem = new();
+				IFileInfo fileInfo = fileSystem.FileInfo.New("foo.txt");
+
+				async Task Act()
+				{
+					await That(fileInfo).DoesNotHaveAttribute(FileAttributes.ReadOnly);
 				}
 
 				await That(Act).DoesNotThrow();
 			}
 
 			[Fact]
-			public async Task WhenExpectedIsDefault_ShouldThrowArgumentException()
+			public async Task WhenUnexpectedIsDefault_ShouldThrowArgumentException()
 			{
 				MockFileSystem fileSystem = new();
 				string path = "foo.txt";
@@ -58,11 +72,11 @@ public sealed partial class FileInfo
 
 				async Task Act()
 				{
-					await That(fileInfo).HasAttribute(default);
+					await That(fileInfo).DoesNotHaveAttribute(default);
 				}
 
 				await That(Act).Throws<ArgumentException>()
-					.WithParamName("expected");
+					.WithParamName("unexpected");
 			}
 		}
 	}

@@ -43,6 +43,7 @@ namespace aweXpect.Testably
     public static class FileInfoExtensions
     {
         public static aweXpect.Results.AndOrResult<System.IO.Abstractions.IFileInfo, aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo>> DoesNotExist(this aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo> source) { }
+        public static aweXpect.Results.AndOrResult<System.IO.Abstractions.IFileInfo, aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo>> DoesNotHaveAttribute(this aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo> source, System.IO.FileAttributes unexpected) { }
         public static aweXpect.Results.AndOrResult<System.IO.Abstractions.IFileInfo, aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo>> Exists(this aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo> source) { }
         public static aweXpect.Results.AndOrResult<System.IO.Abstractions.IFileInfo, aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo>> HasAttribute(this aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo> source, System.IO.FileAttributes expected) { }
         public static aweXpect.Testably.Results.FileInfoContentResult HasContent(this aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo> source) { }
