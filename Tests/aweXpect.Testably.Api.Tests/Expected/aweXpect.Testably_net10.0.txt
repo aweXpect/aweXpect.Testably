@@ -47,6 +47,18 @@ namespace aweXpect.Testably
             public aweXpect.Core.IThat<System.IO.Abstractions.IDirectoryInfo> WhoseParent { get; }
         }
     }
+    public static class DriveInfoExtensions
+    {
+        public static aweXpect.Results.AndOrResult<System.IO.Abstractions.IDriveInfo, aweXpect.Core.IThat<System.IO.Abstractions.IDriveInfo>> HasAvailableFreeSpace(this aweXpect.Core.IThat<System.IO.Abstractions.IDriveInfo> source, long expected) { }
+        public static aweXpect.Results.StringEqualityTypeResult<System.IO.Abstractions.IDriveInfo, aweXpect.Core.IThat<System.IO.Abstractions.IDriveInfo>> HasDriveFormat(this aweXpect.Core.IThat<System.IO.Abstractions.IDriveInfo> source, string expected) { }
+        public static aweXpect.Results.AndOrResult<System.IO.Abstractions.IDriveInfo, aweXpect.Core.IThat<System.IO.Abstractions.IDriveInfo>> HasDriveType(this aweXpect.Core.IThat<System.IO.Abstractions.IDriveInfo> source, System.IO.DriveType expected) { }
+        public static aweXpect.Results.StringEqualityTypeResult<System.IO.Abstractions.IDriveInfo, aweXpect.Core.IThat<System.IO.Abstractions.IDriveInfo>> HasName(this aweXpect.Core.IThat<System.IO.Abstractions.IDriveInfo> source, string expected) { }
+        public static aweXpect.Results.AndOrResult<System.IO.Abstractions.IDriveInfo, aweXpect.Core.IThat<System.IO.Abstractions.IDriveInfo>> HasTotalFreeSpace(this aweXpect.Core.IThat<System.IO.Abstractions.IDriveInfo> source, long expected) { }
+        public static aweXpect.Results.AndOrResult<System.IO.Abstractions.IDriveInfo, aweXpect.Core.IThat<System.IO.Abstractions.IDriveInfo>> HasTotalSize(this aweXpect.Core.IThat<System.IO.Abstractions.IDriveInfo> source, long expected) { }
+        public static aweXpect.Results.StringEqualityTypeResult<System.IO.Abstractions.IDriveInfo, aweXpect.Core.IThat<System.IO.Abstractions.IDriveInfo>> HasVolumeLabel(this aweXpect.Core.IThat<System.IO.Abstractions.IDriveInfo> source, string? expected) { }
+        public static aweXpect.Results.AndOrResult<System.IO.Abstractions.IDriveInfo, aweXpect.Core.IThat<System.IO.Abstractions.IDriveInfo>> IsNotReady(this aweXpect.Core.IThat<System.IO.Abstractions.IDriveInfo> source) { }
+        public static aweXpect.Results.AndOrResult<System.IO.Abstractions.IDriveInfo, aweXpect.Core.IThat<System.IO.Abstractions.IDriveInfo>> IsReady(this aweXpect.Core.IThat<System.IO.Abstractions.IDriveInfo> source) { }
+    }
     public static class FileInfoExtensions
     {
         public static aweXpect.Results.AndOrResult<System.IO.Abstractions.IFileInfo, aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo>> DoesNotExist(this aweXpect.Core.IThat<System.IO.Abstractions.IFileInfo> source) { }
@@ -76,9 +88,13 @@ namespace aweXpect.Testably
         public static aweXpect.Testably.Results.DidNotTriggerNotificationResult DidNotTriggerNotification(this aweXpect.Core.IThat<Testably.Abstractions.Testing.MockFileSystem> subject, System.Func<Testably.Abstractions.Testing.FileSystem.ChangeDescription, bool> predicate, [System.Runtime.CompilerServices.CallerArgumentExpression("predicate")] string doNotPopulateThisValue = "") { }
         public static aweXpect.Results.AndOrResult<TFileSystem, aweXpect.Core.IThat<TFileSystem>> DoesNotHaveDirectory<TFileSystem>(this aweXpect.Core.IThat<TFileSystem> subject, string path)
             where TFileSystem :  class, System.IO.Abstractions.IFileSystem { }
+        public static aweXpect.Results.AndOrResult<TFileSystem, aweXpect.Core.IThat<TFileSystem>> DoesNotHaveDrive<TFileSystem>(this aweXpect.Core.IThat<TFileSystem> subject, string driveName)
+            where TFileSystem :  class, System.IO.Abstractions.IFileSystem { }
         public static aweXpect.Results.AndOrResult<TFileSystem, aweXpect.Core.IThat<TFileSystem>> DoesNotHaveFile<TFileSystem>(this aweXpect.Core.IThat<TFileSystem> subject, string path)
             where TFileSystem :  class, System.IO.Abstractions.IFileSystem { }
         public static aweXpect.Testably.Results.DirectoryResult<TFileSystem> HasDirectory<TFileSystem>(this aweXpect.Core.IThat<TFileSystem> subject, string path)
+            where TFileSystem :  class, System.IO.Abstractions.IFileSystem { }
+        public static aweXpect.Testably.Results.DriveResult<TFileSystem> HasDrive<TFileSystem>(this aweXpect.Core.IThat<TFileSystem> subject, string driveName)
             where TFileSystem :  class, System.IO.Abstractions.IFileSystem { }
         public static aweXpect.Testably.Results.FileResult<TFileSystem> HasFile<TFileSystem>(this aweXpect.Core.IThat<TFileSystem> subject, string path)
             where TFileSystem :  class, System.IO.Abstractions.IFileSystem { }
@@ -457,6 +473,11 @@ namespace aweXpect.Testably.Results
         public aweXpect.Core.IThat<System.IO.Abstractions.IDirectoryInfo> Which { get; }
         public aweXpect.Testably.Results.DirectoryResult<TParent> WithDirectories(System.Action<aweXpect.Core.IThat<System.Collections.Generic.IEnumerable<System.IO.Abstractions.IDirectoryInfo>>> expectations) { }
         public aweXpect.Testably.Results.DirectoryResult<TParent> WithFiles(System.Action<aweXpect.Core.IThat<System.Collections.Generic.IEnumerable<System.IO.Abstractions.IFileInfo>>> expectations) { }
+    }
+    public class DriveResult<TParent> : aweXpect.Results.AndOrResult<TParent, aweXpect.Core.IThat<TParent>>
+        where TParent :  class
+    {
+        public aweXpect.Core.IThat<System.IO.Abstractions.IDriveInfo> Which { get; }
     }
     public class FileInfoContentResult
     {

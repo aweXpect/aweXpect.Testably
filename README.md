@@ -79,6 +79,42 @@ fileSystem.File.WriteAllText("foo/bar/my-file.txt", "some content");
 await That(fileSystem).HasDirectory("foo/bar").WithFiles(f => f.All().ComplyWith(x => x.HasContent("SOME CONTENT").IgnoringCase()));
 ```
 
+### Drives
+
+You can verify that a drive is registered on the file system. Drives are
+matched by name (case-insensitive) against `IFileSystem.DriveInfo.GetDrives()`;
+UNC drives (which do not appear in `GetDrives()`) are not supported by
+`HasDrive`:
+
+```csharp
+MockFileSystem fileSystem = new(o => o.SimulatingOperatingSystem(SimulationMode.Windows));
+fileSystem.WithDrive("D:", d => d.SetTotalSize(2048));
+
+await That(fileSystem).HasDrive("D:\\");
+await That(fileSystem).DoesNotHaveDrive("Z:\\");
+```
+
+`HasDrive` exposes a `.Which` property returning `IThat<IDriveInfo>`, so all
+`IDriveInfo` assertions can be chained directly:
+
+```csharp
+await That(fileSystem).HasDrive("D:\\")
+    .Which.HasTotalSize(2048).And.IsReady();
+```
+
+You can also assert directly on `IDriveInfo` instances:
+
+```csharp
+IDriveInfo driveInfo = fileSystem.DriveInfo.New("D:");
+
+await That(driveInfo).HasAvailableFreeSpace(2048);
+await That(driveInfo).HasTotalSize(2048).And.HasTotalFreeSpace(2048);
+await That(driveInfo).HasDriveFormat("NTFS");
+await That(driveInfo).HasDriveType(System.IO.DriveType.Fixed);
+await That(driveInfo).HasName(driveInfo.Name).And.HasVolumeLabel(driveInfo.VolumeLabel);
+await That(driveInfo).IsReady();
+```
+
 ### IFileInfo / IDirectoryInfo as subjects
 
 You can also assert directly on `IFileInfo` and `IDirectoryInfo` instances:
@@ -97,13 +133,14 @@ await That(dirInfo).HasDirectory("bar").Which.HasFile("my-file.txt");
 
 ### Bridging from the file-system chain via `.Which`
 
-`HasFile` and `HasDirectory` expose a `.Which` property that returns the
-`IThat<IFileInfo>` / `IThat<IDirectoryInfo>` for the resolved entry, so the
-same assertions light up in both places:
+`HasFile`, `HasDirectory` and `HasDrive` expose a `.Which` property that returns
+the `IThat<IFileInfo>` / `IThat<IDirectoryInfo>` / `IThat<IDriveInfo>` for the
+resolved entry, so the same assertions light up in both places:
 
 ```csharp
 await That(fileSystem).HasFile("my-file.txt").Which.HasLength(12).And.HasContent("some content");
 await That(fileSystem).HasDirectory("logs").Which.IsEmpty();
+await That(fileSystem).HasDrive("D:\\").Which.IsReady().And.HasDriveFormat("NTFS");
 ```
 
 ### IFileVersionInfo
