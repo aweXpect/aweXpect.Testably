@@ -28,9 +28,11 @@ namespace aweXpect.Testably
     public static class DirectoryInfoExtensions
     {
         public static aweXpect.Results.AndOrResult<System.IO.Abstractions.IDirectoryInfo, aweXpect.Core.IThat<System.IO.Abstractions.IDirectoryInfo>> DoesNotExist(this aweXpect.Core.IThat<System.IO.Abstractions.IDirectoryInfo> source) { }
+        public static aweXpect.Results.AndOrResult<System.IO.Abstractions.IDirectoryInfo, aweXpect.Core.IThat<System.IO.Abstractions.IDirectoryInfo>> DoesNotHaveAttribute(this aweXpect.Core.IThat<System.IO.Abstractions.IDirectoryInfo> source, System.IO.FileAttributes unexpected) { }
         public static aweXpect.Results.AndOrResult<System.IO.Abstractions.IDirectoryInfo, aweXpect.Core.IThat<System.IO.Abstractions.IDirectoryInfo>> DoesNotHaveDirectory(this aweXpect.Core.IThat<System.IO.Abstractions.IDirectoryInfo> subject, string path) { }
         public static aweXpect.Results.AndOrResult<System.IO.Abstractions.IDirectoryInfo, aweXpect.Core.IThat<System.IO.Abstractions.IDirectoryInfo>> DoesNotHaveFile(this aweXpect.Core.IThat<System.IO.Abstractions.IDirectoryInfo> subject, string path) { }
         public static aweXpect.Results.AndOrResult<System.IO.Abstractions.IDirectoryInfo, aweXpect.Core.IThat<System.IO.Abstractions.IDirectoryInfo>> Exists(this aweXpect.Core.IThat<System.IO.Abstractions.IDirectoryInfo> source) { }
+        public static aweXpect.Results.AndOrResult<System.IO.Abstractions.IDirectoryInfo, aweXpect.Core.IThat<System.IO.Abstractions.IDirectoryInfo>> HasAttribute(this aweXpect.Core.IThat<System.IO.Abstractions.IDirectoryInfo> source, System.IO.FileAttributes expected) { }
         public static aweXpect.Results.TimeToleranceResult<System.IO.Abstractions.IDirectoryInfo, aweXpect.Core.IThat<System.IO.Abstractions.IDirectoryInfo>> HasCreationTime(this aweXpect.Core.IThat<System.IO.Abstractions.IDirectoryInfo> source, System.DateTime expected) { }
         public static aweXpect.Testably.Results.DirectoryResult<System.IO.Abstractions.IDirectoryInfo> HasDirectory(this aweXpect.Core.IThat<System.IO.Abstractions.IDirectoryInfo> subject, string path) { }
         public static aweXpect.Testably.Results.FileResult<System.IO.Abstractions.IDirectoryInfo> HasFile(this aweXpect.Core.IThat<System.IO.Abstractions.IDirectoryInfo> subject, string path) { }
