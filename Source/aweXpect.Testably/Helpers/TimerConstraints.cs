@@ -76,23 +76,30 @@ internal static class TimerConstraints
 			=> value > int.MaxValue ? int.MaxValue : (int)value;
 
 		protected override void AppendNormalExpectation(StringBuilder stringBuilder, string? indentation = null)
-		{
-			stringBuilder.Append("executed");
-			stringBuilder.Append(' ').Append(quantifier);
-			stringBuilder.Append(options);
-		}
+			=> AppendExpectation(stringBuilder, false);
 
 		protected override void AppendNormalResult(StringBuilder stringBuilder, string? indentation = null)
 			=> AppendCount(stringBuilder);
 
 		protected override void AppendNegatedExpectation(StringBuilder stringBuilder, string? indentation = null)
-		{
-			stringBuilder.Append("did not execute");
-			stringBuilder.Append(options);
-		}
+			=> AppendExpectation(stringBuilder, true);
 
 		protected override void AppendNegatedResult(StringBuilder stringBuilder, string? indentation = null)
 			=> AppendCount(stringBuilder);
+
+		private void AppendExpectation(StringBuilder stringBuilder, bool negated)
+		{
+			if (quantifier.IsNever)
+			{
+				stringBuilder.Append(negated ? "executed at least once" : "did not execute");
+			}
+			else
+			{
+				stringBuilder.Append(negated ? "did not execute " : "executed ").Append(quantifier);
+			}
+
+			stringBuilder.Append(options);
+		}
 
 		private void AppendCount(StringBuilder stringBuilder)
 		{

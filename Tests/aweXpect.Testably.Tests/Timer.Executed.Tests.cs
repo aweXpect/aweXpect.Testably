@@ -2,6 +2,7 @@ using System.Threading;
 using aweXpect.Core;
 using Testably.Abstractions.Testing;
 using Testably.Abstractions.Testing.TimeSystem;
+
 // ReSharper disable UseAwaitUsing
 
 namespace aweXpect.Testably.Tests;
@@ -99,6 +100,85 @@ public sealed class Timer
 				}
 
 				await That(Act).DoesNotThrow();
+			}
+
+			[Fact]
+			public async Task WhenNegated_AndExecuted_ShouldFail()
+			{
+				MockTimeSystem timeSystem = new(o => o.DisableAutoAdvance());
+				using ITimerMock sut = (ITimerMock)timeSystem.Timer.New(
+					_ => { },
+					null,
+					TimeSpan.Zero,
+					Timeout.InfiniteTimeSpan);
+				timeSystem.TimeProvider.AdvanceBy(TimeSpan.Zero);
+				sut.Wait(1, 5000);
+
+				async Task Act()
+				{
+					// ReSharper disable once AccessToDisposedClosure
+					await That(sut).DoesNotComplyWith(it
+						=> it.Executed().Within(TimeSpan.FromMilliseconds(100)));
+				}
+
+				await That(Act).ThrowsException()
+					.WithMessage("""
+					             Expected that sut
+					             did not execute at least once within 0:00.100,
+					             but it was executed once
+					             """);
+			}
+
+			[Fact]
+			public async Task WhenNegatedWithAtLeastQuantifier_ShouldIncludeQuantifierInMessage()
+			{
+				MockTimeSystem timeSystem = new(o => o.DisableAutoAdvance());
+				using ITimerMock sut = (ITimerMock)timeSystem.Timer.New(
+					_ => { },
+					null,
+					TimeSpan.Zero,
+					TimeSpan.FromMilliseconds(10));
+				timeSystem.TimeProvider.AdvanceBy(TimeSpan.FromMilliseconds(25));
+				sut.Wait(3, 5000);
+
+				async Task Act()
+				{
+					// ReSharper disable once AccessToDisposedClosure
+					await That(sut).DoesNotComplyWith(it
+						=> it.Executed().AtLeast(3.Times()).Within(TimeSpan.FromMilliseconds(100)));
+				}
+
+				await That(Act).ThrowsException()
+					.WithMessage("""
+					             Expected that sut
+					             did not execute at least 3 times within 0:00.100,
+					             but it was executed 3 times
+					             """);
+			}
+
+			[Fact]
+			public async Task WhenNegatedWithNeverQuantifier_AndNotExecuted_ShouldFail()
+			{
+				MockTimeSystem timeSystem = new();
+				using ITimerMock sut = (ITimerMock)timeSystem.Timer.New(
+					_ => { },
+					null,
+					Timeout.InfiniteTimeSpan,
+					Timeout.InfiniteTimeSpan);
+
+				async Task Act()
+				{
+					// ReSharper disable once AccessToDisposedClosure
+					await That(sut).DoesNotComplyWith(it
+						=> it.Executed().Never().Within(TimeSpan.FromMilliseconds(100)));
+				}
+
+				await That(Act).ThrowsException()
+					.WithMessage("""
+					             Expected that sut
+					             executed at least once within 0:00.100,
+					             but it was not executed
+					             """);
 			}
 
 			[Fact]
