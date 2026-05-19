@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.IO.Abstractions;
 using System.Text;
 using System.Threading;
@@ -11,6 +12,61 @@ namespace aweXpect.Testably.Helpers;
 
 internal static class FileSystemConstraints
 {
+	internal sealed class HasAttributeConstraint<TInfo>(
+		string it,
+		ExpectationGrammars grammars,
+		FileAttributes expected)
+		: ConstraintResult.WithValue<TInfo>(grammars),
+			IValueConstraint<TInfo>
+		where TInfo : class, IFileSystemInfo
+	{
+		private FileAttributes _actualAttributes;
+
+		public ConstraintResult IsMetBy(TInfo actual)
+		{
+			Actual = actual;
+			if (!actual.Exists)
+			{
+				Outcome = Outcome.Failure;
+				return this;
+			}
+
+			_actualAttributes = actual.Attributes;
+			Outcome = (_actualAttributes & expected) == expected ? Outcome.Success : Outcome.Failure;
+			return this;
+		}
+
+		protected override void AppendNormalExpectation(StringBuilder stringBuilder, string? indentation = null)
+			=> stringBuilder.Append("has attribute ").Append(expected);
+
+		protected override void AppendNormalResult(StringBuilder stringBuilder, string? indentation = null)
+		{
+			if (Actual?.Exists != true)
+			{
+				stringBuilder.Append(it).Append(" did not exist");
+			}
+			else
+			{
+				stringBuilder.Append(it).Append(" was ").Append(_actualAttributes);
+			}
+		}
+
+		protected override void AppendNegatedExpectation(StringBuilder stringBuilder, string? indentation = null)
+			=> stringBuilder.Append("does not have attribute ").Append(expected);
+
+		protected override void AppendNegatedResult(StringBuilder stringBuilder, string? indentation = null)
+		{
+			if (Actual?.Exists != true)
+			{
+				stringBuilder.Append(it).Append(" did not exist");
+			}
+			else
+			{
+				stringBuilder.Append(it).Append(" did");
+			}
+		}
+	}
+
 	internal sealed class ExistsConstraint<TInfo>(string it, ExpectationGrammars grammars)
 		: ConstraintResult.WithValue<TInfo>(grammars),
 			IValueConstraint<TInfo>
