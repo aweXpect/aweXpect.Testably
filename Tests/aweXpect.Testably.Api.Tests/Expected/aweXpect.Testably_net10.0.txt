@@ -93,6 +93,29 @@ namespace aweXpect.Testably
     {
         public static aweXpect.Testably.Recorded.RecordedFileSystemStatistics Recorded(this aweXpect.Core.IThat<Testably.Abstractions.Testing.Statistics.IFileSystemStatistics> subject) { }
     }
+    public static class TimeSystemExtensions
+    {
+        public static aweXpect.Testably.Results.DidNotTriggerTimeSystemEventResult<System.DateTime> DidNotTriggerDateTimeRead(this aweXpect.Core.IThat<Testably.Abstractions.Testing.MockTimeSystem> subject) { }
+        public static aweXpect.Testably.Results.DidNotTriggerTimeSystemEventResult<System.DateTime> DidNotTriggerDateTimeRead(this aweXpect.Core.IThat<Testably.Abstractions.Testing.MockTimeSystem> subject, System.Func<System.DateTime, bool> predicate, [System.Runtime.CompilerServices.CallerArgumentExpression("predicate")] string doNotPopulateThisValue = "") { }
+        public static aweXpect.Testably.Results.DidNotTriggerTimeSystemEventResult<Testably.Abstractions.TimeSystem.IPeriodicTimer> DidNotTriggerPeriodicTimerTick(this aweXpect.Core.IThat<Testably.Abstractions.Testing.MockTimeSystem> subject) { }
+        public static aweXpect.Testably.Results.DidNotTriggerTimeSystemEventResult<Testably.Abstractions.TimeSystem.IPeriodicTimer> DidNotTriggerPeriodicTimerTick(this aweXpect.Core.IThat<Testably.Abstractions.Testing.MockTimeSystem> subject, System.Func<Testably.Abstractions.TimeSystem.IPeriodicTimer, bool> predicate, [System.Runtime.CompilerServices.CallerArgumentExpression("predicate")] string doNotPopulateThisValue = "") { }
+        public static aweXpect.Testably.Results.DidNotTriggerTimeSystemEventResult<System.TimeSpan> DidNotTriggerTaskDelay(this aweXpect.Core.IThat<Testably.Abstractions.Testing.MockTimeSystem> subject) { }
+        public static aweXpect.Testably.Results.DidNotTriggerTimeSystemEventResult<System.TimeSpan> DidNotTriggerTaskDelay(this aweXpect.Core.IThat<Testably.Abstractions.Testing.MockTimeSystem> subject, System.Func<System.TimeSpan, bool> predicate, [System.Runtime.CompilerServices.CallerArgumentExpression("predicate")] string doNotPopulateThisValue = "") { }
+        public static aweXpect.Testably.Results.DidNotTriggerTimeSystemEventResult<System.TimeSpan> DidNotTriggerThreadSleep(this aweXpect.Core.IThat<Testably.Abstractions.Testing.MockTimeSystem> subject) { }
+        public static aweXpect.Testably.Results.DidNotTriggerTimeSystemEventResult<System.TimeSpan> DidNotTriggerThreadSleep(this aweXpect.Core.IThat<Testably.Abstractions.Testing.MockTimeSystem> subject, System.Func<System.TimeSpan, bool> predicate, [System.Runtime.CompilerServices.CallerArgumentExpression("predicate")] string doNotPopulateThisValue = "") { }
+        public static aweXpect.Testably.Results.DidNotTriggerTimeSystemEventResult<System.DateTime> DidNotTriggerTimeChange(this aweXpect.Core.IThat<Testably.Abstractions.Testing.MockTimeSystem> subject) { }
+        public static aweXpect.Testably.Results.DidNotTriggerTimeSystemEventResult<System.DateTime> DidNotTriggerTimeChange(this aweXpect.Core.IThat<Testably.Abstractions.Testing.MockTimeSystem> subject, System.Func<System.DateTime, bool> predicate, [System.Runtime.CompilerServices.CallerArgumentExpression("predicate")] string doNotPopulateThisValue = "") { }
+        public static aweXpect.Testably.Results.TriggeredTimeSystemEventResult<System.DateTime> TriggeredDateTimeRead(this aweXpect.Core.IThat<Testably.Abstractions.Testing.MockTimeSystem> subject) { }
+        public static aweXpect.Testably.Results.TriggeredTimeSystemEventResult<System.DateTime> TriggeredDateTimeRead(this aweXpect.Core.IThat<Testably.Abstractions.Testing.MockTimeSystem> subject, System.Func<System.DateTime, bool> predicate, [System.Runtime.CompilerServices.CallerArgumentExpression("predicate")] string doNotPopulateThisValue = "") { }
+        public static aweXpect.Testably.Results.TriggeredTimeSystemEventResult<Testably.Abstractions.TimeSystem.IPeriodicTimer> TriggeredPeriodicTimerTick(this aweXpect.Core.IThat<Testably.Abstractions.Testing.MockTimeSystem> subject) { }
+        public static aweXpect.Testably.Results.TriggeredTimeSystemEventResult<Testably.Abstractions.TimeSystem.IPeriodicTimer> TriggeredPeriodicTimerTick(this aweXpect.Core.IThat<Testably.Abstractions.Testing.MockTimeSystem> subject, System.Func<Testably.Abstractions.TimeSystem.IPeriodicTimer, bool> predicate, [System.Runtime.CompilerServices.CallerArgumentExpression("predicate")] string doNotPopulateThisValue = "") { }
+        public static aweXpect.Testably.Results.TriggeredTimeSystemEventResult<System.TimeSpan> TriggeredTaskDelay(this aweXpect.Core.IThat<Testably.Abstractions.Testing.MockTimeSystem> subject) { }
+        public static aweXpect.Testably.Results.TriggeredTimeSystemEventResult<System.TimeSpan> TriggeredTaskDelay(this aweXpect.Core.IThat<Testably.Abstractions.Testing.MockTimeSystem> subject, System.Func<System.TimeSpan, bool> predicate, [System.Runtime.CompilerServices.CallerArgumentExpression("predicate")] string doNotPopulateThisValue = "") { }
+        public static aweXpect.Testably.Results.TriggeredTimeSystemEventResult<System.TimeSpan> TriggeredThreadSleep(this aweXpect.Core.IThat<Testably.Abstractions.Testing.MockTimeSystem> subject) { }
+        public static aweXpect.Testably.Results.TriggeredTimeSystemEventResult<System.TimeSpan> TriggeredThreadSleep(this aweXpect.Core.IThat<Testably.Abstractions.Testing.MockTimeSystem> subject, System.Func<System.TimeSpan, bool> predicate, [System.Runtime.CompilerServices.CallerArgumentExpression("predicate")] string doNotPopulateThisValue = "") { }
+        public static aweXpect.Testably.Results.TriggeredTimeSystemEventResult<System.DateTime> TriggeredTimeChange(this aweXpect.Core.IThat<Testably.Abstractions.Testing.MockTimeSystem> subject) { }
+        public static aweXpect.Testably.Results.TriggeredTimeSystemEventResult<System.DateTime> TriggeredTimeChange(this aweXpect.Core.IThat<Testably.Abstractions.Testing.MockTimeSystem> subject, System.Func<System.DateTime, bool> predicate, [System.Runtime.CompilerServices.CallerArgumentExpression("predicate")] string doNotPopulateThisValue = "") { }
+    }
 }
 namespace aweXpect.Testably.Recorded
 {
@@ -423,6 +446,12 @@ namespace aweXpect.Testably.Results
         public aweXpect.Testably.Results.DidNotTriggerNotificationResult Which(System.Action<aweXpect.Core.IThat<Testably.Abstractions.Testing.FileSystem.ChangeDescription>> expectation) { }
         public aweXpect.Testably.Results.DidNotTriggerNotificationResult Within(System.TimeSpan timeout) { }
     }
+    public class DidNotTriggerTimeSystemEventResult<T> : aweXpect.Results.AndOrResult<Testably.Abstractions.Testing.MockTimeSystem, aweXpect.Core.IThat<Testably.Abstractions.Testing.MockTimeSystem>, aweXpect.Testably.Results.DidNotTriggerTimeSystemEventResult<T>>
+        where T :  notnull
+    {
+        public aweXpect.Testably.Results.DidNotTriggerTimeSystemEventResult<T> Which(System.Action<aweXpect.Core.IThat<T>> expectation) { }
+        public aweXpect.Testably.Results.DidNotTriggerTimeSystemEventResult<T> Within(System.TimeSpan timeout) { }
+    }
     public class DidNotTriggerWatcherResult : aweXpect.Results.AndOrResult<System.IO.Abstractions.IFileSystemWatcher, aweXpect.Core.IThat<System.IO.Abstractions.IFileSystemWatcher>, aweXpect.Testably.Results.DidNotTriggerWatcherResult>
     {
         public aweXpect.Testably.Results.DidNotTriggerWatcherResult Which(System.Action<aweXpect.Core.IThat<Testably.Abstractions.Testing.FileSystem.WatcherChangeDescription>> expectation) { }
@@ -472,6 +501,12 @@ namespace aweXpect.Testably.Results
     {
         public aweXpect.Testably.Results.TriggeredNotificationResult Which(System.Action<aweXpect.Core.IThat<Testably.Abstractions.Testing.FileSystem.ChangeDescription>> expectation) { }
         public aweXpect.Testably.Results.TriggeredNotificationResult Within(System.TimeSpan timeout) { }
+    }
+    public class TriggeredTimeSystemEventResult<T> : aweXpect.Results.CountResult<Testably.Abstractions.Testing.MockTimeSystem, aweXpect.Core.IThat<Testably.Abstractions.Testing.MockTimeSystem>, aweXpect.Testably.Results.TriggeredTimeSystemEventResult<T>>
+        where T :  notnull
+    {
+        public aweXpect.Testably.Results.TriggeredTimeSystemEventResult<T> Which(System.Action<aweXpect.Core.IThat<T>> expectation) { }
+        public aweXpect.Testably.Results.TriggeredTimeSystemEventResult<T> Within(System.TimeSpan timeout) { }
     }
     public class TriggeredWatcherResult : aweXpect.Results.CountResult<System.IO.Abstractions.IFileSystemWatcher, aweXpect.Core.IThat<System.IO.Abstractions.IFileSystemWatcher>, aweXpect.Testably.Results.TriggeredWatcherResult>
     {

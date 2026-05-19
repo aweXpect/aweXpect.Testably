@@ -230,3 +230,80 @@ await That(change).HasNotifyFilters(NotifyFilters.LastWrite);
 await That(change).HasName("my-file.txt").And.HasPath("/abs/my-file.txt");
 await That(renamedChange).HasOldName("old.txt").And.HasOldPath("/abs/old.txt");
 ```
+
+## Time system
+
+A `MockTimeSystem` lets the code under test sleep, delay, read the clock and
+advance time without touching the real wall clock. Run the code, then assert
+against the events it produced:
+
+```csharp
+MockTimeSystem timeSystem = new();
+timeSystem.Thread.Sleep(TimeSpan.FromMilliseconds(50));
+
+await That(timeSystem).TriggeredThreadSleep();
+await That(timeSystem).TriggeredThreadSleep(t => t == TimeSpan.FromMilliseconds(50));
+```
+
+The same shape is available for every notification on `MockTimeSystem.On`:
+
+```csharp
+await That(timeSystem).TriggeredTaskDelay();
+await That(timeSystem).TriggeredTaskDelay(t => t > TimeSpan.Zero);
+
+await That(timeSystem).TriggeredDateTimeRead();
+await That(timeSystem).TriggeredDateTimeRead(d => d.Kind == DateTimeKind.Utc);
+
+await That(timeSystem).TriggeredTimeChange();
+await That(timeSystem).TriggeredTimeChange(d => d >= cutoff);
+```
+
+On TFMs that support `PeriodicTimer` (net8.0+), every wait on a periodic timer
+is also observable:
+
+```csharp
+await That(timeSystem).TriggeredPeriodicTimerTick();
+await That(timeSystem).TriggeredPeriodicTimerTick(t => t.Period == TimeSpan.FromSeconds(1));
+```
+
+`.Within(timeout)` (default 30 s) waits for asynchronous events — unlike file
+notifications there is no replay, so the assertion only sees events that fire
+after subscription:
+
+```csharp
+async Task Act()
+{
+    _ = Task.Run(() => timeSystem.Thread.Sleep(TimeSpan.FromMilliseconds(5)));
+    await That(timeSystem).TriggeredThreadSleep().Within(100.Milliseconds());
+}
+```
+
+Every `Triggered*` method accepts a `Quantifier` (`AtLeast`, `AtMost`,
+`Exactly`, `Between`, `Never`, `Once`):
+
+```csharp
+await That(timeSystem).TriggeredTaskDelay(t => t == TimeSpan.FromSeconds(1))
+    .Exactly(2.Times());
+```
+
+`.Which(t => …)` composes inner expectations against the captured payload —
+`TimeSpan` for `ThreadSleep`/`TaskDelay`, `DateTime` for `DateTimeRead`/
+`TimeChange`, `IPeriodicTimer` for `PeriodicTimerTick`:
+
+```csharp
+await That(timeSystem)
+    .TriggeredThreadSleep()
+    .Which(t => t.IsGreaterThan(TimeSpan.Zero))
+    .Exactly(1.Times());
+```
+
+Each method has a matching `DidNotTrigger*` variant that short-circuits as
+soon as a matching event is observed:
+
+```csharp
+await That(timeSystem).DidNotTriggerThreadSleep().Within(100.Milliseconds());
+await That(timeSystem).DidNotTriggerTaskDelay(t => t == TimeSpan.FromSeconds(1));
+await That(timeSystem).DidNotTriggerDateTimeRead();
+await That(timeSystem).DidNotTriggerTimeChange();
+await That(timeSystem).DidNotTriggerPeriodicTimerTick();
+```

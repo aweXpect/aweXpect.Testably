@@ -30,7 +30,7 @@ internal static class NotificationConstraints
 		: ConstraintResult.WithValue<TSubject>(grammars),
 			IAsyncContextConstraint<TSubject>
 		where TSubject : class
-		where TChange : ChangeDescription
+		where TChange : notnull
 	{
 		public async Task<ConstraintResult> IsMetBy(TSubject actual,
 			IEvaluationContext context,
@@ -172,7 +172,7 @@ internal static class NotificationConstraints
 	}
 
 	internal sealed class TriggerNotificationFilter<TChange>
-		where TChange : ChangeDescription
+		where TChange : notnull
 	{
 		private readonly List<ManualExpectationBuilder<TChange>> _asyncFilters = new();
 		private readonly List<(Func<TChange, bool> Predicate, string Description)> _syncPredicates = new();
