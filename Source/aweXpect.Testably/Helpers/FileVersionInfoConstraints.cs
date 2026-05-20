@@ -70,6 +70,62 @@ internal static class FileVersionInfoConstraints
 		}
 	}
 
+	internal sealed class HasInt32PropertyConstraint(
+		string it,
+		ExpectationGrammars grammars,
+		Func<IFileVersionInfo, int> selector,
+		int expected,
+		string propertyName)
+		: ConstraintResult.WithValue<IFileVersionInfo>(grammars),
+			IValueConstraint<IFileVersionInfo>
+	{
+		private int _actualValue;
+
+		public ConstraintResult IsMetBy(IFileVersionInfo actual)
+		{
+			Actual = actual;
+			if (actual is null)
+			{
+				Outcome = Outcome.Failure;
+				return this;
+			}
+
+			_actualValue = selector(actual);
+			Outcome = _actualValue == expected ? Outcome.Success : Outcome.Failure;
+			return this;
+		}
+
+		protected override void AppendNormalExpectation(StringBuilder stringBuilder, string? indentation = null)
+			=> stringBuilder.Append("has ").Append(propertyName).Append(' ').Append(expected);
+
+		protected override void AppendNormalResult(StringBuilder stringBuilder, string? indentation = null)
+		{
+			if (Actual is null)
+			{
+				stringBuilder.Append(it).Append(" was <null>");
+			}
+			else
+			{
+				stringBuilder.Append(it).Append(" was ").Append(_actualValue);
+			}
+		}
+
+		protected override void AppendNegatedExpectation(StringBuilder stringBuilder, string? indentation = null)
+			=> stringBuilder.Append("does not have ").Append(propertyName).Append(' ').Append(expected);
+
+		protected override void AppendNegatedResult(StringBuilder stringBuilder, string? indentation = null)
+		{
+			if (Actual is null)
+			{
+				stringBuilder.Append(it).Append(" was <null>");
+			}
+			else
+			{
+				stringBuilder.Append(it).Append(" did");
+			}
+		}
+	}
+
 	internal sealed class HasBoolPropertyConstraint(
 		string it,
 		ExpectationGrammars grammars,
