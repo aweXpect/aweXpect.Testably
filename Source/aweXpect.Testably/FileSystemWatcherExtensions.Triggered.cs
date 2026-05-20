@@ -23,10 +23,10 @@ public static class FileSystemWatcherExtensions
 	/// <remarks>
 	///     Subscribes via <see cref="IWatcherTriggeredHandler.OnTriggeredOrReplay" />, so events
 	///     that already fired on this watcher count toward the quantifier. The assertion always
-	///     waits up to a timeout for late-arriving (asynchronous) events — 30 seconds by default;
-	///     use <c>.Within(timeout)</c> to override.
-	///     The subject must be created from a <see cref="MockFileSystem" /> — calling this on a
-	///     real-file-system watcher throws <see cref="InvalidOperationException" />. The watcher's
+	///     waits up to a timeout for late-arriving (asynchronous) events (30 seconds by default;
+	///     use <c>.Within(timeout)</c> to override).
+	///     The subject must be created from a <see cref="MockFileSystem" /> (calling this on a
+	///     real-file-system watcher throws <see cref="InvalidOperationException" />). The watcher's
 	///     <see cref="IFileSystemWatcher.EnableRaisingEvents" /> must be <see langword="true" /> for
 	///     any event to be observed.
 	/// </remarks>
@@ -41,10 +41,10 @@ public static class FileSystemWatcherExtensions
 	/// <remarks>
 	///     Subscribes via <see cref="IWatcherTriggeredHandler.OnTriggeredOrReplay" />, so events
 	///     that already fired on this watcher count toward the quantifier. The assertion always
-	///     waits up to a timeout for late-arriving (asynchronous) events — 30 seconds by default;
-	///     use <c>.Within(timeout)</c> to override.
-	///     The subject must be created from a <see cref="MockFileSystem" /> — calling this on a
-	///     real-file-system watcher throws <see cref="InvalidOperationException" />. The watcher's
+	///     waits up to a timeout for late-arriving (asynchronous) events (30 seconds by default;
+	///     use <c>.Within(timeout)</c> to override).
+	///     The subject must be created from a <see cref="MockFileSystem" /> (calling this on a
+	///     real-file-system watcher throws <see cref="InvalidOperationException" />). The watcher's
 	///     <see cref="IFileSystemWatcher.EnableRaisingEvents" /> must be <see langword="true" /> for
 	///     any event to be observed.
 	/// </remarks>
@@ -68,11 +68,11 @@ public static class FileSystemWatcherExtensions
 	/// <remarks>
 	///     Subscribes via <see cref="IWatcherTriggeredHandler.OnTriggeredOrReplay" /> so any event
 	///     that already fired on this watcher fails the assertion. The assertion also waits up to a
-	///     timeout for late-arriving events — 30 seconds by default; use <c>.Within(timeout)</c>
-	///     to lower it when you do not need to wait. The assertion short-circuits as soon as a
+	///     timeout for late-arriving events (30 seconds by default; use <c>.Within(timeout)</c>
+	///     to lower it when you do not need to wait). The assertion short-circuits as soon as a
 	///     matching event is observed.
-	///     The subject must be created from a <see cref="MockFileSystem" /> — calling this on a
-	///     real-file-system watcher throws <see cref="InvalidOperationException" />. The watcher's
+	///     The subject must be created from a <see cref="MockFileSystem" /> (calling this on a
+	///     real-file-system watcher throws <see cref="InvalidOperationException" />). The watcher's
 	///     <see cref="IFileSystemWatcher.EnableRaisingEvents" /> must be <see langword="true" /> for
 	///     any event to be observed.
 	/// </remarks>

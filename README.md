@@ -155,7 +155,7 @@ await That(dirInfo).HasLastWriteTime(DateTime.Now).Within(1.Second());
 
 `HasFile` / `HasDirectory` on `IDirectoryInfo` return the same chain
 results as the file-system-level versions, so `.WithContent(...)`,
-`.WithLastWriteTime(...)`, `.Which`, etc. all work as well — the path is
+`.WithLastWriteTime(...)`, `.Which`, etc. all work as well: the path is
 resolved relative to the directory.
 
 On .NET 10 or later, `WhoseParent` switches to the parent directory:
@@ -206,9 +206,9 @@ await That(info).HasFileVersion("1.2.3.4");
 await That(info).IsDebug().And.IsNotPreRelease();
 ```
 
-Dedicated assertions exist for the common fields — `HasCompanyName`,
+Dedicated assertions exist for the common fields (`HasCompanyName`,
 `HasProductName`, `HasFileDescription`, `HasFileVersion`, `HasProductVersion`,
-`HasOriginalFilename`, `HasLanguage` — plus the boolean pairs
+`HasOriginalFilename`, `HasLanguage`), plus the boolean pairs
 `IsDebug` / `IsNotDebug`, `IsPreRelease` / `IsNotPreRelease` and
 `IsPatched` / `IsNotPatched`.
 
@@ -240,8 +240,8 @@ await That(fileSystem).TriggeredNotification(c => c.Name == "my-file.txt");
 ```
 
 `.Within(timeout)` (default 30 s) lets the assertion wait for asynchronous
-notifications — if a matching notification already fired the assertion
-completes synchronously, otherwise it waits up to the timeout for a late
+notifications. If a matching notification already fired, the assertion
+completes synchronously; otherwise it waits up to the timeout for a late
 arrival:
 
 ```csharp
@@ -278,13 +278,13 @@ await That(fileSystem)
 > Replay of historical notifications relies on the `MockFileSystem` notification
 > history. Disable it via
 > `new MockFileSystem(o => o.WithoutNotificationHistory())` only if you don't
-> use these assertions — they throw against a history-disabled file system.
+> use these assertions: they throw against a history-disabled file system.
 
 ## Watcher events (`IFileSystemWatcher`)
 
 An individual `IFileSystemWatcher` can also be the subject. The watcher must
 come from a `MockFileSystem`, and `EnableRaisingEvents` must be `true` for any
-event to be observed. Only events fired on this specific watcher count —
+event to be observed. Only events fired on this specific watcher count;
 events fired on other watchers of the same `MockFileSystem` are ignored.
 
 ```csharp
@@ -301,7 +301,7 @@ await That(watcher).DidNotTrigger(c => c.Name == "secret.txt");
 ```
 
 `Triggered` and `DidNotTrigger` share the same shape as the
-[notification](#file-system-notifications) assertions — a `Quantifier`
+[notification](#file-system-notifications) assertions: a `Quantifier`
 (`AtLeast`, `AtMost`, `Exactly`, `Between`, `Never`, `Once`), a
 `.Within(timeout)` (default 30 s), and a `.Which(c => …)` callback that
 composes the per-change expectations from
@@ -348,9 +348,9 @@ await That(fileSystem.Statistics).Recorded().File.WriteAllText().Once();
 await That(fileSystem.Statistics).Recorded().File.WriteAllText(path: p => p == "foo.txt").Once();
 ```
 
-The mirror has one entry per `IFileSystem` member — `.File`, `.Directory`,
+The mirror has one entry per `IFileSystem` member (`.File`, `.Directory`,
 `.FileInfo[path]`, `.DirectoryInfo[path]`, `.DriveInfo`, `.FileStream`,
-`.FileSystemWatcher`, `.FileVersionInfo`, `.Path` — with one method per
+`.FileSystemWatcher`, `.FileVersionInfo`, `.Path`), with one method per
 underlying API and an indexer (`[path]`) for per-instance buckets. Every
 result inherits the count vocabulary (`Once`, `Twice`, `Never`, `Exactly`,
 `AtLeast`, `AtMost`, `Between`, …).
@@ -368,24 +368,21 @@ Each parameter on a mirror method is an optional `Func<T, bool>` predicate
 matched **positionally** against the recorded argument:
 
 - Supplying no predicate (or `null`) skips that position and matches every
-  overload — `.File.Open()` counts _all_ `Open` invocations regardless of arity.
+  overload, so `.File.Open()` counts _all_ `Open` invocations regardless of arity.
 - A predicate whose position exceeds an overload's arity excludes that
-  overload — filtering `recursive` on `Directory.Delete` only matches the
+  overload, so filtering `recursive` on `Directory.Delete` only matches the
   two-argument overload.
 - A predicate whose type differs from the recorded type at that position
-  silently excludes that overload — filtering `searchOption` on
+  silently excludes that overload, so filtering `searchOption` on
   `Directory.EnumerateDirectories` never matches the `EnumerationOptions`
   overload.
 
 A handful of methods can't be filtered fully through this positional model
 because two overloads place different types at the same recording position
 (`File.Open` / `FileInfo.Open` with `FileStreamOptions`,
-`FileSystemWatcher.WaitForChanged` with `TimeSpan`); the affected mirror
-methods document the limitation in their own xmldoc.
+`FileSystemWatcher.WaitForChanged` with `TimeSpan`).
 
-## Time system (`ITimeSystem`)
-
-### Timer (`ITimerMock`)
+## Timer (`ITimerMock`)
 
 A `MockTimeSystem` exposes timers as `ITimerMock`. You can assert how often
 the timer callback was executed without blocking the test thread:
@@ -401,7 +398,7 @@ await That(timer).Executed(3.Times()).Within(5.Seconds());
 `Executed()` accepts a `Quantifier` (`AtLeast`, `AtMost`, `Exactly`,
 `Between`, `Never`, `Once`) and exposes `.Within(timeout)` for asynchronous
 execution. The assertion polls `ITimerMock.ExecutionCount` until the
-quantifier is satisfied or the timeout expires — 30 seconds by default.
+quantifier is satisfied or the timeout expires (30 seconds by default).
 
 ```csharp
 await That(timer).Executed().AtLeast(2.Times()).Within(100.Milliseconds());

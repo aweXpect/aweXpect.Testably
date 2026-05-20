@@ -20,7 +20,7 @@ public static partial class FileSystemExtensions
 	///     Subscribes via <see cref="INotificationHandler.OnEventOrReplay" /> so notifications
 	///     that already fired on this <see cref="MockFileSystem" /> count toward the quantifier.
 	///     The assertion always waits up to a timeout for late-arriving (asynchronous)
-	///     notifications — 30 seconds by default; use <c>.Within(timeout)</c> to override.
+	///     notifications (30 seconds by default; use <c>.Within(timeout)</c> to override).
 	/// </remarks>
 	public static TriggeredNotificationResult TriggeredNotification(
 		this IThat<MockFileSystem> subject)
@@ -34,7 +34,7 @@ public static partial class FileSystemExtensions
 	///     Subscribes via <see cref="INotificationHandler.OnEventOrReplay" /> so notifications
 	///     that already fired on this <see cref="MockFileSystem" /> count toward the quantifier.
 	///     The assertion always waits up to a timeout for late-arriving (asynchronous)
-	///     notifications — 30 seconds by default; use <c>.Within(timeout)</c> to override.
+	///     notifications (30 seconds by default; use <c>.Within(timeout)</c> to override).
 	/// </remarks>
 	public static TriggeredNotificationResult TriggeredNotification(
 		this IThat<MockFileSystem> subject,
@@ -56,8 +56,8 @@ public static partial class FileSystemExtensions
 	/// <remarks>
 	///     Subscribes via <see cref="INotificationHandler.OnEventOrReplay" /> so any notification
 	///     that already fired on this <see cref="MockFileSystem" /> fails the assertion. The
-	///     assertion also waits up to a timeout for late-arriving notifications — 30 seconds by
-	///     default; use <c>.Within(timeout)</c> to lower it when you do not need to wait. The
+	///     assertion also waits up to a timeout for late-arriving notifications (30 seconds by
+	///     default; use <c>.Within(timeout)</c> to lower it when you do not need to wait). The
 	///     assertion short-circuits as soon as a matching notification is observed.
 	/// </remarks>
 	public static DidNotTriggerNotificationResult DidNotTriggerNotification(
