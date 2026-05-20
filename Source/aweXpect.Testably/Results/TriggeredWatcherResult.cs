@@ -36,8 +36,8 @@ public class TriggeredWatcherResult
 	/// <remarks>
 	///     The <paramref name="expectation" /> is applied as an additional per-event filter, so any
 	///     assertions from <see cref="ChangeDescriptionExtensions" /> (e.g. <c>.HasName(...)</c>,
-	///     <c>.HasChangeType(...)</c>) compose naturally — only events that satisfy all of them
-	///     count toward the quantifier. The expectation text is taken from the inner expectation
+	///     <c>.HasChangeType(...)</c>) compose naturally (only events that satisfy all of them
+	///     count toward the quantifier). The expectation text is taken from the inner expectation
 	///     builder, so it reads like <c>which has name equal to "foo.txt"</c> rather than the raw
 	///     lambda source.
 	/// </remarks>

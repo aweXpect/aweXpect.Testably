@@ -34,7 +34,7 @@ public class DidNotTriggerWatcherResult
 	/// <remarks>
 	///     The <paramref name="expectation" /> is applied as an additional per-event filter, so any
 	///     assertions from <see cref="ChangeDescriptionExtensions" /> (e.g. <c>.HasName(...)</c>,
-	///     <c>.HasChangeType(...)</c>) compose naturally — the assertion fails if any event
+	///     <c>.HasChangeType(...)</c>) compose naturally. The assertion fails if any event
 	///     satisfies all of them. The expectation text is taken from the inner expectation builder,
 	///     so it reads like <c>which has name equal to "foo.txt"</c> rather than the raw lambda
 	///     source.
