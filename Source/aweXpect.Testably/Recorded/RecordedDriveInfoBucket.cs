@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.IO.Abstractions;
 using System.Runtime.CompilerServices;
 using aweXpect.Core;
@@ -41,7 +42,8 @@ public sealed class RecordedDriveInfoBucket
 	/// </summary>
 	public RecordedMethodCallResult New(
 		Func<string, bool>? driveName = null,
-		[CallerArgumentExpression(nameof(driveName))] string? driveNameExpression = null)
+		[CallerArgumentExpression(nameof(driveName))]
+		string? driveNameExpression = null)
 		=> Build(nameof(IDriveInfoFactory.New),
 			ParameterMatcher.From("driveName", driveName, driveNameExpression));
 
@@ -49,8 +51,9 @@ public sealed class RecordedDriveInfoBucket
 	///     Recorded calls to <see cref="IDriveInfoFactory.Wrap(System.IO.DriveInfo)" />.
 	/// </summary>
 	public RecordedMethodCallResult Wrap(
-		Func<System.IO.DriveInfo, bool>? driveInfo = null,
-		[CallerArgumentExpression(nameof(driveInfo))] string? driveInfoExpression = null)
+		Func<DriveInfo, bool>? driveInfo = null,
+		[CallerArgumentExpression(nameof(driveInfo))]
+		string? driveInfoExpression = null)
 		=> Build(nameof(IDriveInfoFactory.Wrap),
 			ParameterMatcher.From("driveInfo", driveInfo, driveInfoExpression));
 

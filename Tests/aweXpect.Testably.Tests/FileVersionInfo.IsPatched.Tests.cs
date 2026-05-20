@@ -10,17 +10,19 @@ public sealed partial class FileVersionInfo
 		public sealed class Tests
 		{
 			[Fact]
-			public async Task WhenInfoIsPatched_ShouldSucceed()
+			public async Task ShouldSupportAndComposition()
 			{
 				MockFileSystem fileSystem = new();
-				fileSystem.WithFileVersionInfo("*.dll", v => v.SetIsPatched(true));
+				fileSystem.WithFileVersionInfo("*.dll", v => v
+					.SetIsPatched(true)
+					.SetCompanyName("Acme"));
 				// ReSharper disable once MethodHasAsyncOverload
 				fileSystem.File.WriteAllText("Acme.dll", "");
 				IFileVersionInfo info = fileSystem.FileVersionInfo.GetVersionInfo("Acme.dll");
 
 				async Task Act()
 				{
-					await That(info).IsPatched();
+					await That(info).IsPatched().And.HasCompanyName("Acme");
 				}
 
 				await That(Act).DoesNotThrow();
@@ -49,19 +51,17 @@ public sealed partial class FileVersionInfo
 			}
 
 			[Fact]
-			public async Task ShouldSupportAndComposition()
+			public async Task WhenInfoIsPatched_ShouldSucceed()
 			{
 				MockFileSystem fileSystem = new();
-				fileSystem.WithFileVersionInfo("*.dll", v => v
-					.SetIsPatched(true)
-					.SetCompanyName("Acme"));
+				fileSystem.WithFileVersionInfo("*.dll", v => v.SetIsPatched(true));
 				// ReSharper disable once MethodHasAsyncOverload
 				fileSystem.File.WriteAllText("Acme.dll", "");
 				IFileVersionInfo info = fileSystem.FileVersionInfo.GetVersionInfo("Acme.dll");
 
 				async Task Act()
 				{
-					await That(info).IsPatched().And.HasCompanyName("Acme");
+					await That(info).IsPatched();
 				}
 
 				await That(Act).DoesNotThrow();
@@ -73,6 +73,25 @@ public sealed partial class FileVersionInfo
 	{
 		public sealed class Tests
 		{
+			[Fact]
+			public async Task ShouldSupportAndComposition()
+			{
+				MockFileSystem fileSystem = new();
+				fileSystem.WithFileVersionInfo("*.dll", v => v
+					.SetIsPatched(false)
+					.SetCompanyName("Acme"));
+				// ReSharper disable once MethodHasAsyncOverload
+				fileSystem.File.WriteAllText("Acme.dll", "");
+				IFileVersionInfo info = fileSystem.FileVersionInfo.GetVersionInfo("Acme.dll");
+
+				async Task Act()
+				{
+					await That(info).IsNotPatched().And.HasCompanyName("Acme");
+				}
+
+				await That(Act).DoesNotThrow();
+			}
+
 			[Fact]
 			public async Task WhenInfoIsNotPatched_ShouldSucceed()
 			{
@@ -110,25 +129,6 @@ public sealed partial class FileVersionInfo
 					             is not patched,
 					             but it was
 					             """);
-			}
-
-			[Fact]
-			public async Task ShouldSupportAndComposition()
-			{
-				MockFileSystem fileSystem = new();
-				fileSystem.WithFileVersionInfo("*.dll", v => v
-					.SetIsPatched(false)
-					.SetCompanyName("Acme"));
-				// ReSharper disable once MethodHasAsyncOverload
-				fileSystem.File.WriteAllText("Acme.dll", "");
-				IFileVersionInfo info = fileSystem.FileVersionInfo.GetVersionInfo("Acme.dll");
-
-				async Task Act()
-				{
-					await That(info).IsNotPatched().And.HasCompanyName("Acme");
-				}
-
-				await That(Act).DoesNotThrow();
 			}
 		}
 	}

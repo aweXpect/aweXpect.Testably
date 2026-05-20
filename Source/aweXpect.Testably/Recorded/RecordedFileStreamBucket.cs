@@ -46,11 +46,16 @@ public sealed class RecordedFileStreamBucket
 		Func<FileAccess, bool>? access = null,
 		Func<FileShare, bool>? share = null,
 		Func<int, bool>? bufferSize = null,
-		[CallerArgumentExpression(nameof(path))] string? pathExpression = null,
-		[CallerArgumentExpression(nameof(mode))] string? modeExpression = null,
-		[CallerArgumentExpression(nameof(access))] string? accessExpression = null,
-		[CallerArgumentExpression(nameof(share))] string? shareExpression = null,
-		[CallerArgumentExpression(nameof(bufferSize))] string? bufferSizeExpression = null)
+		[CallerArgumentExpression(nameof(path))]
+		string? pathExpression = null,
+		[CallerArgumentExpression(nameof(mode))]
+		string? modeExpression = null,
+		[CallerArgumentExpression(nameof(access))]
+		string? accessExpression = null,
+		[CallerArgumentExpression(nameof(share))]
+		string? shareExpression = null,
+		[CallerArgumentExpression(nameof(bufferSize))]
+		string? bufferSizeExpression = null)
 		=> Build(nameof(IFileStreamFactory.New),
 			ParameterMatcher.From("path", path, pathExpression),
 			ParameterMatcher.From("mode", mode, modeExpression),
@@ -64,7 +69,8 @@ public sealed class RecordedFileStreamBucket
 	/// </summary>
 	public RecordedMethodCallResult Wrap(
 		Func<FileStream, bool>? fileStream = null,
-		[CallerArgumentExpression(nameof(fileStream))] string? fileStreamExpression = null)
+		[CallerArgumentExpression(nameof(fileStream))]
+		string? fileStreamExpression = null)
 		=> Build(nameof(IFileStreamFactory.Wrap),
 			ParameterMatcher.From("fileStream", fileStream, fileStreamExpression));
 

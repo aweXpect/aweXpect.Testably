@@ -10,9 +10,9 @@ namespace aweXpect.Testably.Recorded;
 /// </summary>
 public sealed class RecordedDriveInfoInstance
 {
-	private readonly IThat<IFileSystemStatistics> _subject;
-	private readonly string _driveName;
 	private readonly string _bucketDescription;
+	private readonly string _driveName;
+	private readonly IThat<IFileSystemStatistics> _subject;
 
 	internal RecordedDriveInfoInstance(IThat<IFileSystemStatistics> subject, string driveName)
 	{

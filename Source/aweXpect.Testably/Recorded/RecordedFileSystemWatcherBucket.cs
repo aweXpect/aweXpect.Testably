@@ -37,8 +37,10 @@ public sealed class RecordedFileSystemWatcherBucket
 	public RecordedMethodCallResult New(
 		Func<string, bool>? path = null,
 		Func<string, bool>? filter = null,
-		[CallerArgumentExpression(nameof(path))] string? pathExpression = null,
-		[CallerArgumentExpression(nameof(filter))] string? filterExpression = null)
+		[CallerArgumentExpression(nameof(path))]
+		string? pathExpression = null,
+		[CallerArgumentExpression(nameof(filter))]
+		string? filterExpression = null)
 		=> Build(nameof(IFileSystemWatcherFactory.New),
 			ParameterMatcher.From("path", path, pathExpression),
 			ParameterMatcher.From("filter", filter, filterExpression));
@@ -48,7 +50,8 @@ public sealed class RecordedFileSystemWatcherBucket
 	/// </summary>
 	public RecordedMethodCallResult Wrap(
 		Func<FileSystemWatcher, bool>? fileSystemWatcher = null,
-		[CallerArgumentExpression(nameof(fileSystemWatcher))] string? fileSystemWatcherExpression = null)
+		[CallerArgumentExpression(nameof(fileSystemWatcher))]
+		string? fileSystemWatcherExpression = null)
 		=> Build(nameof(IFileSystemWatcherFactory.Wrap),
 			ParameterMatcher.From("fileSystemWatcher", fileSystemWatcher, fileSystemWatcherExpression));
 

@@ -10,6 +10,25 @@ public sealed partial class FileVersionInfo
 		public sealed class Tests
 		{
 			[Fact]
+			public async Task ShouldSupportAndComposition()
+			{
+				MockFileSystem fileSystem = new();
+				fileSystem.WithFileVersionInfo("*.dll", v => v
+					.SetProductVersion("1.2")
+					.SetFileVersion("1.2.3.4"));
+				// ReSharper disable once MethodHasAsyncOverload
+				fileSystem.File.WriteAllText("Acme.dll", "");
+				IFileVersionInfo info = fileSystem.FileVersionInfo.GetVersionInfo("Acme.dll");
+
+				async Task Act()
+				{
+					await That(info).HasProductVersion("1.2").And.HasFileVersion("1.2.3.4");
+				}
+
+				await That(Act).DoesNotThrow();
+			}
+
+			[Fact]
 			public async Task WhenProductVersionDiffers_ShouldFail()
 			{
 				MockFileSystem fileSystem = new();
@@ -47,25 +66,6 @@ public sealed partial class FileVersionInfo
 				async Task Act()
 				{
 					await That(info).HasProductVersion("1.2");
-				}
-
-				await That(Act).DoesNotThrow();
-			}
-
-			[Fact]
-			public async Task ShouldSupportAndComposition()
-			{
-				MockFileSystem fileSystem = new();
-				fileSystem.WithFileVersionInfo("*.dll", v => v
-					.SetProductVersion("1.2")
-					.SetFileVersion("1.2.3.4"));
-				// ReSharper disable once MethodHasAsyncOverload
-				fileSystem.File.WriteAllText("Acme.dll", "");
-				IFileVersionInfo info = fileSystem.FileVersionInfo.GetVersionInfo("Acme.dll");
-
-				async Task Act()
-				{
-					await That(info).HasProductVersion("1.2").And.HasFileVersion("1.2.3.4");
 				}
 
 				await That(Act).DoesNotThrow();

@@ -15,9 +15,9 @@ namespace aweXpect.Testably.Recorded;
 /// </summary>
 public sealed class RecordedFileSystemWatcherInstance
 {
-	private readonly IThat<IFileSystemStatistics> _subject;
-	private readonly string _path;
 	private readonly string _bucketDescription;
+	private readonly string _path;
+	private readonly IThat<IFileSystemStatistics> _subject;
 
 	internal RecordedFileSystemWatcherInstance(IThat<IFileSystemStatistics> subject, string path)
 	{
@@ -25,29 +25,6 @@ public sealed class RecordedFileSystemWatcherInstance
 		_path = path;
 		_bucketDescription = $"FileSystemWatcher[\"{path}\"]";
 	}
-
-	/// <summary>Recorded calls to <see cref="IFileSystemWatcher.BeginInit" />.</summary>
-	public RecordedMethodCallResult BeginInit()
-		=> Build(nameof(IFileSystemWatcher.BeginInit));
-
-	/// <summary>Recorded calls to <see cref="IFileSystemWatcher.EndInit" />.</summary>
-	public RecordedMethodCallResult EndInit()
-		=> Build(nameof(IFileSystemWatcher.EndInit));
-
-	/// <summary>Recorded calls to <see cref="IFileSystemWatcher.WaitForChanged(WatcherChangeTypes)" /> and overloads.</summary>
-	/// <remarks>
-	///     The <c>TimeSpan</c> overload records a <see cref="TimeSpan" /> at parameter position 1 while
-	///     <paramref name="timeout" /> expects an <see cref="int" />; filtering by <paramref name="timeout" />
-	///     only matches the <c>WaitForChanged(WatcherChangeTypes, int)</c> overload.
-	/// </remarks>
-	public RecordedMethodCallResult WaitForChanged(
-		Func<WatcherChangeTypes, bool>? changeType = null,
-		Func<int, bool>? timeout = null,
-		[CallerArgumentExpression(nameof(changeType))] string? changeTypeExpression = null,
-		[CallerArgumentExpression(nameof(timeout))] string? timeoutExpression = null)
-		=> Build(nameof(IFileSystemWatcher.WaitForChanged),
-			ParameterMatcher.From("changeType", changeType, changeTypeExpression),
-			ParameterMatcher.From("timeout", timeout, timeoutExpression));
 
 	/// <summary>Recorded accesses to <see cref="IFileSystemWatcher.EnableRaisingEvents" />.</summary>
 	public RecordedProperty EnableRaisingEvents => Property(nameof(IFileSystemWatcher.EnableRaisingEvents));
@@ -79,6 +56,31 @@ public sealed class RecordedFileSystemWatcherInstance
 
 	/// <summary>Recorded accesses to <see cref="IFileSystemWatcher.SynchronizingObject" />.</summary>
 	public RecordedProperty SynchronizingObject => Property(nameof(IFileSystemWatcher.SynchronizingObject));
+
+	/// <summary>Recorded calls to <see cref="IFileSystemWatcher.BeginInit" />.</summary>
+	public RecordedMethodCallResult BeginInit()
+		=> Build(nameof(IFileSystemWatcher.BeginInit));
+
+	/// <summary>Recorded calls to <see cref="IFileSystemWatcher.EndInit" />.</summary>
+	public RecordedMethodCallResult EndInit()
+		=> Build(nameof(IFileSystemWatcher.EndInit));
+
+	/// <summary>Recorded calls to <see cref="IFileSystemWatcher.WaitForChanged(WatcherChangeTypes)" /> and overloads.</summary>
+	/// <remarks>
+	///     The <c>TimeSpan</c> overload records a <see cref="TimeSpan" /> at parameter position 1 while
+	///     <paramref name="timeout" /> expects an <see cref="int" />; filtering by <paramref name="timeout" />
+	///     only matches the <c>WaitForChanged(WatcherChangeTypes, int)</c> overload.
+	/// </remarks>
+	public RecordedMethodCallResult WaitForChanged(
+		Func<WatcherChangeTypes, bool>? changeType = null,
+		Func<int, bool>? timeout = null,
+		[CallerArgumentExpression(nameof(changeType))]
+		string? changeTypeExpression = null,
+		[CallerArgumentExpression(nameof(timeout))]
+		string? timeoutExpression = null)
+		=> Build(nameof(IFileSystemWatcher.WaitForChanged),
+			ParameterMatcher.From("changeType", changeType, changeTypeExpression),
+			ParameterMatcher.From("timeout", timeout, timeoutExpression));
 
 	private RecordedProperty Property(string propertyName)
 	{

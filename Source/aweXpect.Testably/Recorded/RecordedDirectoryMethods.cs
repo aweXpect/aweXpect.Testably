@@ -30,24 +30,27 @@ public sealed class RecordedDirectoryMethods
 #if NET7_0_OR_GREATER
 		Func<UnixFileMode, bool>? unixCreateMode = null,
 #endif
-		[CallerArgumentExpression(nameof(path))] string? pathExpression = null
+		[CallerArgumentExpression(nameof(path))]
+		string? pathExpression = null
 #if NET7_0_OR_GREATER
 		, [CallerArgumentExpression(nameof(unixCreateMode))] string? unixCreateModeExpression = null
 #endif
-		)
+	)
 		=> Build(nameof(IDirectory.CreateDirectory),
 			ParameterMatcher.From("path", path, pathExpression)
 #if NET7_0_OR_GREATER
 			, ParameterMatcher.From("unixCreateMode", unixCreateMode, unixCreateModeExpression)
 #endif
-			);
+		);
 
 	/// <summary>Recorded calls to <c>IDirectory.CreateSymbolicLink(string, string)</c>.</summary>
 	public RecordedMethodCallResult CreateSymbolicLink(
 		Func<string, bool>? path = null,
 		Func<string, bool>? pathToTarget = null,
-		[CallerArgumentExpression(nameof(path))] string? pathExpression = null,
-		[CallerArgumentExpression(nameof(pathToTarget))] string? pathToTargetExpression = null)
+		[CallerArgumentExpression(nameof(path))]
+		string? pathExpression = null,
+		[CallerArgumentExpression(nameof(pathToTarget))]
+		string? pathToTargetExpression = null)
 		=> Build("CreateSymbolicLink",
 			ParameterMatcher.From("path", path, pathExpression),
 			ParameterMatcher.From("pathToTarget", pathToTarget, pathToTargetExpression));
@@ -55,7 +58,8 @@ public sealed class RecordedDirectoryMethods
 	/// <summary>Recorded calls to <c>IDirectory.CreateTempSubdirectory(string?)</c>.</summary>
 	public RecordedMethodCallResult CreateTempSubdirectory(
 		Func<string?, bool>? prefix = null,
-		[CallerArgumentExpression(nameof(prefix))] string? prefixExpression = null)
+		[CallerArgumentExpression(nameof(prefix))]
+		string? prefixExpression = null)
 		=> Build("CreateTempSubdirectory",
 			ParameterMatcher.From("prefix", prefix, prefixExpression));
 
@@ -63,8 +67,10 @@ public sealed class RecordedDirectoryMethods
 	public RecordedMethodCallResult Delete(
 		Func<string, bool>? path = null,
 		Func<bool, bool>? recursive = null,
-		[CallerArgumentExpression(nameof(path))] string? pathExpression = null,
-		[CallerArgumentExpression(nameof(recursive))] string? recursiveExpression = null)
+		[CallerArgumentExpression(nameof(path))]
+		string? pathExpression = null,
+		[CallerArgumentExpression(nameof(recursive))]
+		string? recursiveExpression = null)
 		=> Build(nameof(IDirectory.Delete),
 			ParameterMatcher.From("path", path, pathExpression),
 			ParameterMatcher.From("recursive", recursive, recursiveExpression));
@@ -82,13 +88,16 @@ public sealed class RecordedDirectoryMethods
 #if NET6_0_OR_GREATER
 		Func<EnumerationOptions, bool>? enumerationOptions = null,
 #endif
-		[CallerArgumentExpression(nameof(path))] string? pathExpression = null,
-		[CallerArgumentExpression(nameof(searchPattern))] string? searchPatternExpression = null,
-		[CallerArgumentExpression(nameof(searchOption))] string? searchOptionExpression = null
+		[CallerArgumentExpression(nameof(path))]
+		string? pathExpression = null,
+		[CallerArgumentExpression(nameof(searchPattern))]
+		string? searchPatternExpression = null,
+		[CallerArgumentExpression(nameof(searchOption))]
+		string? searchOptionExpression = null
 #if NET6_0_OR_GREATER
 		, [CallerArgumentExpression(nameof(enumerationOptions))] string? enumerationOptionsExpression = null
 #endif
-		)
+	)
 		=> Build(nameof(IDirectory.EnumerateDirectories),
 			ParameterMatcher.From("path", path, pathExpression),
 			ParameterMatcher.From("searchPattern", searchPattern, searchPatternExpression),
@@ -96,7 +105,7 @@ public sealed class RecordedDirectoryMethods
 #if NET6_0_OR_GREATER
 				, enumerationOptions, enumerationOptionsExpression
 #endif
-				));
+			));
 #pragma warning restore S107
 
 	/// <summary>Recorded calls to <see cref="IDirectory.EnumerateFiles(string)" /> and overloads.</summary>
@@ -112,13 +121,16 @@ public sealed class RecordedDirectoryMethods
 #if NET6_0_OR_GREATER
 		Func<EnumerationOptions, bool>? enumerationOptions = null,
 #endif
-		[CallerArgumentExpression(nameof(path))] string? pathExpression = null,
-		[CallerArgumentExpression(nameof(searchPattern))] string? searchPatternExpression = null,
-		[CallerArgumentExpression(nameof(searchOption))] string? searchOptionExpression = null
+		[CallerArgumentExpression(nameof(path))]
+		string? pathExpression = null,
+		[CallerArgumentExpression(nameof(searchPattern))]
+		string? searchPatternExpression = null,
+		[CallerArgumentExpression(nameof(searchOption))]
+		string? searchOptionExpression = null
 #if NET6_0_OR_GREATER
 		, [CallerArgumentExpression(nameof(enumerationOptions))] string? enumerationOptionsExpression = null
 #endif
-		)
+	)
 		=> Build(nameof(IDirectory.EnumerateFiles),
 			ParameterMatcher.From("path", path, pathExpression),
 			ParameterMatcher.From("searchPattern", searchPattern, searchPatternExpression),
@@ -126,7 +138,7 @@ public sealed class RecordedDirectoryMethods
 #if NET6_0_OR_GREATER
 				, enumerationOptions, enumerationOptionsExpression
 #endif
-				));
+			));
 #pragma warning restore S107
 
 	/// <summary>Recorded calls to <see cref="IDirectory.EnumerateFileSystemEntries(string)" /> and overloads.</summary>
@@ -142,13 +154,16 @@ public sealed class RecordedDirectoryMethods
 #if NET6_0_OR_GREATER
 		Func<EnumerationOptions, bool>? enumerationOptions = null,
 #endif
-		[CallerArgumentExpression(nameof(path))] string? pathExpression = null,
-		[CallerArgumentExpression(nameof(searchPattern))] string? searchPatternExpression = null,
-		[CallerArgumentExpression(nameof(searchOption))] string? searchOptionExpression = null
+		[CallerArgumentExpression(nameof(path))]
+		string? pathExpression = null,
+		[CallerArgumentExpression(nameof(searchPattern))]
+		string? searchPatternExpression = null,
+		[CallerArgumentExpression(nameof(searchOption))]
+		string? searchOptionExpression = null
 #if NET6_0_OR_GREATER
 		, [CallerArgumentExpression(nameof(enumerationOptions))] string? enumerationOptionsExpression = null
 #endif
-		)
+	)
 		=> Build(nameof(IDirectory.EnumerateFileSystemEntries),
 			ParameterMatcher.From("path", path, pathExpression),
 			ParameterMatcher.From("searchPattern", searchPattern, searchPatternExpression),
@@ -156,27 +171,30 @@ public sealed class RecordedDirectoryMethods
 #if NET6_0_OR_GREATER
 				, enumerationOptions, enumerationOptionsExpression
 #endif
-				));
+			));
 #pragma warning restore S107
 
 	/// <summary>Recorded calls to <see cref="IDirectory.Exists(string?)" />.</summary>
 	public RecordedMethodCallResult Exists(
 		Func<string?, bool>? path = null,
-		[CallerArgumentExpression(nameof(path))] string? pathExpression = null)
+		[CallerArgumentExpression(nameof(path))]
+		string? pathExpression = null)
 		=> Build(nameof(IDirectory.Exists),
 			ParameterMatcher.From("path", path, pathExpression));
 
 	/// <summary>Recorded calls to <see cref="IDirectory.GetCreationTime(string)" />.</summary>
 	public RecordedMethodCallResult GetCreationTime(
 		Func<string, bool>? path = null,
-		[CallerArgumentExpression(nameof(path))] string? pathExpression = null)
+		[CallerArgumentExpression(nameof(path))]
+		string? pathExpression = null)
 		=> Build(nameof(IDirectory.GetCreationTime),
 			ParameterMatcher.From("path", path, pathExpression));
 
 	/// <summary>Recorded calls to <see cref="IDirectory.GetCreationTimeUtc(string)" />.</summary>
 	public RecordedMethodCallResult GetCreationTimeUtc(
 		Func<string, bool>? path = null,
-		[CallerArgumentExpression(nameof(path))] string? pathExpression = null)
+		[CallerArgumentExpression(nameof(path))]
+		string? pathExpression = null)
 		=> Build(nameof(IDirectory.GetCreationTimeUtc),
 			ParameterMatcher.From("path", path, pathExpression));
 
@@ -197,13 +215,16 @@ public sealed class RecordedDirectoryMethods
 #if NET6_0_OR_GREATER
 		Func<EnumerationOptions, bool>? enumerationOptions = null,
 #endif
-		[CallerArgumentExpression(nameof(path))] string? pathExpression = null,
-		[CallerArgumentExpression(nameof(searchPattern))] string? searchPatternExpression = null,
-		[CallerArgumentExpression(nameof(searchOption))] string? searchOptionExpression = null
+		[CallerArgumentExpression(nameof(path))]
+		string? pathExpression = null,
+		[CallerArgumentExpression(nameof(searchPattern))]
+		string? searchPatternExpression = null,
+		[CallerArgumentExpression(nameof(searchOption))]
+		string? searchOptionExpression = null
 #if NET6_0_OR_GREATER
 		, [CallerArgumentExpression(nameof(enumerationOptions))] string? enumerationOptionsExpression = null
 #endif
-		)
+	)
 		=> Build(nameof(IDirectory.GetDirectories),
 			ParameterMatcher.From("path", path, pathExpression),
 			ParameterMatcher.From("searchPattern", searchPattern, searchPatternExpression),
@@ -211,13 +232,14 @@ public sealed class RecordedDirectoryMethods
 #if NET6_0_OR_GREATER
 				, enumerationOptions, enumerationOptionsExpression
 #endif
-				));
+			));
 #pragma warning restore S107
 
 	/// <summary>Recorded calls to <see cref="IDirectory.GetDirectoryRoot(string)" />.</summary>
 	public RecordedMethodCallResult GetDirectoryRoot(
 		Func<string, bool>? path = null,
-		[CallerArgumentExpression(nameof(path))] string? pathExpression = null)
+		[CallerArgumentExpression(nameof(path))]
+		string? pathExpression = null)
 		=> Build(nameof(IDirectory.GetDirectoryRoot),
 			ParameterMatcher.From("path", path, pathExpression));
 
@@ -234,13 +256,16 @@ public sealed class RecordedDirectoryMethods
 #if NET6_0_OR_GREATER
 		Func<EnumerationOptions, bool>? enumerationOptions = null,
 #endif
-		[CallerArgumentExpression(nameof(path))] string? pathExpression = null,
-		[CallerArgumentExpression(nameof(searchPattern))] string? searchPatternExpression = null,
-		[CallerArgumentExpression(nameof(searchOption))] string? searchOptionExpression = null
+		[CallerArgumentExpression(nameof(path))]
+		string? pathExpression = null,
+		[CallerArgumentExpression(nameof(searchPattern))]
+		string? searchPatternExpression = null,
+		[CallerArgumentExpression(nameof(searchOption))]
+		string? searchOptionExpression = null
 #if NET6_0_OR_GREATER
 		, [CallerArgumentExpression(nameof(enumerationOptions))] string? enumerationOptionsExpression = null
 #endif
-		)
+	)
 		=> Build(nameof(IDirectory.GetFiles),
 			ParameterMatcher.From("path", path, pathExpression),
 			ParameterMatcher.From("searchPattern", searchPattern, searchPatternExpression),
@@ -248,7 +273,7 @@ public sealed class RecordedDirectoryMethods
 #if NET6_0_OR_GREATER
 				, enumerationOptions, enumerationOptionsExpression
 #endif
-				));
+			));
 #pragma warning restore S107
 
 	/// <summary>Recorded calls to <see cref="IDirectory.GetFileSystemEntries(string)" /> and overloads.</summary>
@@ -264,13 +289,16 @@ public sealed class RecordedDirectoryMethods
 #if NET6_0_OR_GREATER
 		Func<EnumerationOptions, bool>? enumerationOptions = null,
 #endif
-		[CallerArgumentExpression(nameof(path))] string? pathExpression = null,
-		[CallerArgumentExpression(nameof(searchPattern))] string? searchPatternExpression = null,
-		[CallerArgumentExpression(nameof(searchOption))] string? searchOptionExpression = null
+		[CallerArgumentExpression(nameof(path))]
+		string? pathExpression = null,
+		[CallerArgumentExpression(nameof(searchPattern))]
+		string? searchPatternExpression = null,
+		[CallerArgumentExpression(nameof(searchOption))]
+		string? searchOptionExpression = null
 #if NET6_0_OR_GREATER
 		, [CallerArgumentExpression(nameof(enumerationOptions))] string? enumerationOptionsExpression = null
 #endif
-		)
+	)
 		=> Build(nameof(IDirectory.GetFileSystemEntries),
 			ParameterMatcher.From("path", path, pathExpression),
 			ParameterMatcher.From("searchPattern", searchPattern, searchPatternExpression),
@@ -278,34 +306,38 @@ public sealed class RecordedDirectoryMethods
 #if NET6_0_OR_GREATER
 				, enumerationOptions, enumerationOptionsExpression
 #endif
-				));
+			));
 #pragma warning restore S107
 
 	/// <summary>Recorded calls to <see cref="IDirectory.GetLastAccessTime(string)" />.</summary>
 	public RecordedMethodCallResult GetLastAccessTime(
 		Func<string, bool>? path = null,
-		[CallerArgumentExpression(nameof(path))] string? pathExpression = null)
+		[CallerArgumentExpression(nameof(path))]
+		string? pathExpression = null)
 		=> Build(nameof(IDirectory.GetLastAccessTime),
 			ParameterMatcher.From("path", path, pathExpression));
 
 	/// <summary>Recorded calls to <see cref="IDirectory.GetLastAccessTimeUtc(string)" />.</summary>
 	public RecordedMethodCallResult GetLastAccessTimeUtc(
 		Func<string, bool>? path = null,
-		[CallerArgumentExpression(nameof(path))] string? pathExpression = null)
+		[CallerArgumentExpression(nameof(path))]
+		string? pathExpression = null)
 		=> Build(nameof(IDirectory.GetLastAccessTimeUtc),
 			ParameterMatcher.From("path", path, pathExpression));
 
 	/// <summary>Recorded calls to <see cref="IDirectory.GetLastWriteTime(string)" />.</summary>
 	public RecordedMethodCallResult GetLastWriteTime(
 		Func<string, bool>? path = null,
-		[CallerArgumentExpression(nameof(path))] string? pathExpression = null)
+		[CallerArgumentExpression(nameof(path))]
+		string? pathExpression = null)
 		=> Build(nameof(IDirectory.GetLastWriteTime),
 			ParameterMatcher.From("path", path, pathExpression));
 
 	/// <summary>Recorded calls to <see cref="IDirectory.GetLastWriteTimeUtc(string)" />.</summary>
 	public RecordedMethodCallResult GetLastWriteTimeUtc(
 		Func<string, bool>? path = null,
-		[CallerArgumentExpression(nameof(path))] string? pathExpression = null)
+		[CallerArgumentExpression(nameof(path))]
+		string? pathExpression = null)
 		=> Build(nameof(IDirectory.GetLastWriteTimeUtc),
 			ParameterMatcher.From("path", path, pathExpression));
 
@@ -316,7 +348,8 @@ public sealed class RecordedDirectoryMethods
 	/// <summary>Recorded calls to <see cref="IDirectory.GetParent(string)" />.</summary>
 	public RecordedMethodCallResult GetParent(
 		Func<string, bool>? path = null,
-		[CallerArgumentExpression(nameof(path))] string? pathExpression = null)
+		[CallerArgumentExpression(nameof(path))]
+		string? pathExpression = null)
 		=> Build(nameof(IDirectory.GetParent),
 			ParameterMatcher.From("path", path, pathExpression));
 
@@ -324,8 +357,10 @@ public sealed class RecordedDirectoryMethods
 	public RecordedMethodCallResult Move(
 		Func<string, bool>? sourceDirName = null,
 		Func<string, bool>? destDirName = null,
-		[CallerArgumentExpression(nameof(sourceDirName))] string? sourceDirNameExpression = null,
-		[CallerArgumentExpression(nameof(destDirName))] string? destDirNameExpression = null)
+		[CallerArgumentExpression(nameof(sourceDirName))]
+		string? sourceDirNameExpression = null,
+		[CallerArgumentExpression(nameof(destDirName))]
+		string? destDirNameExpression = null)
 		=> Build(nameof(IDirectory.Move),
 			ParameterMatcher.From("sourceDirName", sourceDirName, sourceDirNameExpression),
 			ParameterMatcher.From("destDirName", destDirName, destDirNameExpression));
@@ -334,8 +369,10 @@ public sealed class RecordedDirectoryMethods
 	public RecordedMethodCallResult ResolveLinkTarget(
 		Func<string, bool>? linkPath = null,
 		Func<bool, bool>? returnFinalTarget = null,
-		[CallerArgumentExpression(nameof(linkPath))] string? linkPathExpression = null,
-		[CallerArgumentExpression(nameof(returnFinalTarget))] string? returnFinalTargetExpression = null)
+		[CallerArgumentExpression(nameof(linkPath))]
+		string? linkPathExpression = null,
+		[CallerArgumentExpression(nameof(returnFinalTarget))]
+		string? returnFinalTargetExpression = null)
 		=> Build("ResolveLinkTarget",
 			ParameterMatcher.From("linkPath", linkPath, linkPathExpression),
 			ParameterMatcher.From("returnFinalTarget", returnFinalTarget, returnFinalTargetExpression));
@@ -344,8 +381,10 @@ public sealed class RecordedDirectoryMethods
 	public RecordedMethodCallResult SetCreationTime(
 		Func<string, bool>? path = null,
 		Func<DateTime, bool>? creationTime = null,
-		[CallerArgumentExpression(nameof(path))] string? pathExpression = null,
-		[CallerArgumentExpression(nameof(creationTime))] string? creationTimeExpression = null)
+		[CallerArgumentExpression(nameof(path))]
+		string? pathExpression = null,
+		[CallerArgumentExpression(nameof(creationTime))]
+		string? creationTimeExpression = null)
 		=> Build(nameof(IDirectory.SetCreationTime),
 			ParameterMatcher.From("path", path, pathExpression),
 			ParameterMatcher.From("creationTime", creationTime, creationTimeExpression));
@@ -354,8 +393,10 @@ public sealed class RecordedDirectoryMethods
 	public RecordedMethodCallResult SetCreationTimeUtc(
 		Func<string, bool>? path = null,
 		Func<DateTime, bool>? creationTimeUtc = null,
-		[CallerArgumentExpression(nameof(path))] string? pathExpression = null,
-		[CallerArgumentExpression(nameof(creationTimeUtc))] string? creationTimeUtcExpression = null)
+		[CallerArgumentExpression(nameof(path))]
+		string? pathExpression = null,
+		[CallerArgumentExpression(nameof(creationTimeUtc))]
+		string? creationTimeUtcExpression = null)
 		=> Build(nameof(IDirectory.SetCreationTimeUtc),
 			ParameterMatcher.From("path", path, pathExpression),
 			ParameterMatcher.From("creationTimeUtc", creationTimeUtc, creationTimeUtcExpression));
@@ -363,7 +404,8 @@ public sealed class RecordedDirectoryMethods
 	/// <summary>Recorded calls to <see cref="IDirectory.SetCurrentDirectory(string)" />.</summary>
 	public RecordedMethodCallResult SetCurrentDirectory(
 		Func<string, bool>? path = null,
-		[CallerArgumentExpression(nameof(path))] string? pathExpression = null)
+		[CallerArgumentExpression(nameof(path))]
+		string? pathExpression = null)
 		=> Build(nameof(IDirectory.SetCurrentDirectory),
 			ParameterMatcher.From("path", path, pathExpression));
 
@@ -371,8 +413,10 @@ public sealed class RecordedDirectoryMethods
 	public RecordedMethodCallResult SetLastAccessTime(
 		Func<string, bool>? path = null,
 		Func<DateTime, bool>? lastAccessTime = null,
-		[CallerArgumentExpression(nameof(path))] string? pathExpression = null,
-		[CallerArgumentExpression(nameof(lastAccessTime))] string? lastAccessTimeExpression = null)
+		[CallerArgumentExpression(nameof(path))]
+		string? pathExpression = null,
+		[CallerArgumentExpression(nameof(lastAccessTime))]
+		string? lastAccessTimeExpression = null)
 		=> Build(nameof(IDirectory.SetLastAccessTime),
 			ParameterMatcher.From("path", path, pathExpression),
 			ParameterMatcher.From("lastAccessTime", lastAccessTime, lastAccessTimeExpression));
@@ -381,8 +425,10 @@ public sealed class RecordedDirectoryMethods
 	public RecordedMethodCallResult SetLastAccessTimeUtc(
 		Func<string, bool>? path = null,
 		Func<DateTime, bool>? lastAccessTimeUtc = null,
-		[CallerArgumentExpression(nameof(path))] string? pathExpression = null,
-		[CallerArgumentExpression(nameof(lastAccessTimeUtc))] string? lastAccessTimeUtcExpression = null)
+		[CallerArgumentExpression(nameof(path))]
+		string? pathExpression = null,
+		[CallerArgumentExpression(nameof(lastAccessTimeUtc))]
+		string? lastAccessTimeUtcExpression = null)
 		=> Build(nameof(IDirectory.SetLastAccessTimeUtc),
 			ParameterMatcher.From("path", path, pathExpression),
 			ParameterMatcher.From("lastAccessTimeUtc", lastAccessTimeUtc, lastAccessTimeUtcExpression));
@@ -391,8 +437,10 @@ public sealed class RecordedDirectoryMethods
 	public RecordedMethodCallResult SetLastWriteTime(
 		Func<string, bool>? path = null,
 		Func<DateTime, bool>? lastWriteTime = null,
-		[CallerArgumentExpression(nameof(path))] string? pathExpression = null,
-		[CallerArgumentExpression(nameof(lastWriteTime))] string? lastWriteTimeExpression = null)
+		[CallerArgumentExpression(nameof(path))]
+		string? pathExpression = null,
+		[CallerArgumentExpression(nameof(lastWriteTime))]
+		string? lastWriteTimeExpression = null)
 		=> Build(nameof(IDirectory.SetLastWriteTime),
 			ParameterMatcher.From("path", path, pathExpression),
 			ParameterMatcher.From("lastWriteTime", lastWriteTime, lastWriteTimeExpression));
@@ -401,8 +449,10 @@ public sealed class RecordedDirectoryMethods
 	public RecordedMethodCallResult SetLastWriteTimeUtc(
 		Func<string, bool>? path = null,
 		Func<DateTime, bool>? lastWriteTimeUtc = null,
-		[CallerArgumentExpression(nameof(path))] string? pathExpression = null,
-		[CallerArgumentExpression(nameof(lastWriteTimeUtc))] string? lastWriteTimeUtcExpression = null)
+		[CallerArgumentExpression(nameof(path))]
+		string? pathExpression = null,
+		[CallerArgumentExpression(nameof(lastWriteTimeUtc))]
+		string? lastWriteTimeUtcExpression = null)
 		=> Build(nameof(IDirectory.SetLastWriteTimeUtc),
 			ParameterMatcher.From("path", path, pathExpression),
 			ParameterMatcher.From("lastWriteTimeUtc", lastWriteTimeUtc, lastWriteTimeUtcExpression));
@@ -414,7 +464,7 @@ public sealed class RecordedDirectoryMethods
 		, Func<EnumerationOptions, bool>? enumerationOptions,
 		string? enumerationOptionsExpression
 #endif
-		)
+	)
 	{
 #if NET6_0_OR_GREATER
 		if (enumerationOptions is not null)

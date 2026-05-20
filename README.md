@@ -202,29 +202,43 @@ fileSystem.File.WriteAllText("Acme.dll", "");
 IFileVersionInfo info = fileSystem.FileVersionInfo.GetVersionInfo("Acme.dll");
 
 await That(info).HasCompanyName("Acme").And.HasProductName("Anvil");
-await That(info).HasFileVersion("1.2.3.4");
+await That(info).HasFileVersion("1.2.3.4").And.HasFileMajorPart(1);
 await That(info).IsDebug().And.IsNotPreRelease();
 ```
 
-Dedicated assertions exist for the common fields (`HasCompanyName`,
-`HasProductName`, `HasFileDescription`, `HasFileVersion`, `HasProductVersion`,
-`HasOriginalFilename`, `HasLanguage`), plus the boolean pairs
-`IsDebug` / `IsNotDebug`, `IsPreRelease` / `IsNotPreRelease` and
-`IsPatched` / `IsNotPatched`.
+Dedicated assertions cover every `IFileVersionInfo` property — strings via
+`Has…(string)`, the integer version parts via `Has…(int)` and the booleans
+as `Is…()` / `IsNot…()` pairs.
 
-| Property              | Assertion                                  |
-|-----------------------|--------------------------------------------|
-| `CompanyName`         | `HasCompanyName(string)`                   |
-| `ProductName`         | `HasProductName(string)`                   |
-| `FileDescription`     | `HasFileDescription(string)`               |
-| `FileVersion`         | `HasFileVersion(string)`                   |
-| `ProductVersion`      | `HasProductVersion(string)`                |
-| `OriginalFilename`    | `HasOriginalFilename(string)`              |
-| `Language`            | `HasLanguage(string)`                      |
-| `IsDebug`             | `IsDebug()` / `IsNotDebug()`               |
-| `IsPreRelease`        | `IsPreRelease()` / `IsNotPreRelease()`     |
-| `IsPatched`           | `IsPatched()` / `IsNotPatched()`           |
-| _other_ (e.g. `Comments`, `LegalCopyright`, `FileMajorPart`) | `await That(info.X).Is…` |
+| Property             | Assertion                                  |
+|----------------------|--------------------------------------------|
+| `Comments`           | `HasComments(string)`                      |
+| `CompanyName`        | `HasCompanyName(string)`                   |
+| `FileDescription`    | `HasFileDescription(string)`               |
+| `FileName`           | `HasFileName(string)`                      |
+| `FileVersion`        | `HasFileVersion(string)`                   |
+| `InternalName`       | `HasInternalName(string)`                  |
+| `Language`           | `HasLanguage(string)`                      |
+| `LegalCopyright`     | `HasLegalCopyright(string)`                |
+| `LegalTrademarks`    | `HasLegalTrademarks(string)`               |
+| `OriginalFilename`   | `HasOriginalFilename(string)`              |
+| `PrivateBuild`       | `HasPrivateBuild(string)`                  |
+| `ProductName`        | `HasProductName(string)`                   |
+| `ProductVersion`     | `HasProductVersion(string)`                |
+| `SpecialBuild`       | `HasSpecialBuild(string)`                  |
+| `FileBuildPart`      | `HasFileBuildPart(int)`                    |
+| `FileMajorPart`      | `HasFileMajorPart(int)`                    |
+| `FileMinorPart`      | `HasFileMinorPart(int)`                    |
+| `FilePrivatePart`    | `HasFilePrivatePart(int)`                  |
+| `ProductBuildPart`   | `HasProductBuildPart(int)`                 |
+| `ProductMajorPart`   | `HasProductMajorPart(int)`                 |
+| `ProductMinorPart`   | `HasProductMinorPart(int)`                 |
+| `ProductPrivatePart` | `HasProductPrivatePart(int)`               |
+| `IsDebug`            | `IsDebug()` / `IsNotDebug()`               |
+| `IsPatched`          | `IsPatched()` / `IsNotPatched()`           |
+| `IsPreRelease`       | `IsPreRelease()` / `IsNotPreRelease()`     |
+| `IsPrivateBuild`     | `IsPrivateBuild()` / `IsNotPrivateBuild()` |
+| `IsSpecialBuild`     | `IsSpecialBuild()` / `IsNotSpecialBuild()` |
 
 ## File-system notifications
 
