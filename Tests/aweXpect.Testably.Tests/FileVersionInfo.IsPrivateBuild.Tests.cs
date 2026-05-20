@@ -10,17 +10,19 @@ public sealed partial class FileVersionInfo
 		public sealed class Tests
 		{
 			[Fact]
-			public async Task WhenInfoIsPrivateBuild_ShouldSucceed()
+			public async Task ShouldSupportAndComposition()
 			{
 				MockFileSystem fileSystem = new();
-				fileSystem.WithFileVersionInfo("*.dll", v => v.SetIsPrivateBuild(true));
+				fileSystem.WithFileVersionInfo("*.dll", v => v
+					.SetIsPrivateBuild(true)
+					.SetCompanyName("Acme"));
 				// ReSharper disable once MethodHasAsyncOverload
 				fileSystem.File.WriteAllText("Acme.dll", "");
 				IFileVersionInfo info = fileSystem.FileVersionInfo.GetVersionInfo("Acme.dll");
 
 				async Task Act()
 				{
-					await That(info).IsPrivateBuild();
+					await That(info).IsPrivateBuild().And.HasCompanyName("Acme");
 				}
 
 				await That(Act).DoesNotThrow();
@@ -49,19 +51,17 @@ public sealed partial class FileVersionInfo
 			}
 
 			[Fact]
-			public async Task ShouldSupportAndComposition()
+			public async Task WhenInfoIsPrivateBuild_ShouldSucceed()
 			{
 				MockFileSystem fileSystem = new();
-				fileSystem.WithFileVersionInfo("*.dll", v => v
-					.SetIsPrivateBuild(true)
-					.SetCompanyName("Acme"));
+				fileSystem.WithFileVersionInfo("*.dll", v => v.SetIsPrivateBuild(true));
 				// ReSharper disable once MethodHasAsyncOverload
 				fileSystem.File.WriteAllText("Acme.dll", "");
 				IFileVersionInfo info = fileSystem.FileVersionInfo.GetVersionInfo("Acme.dll");
 
 				async Task Act()
 				{
-					await That(info).IsPrivateBuild().And.HasCompanyName("Acme");
+					await That(info).IsPrivateBuild();
 				}
 
 				await That(Act).DoesNotThrow();

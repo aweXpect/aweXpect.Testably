@@ -12,10 +12,10 @@ namespace aweXpect.Testably.Recorded;
 /// </summary>
 public sealed class RecordedProperty
 {
-	private readonly IThat<IFileSystemStatistics> _subject;
-	private readonly Func<IFileSystemStatistics, IStatistics> _bucketSelector;
 	private readonly string _bucketDescription;
+	private readonly Func<IFileSystemStatistics, IStatistics> _bucketSelector;
 	private readonly string _propertyName;
+	private readonly IThat<IFileSystemStatistics> _subject;
 
 	internal RecordedProperty(
 		IThat<IFileSystemStatistics> subject,

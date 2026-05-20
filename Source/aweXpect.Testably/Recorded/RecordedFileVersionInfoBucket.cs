@@ -36,7 +36,8 @@ public sealed class RecordedFileVersionInfoBucket
 	/// </summary>
 	public RecordedMethodCallResult GetVersionInfo(
 		Func<string, bool>? fileName = null,
-		[CallerArgumentExpression(nameof(fileName))] string? fileNameExpression = null)
+		[CallerArgumentExpression(nameof(fileName))]
+		string? fileNameExpression = null)
 		=> Build(nameof(IFileVersionInfoFactory.GetVersionInfo),
 			ParameterMatcher.From("fileName", fileName, fileNameExpression));
 

@@ -30,6 +30,6 @@ public class DriveResult<TParent>
 	/// </summary>
 	public IThat<IDriveInfo> Which
 		=> new ThatSubject<IDriveInfo>(
-			_expectationBuilder.ForWhich<TParent, IDriveInfo>(
+			_expectationBuilder.ForWhich(
 				_resolver, " which "));
 }

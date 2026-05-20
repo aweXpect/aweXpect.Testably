@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.IO.Abstractions;
 using System.Runtime.CompilerServices;
 using aweXpect.Core;
@@ -35,7 +36,8 @@ public sealed class RecordedFileInfoBucket
 	/// </summary>
 	public RecordedMethodCallResult New(
 		Func<string, bool>? fileName = null,
-		[CallerArgumentExpression(nameof(fileName))] string? fileNameExpression = null)
+		[CallerArgumentExpression(nameof(fileName))]
+		string? fileNameExpression = null)
 		=> Build(nameof(IFileInfoFactory.New),
 			ParameterMatcher.From("fileName", fileName, fileNameExpression));
 
@@ -43,8 +45,9 @@ public sealed class RecordedFileInfoBucket
 	///     Recorded calls to <see cref="IFileInfoFactory.Wrap(System.IO.FileInfo?)" />.
 	/// </summary>
 	public RecordedMethodCallResult Wrap(
-		Func<System.IO.FileInfo?, bool>? fileInfo = null,
-		[CallerArgumentExpression(nameof(fileInfo))] string? fileInfoExpression = null)
+		Func<FileInfo?, bool>? fileInfo = null,
+		[CallerArgumentExpression(nameof(fileInfo))]
+		string? fileInfoExpression = null)
 		=> Build(nameof(IFileInfoFactory.Wrap),
 			ParameterMatcher.From("fileInfo", fileInfo, fileInfoExpression));
 

@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.IO.Abstractions;
 using System.Runtime.CompilerServices;
 using aweXpect.Core;
@@ -35,7 +36,8 @@ public sealed class RecordedDirectoryInfoBucket
 	/// </summary>
 	public RecordedMethodCallResult New(
 		Func<string, bool>? path = null,
-		[CallerArgumentExpression(nameof(path))] string? pathExpression = null)
+		[CallerArgumentExpression(nameof(path))]
+		string? pathExpression = null)
 		=> Build(nameof(IDirectoryInfoFactory.New),
 			ParameterMatcher.From("path", path, pathExpression));
 
@@ -43,8 +45,9 @@ public sealed class RecordedDirectoryInfoBucket
 	///     Recorded calls to <see cref="IDirectoryInfoFactory.Wrap(System.IO.DirectoryInfo?)" />.
 	/// </summary>
 	public RecordedMethodCallResult Wrap(
-		Func<System.IO.DirectoryInfo?, bool>? directoryInfo = null,
-		[CallerArgumentExpression(nameof(directoryInfo))] string? directoryInfoExpression = null)
+		Func<DirectoryInfo?, bool>? directoryInfo = null,
+		[CallerArgumentExpression(nameof(directoryInfo))]
+		string? directoryInfoExpression = null)
 		=> Build(nameof(IDirectoryInfoFactory.Wrap),
 			ParameterMatcher.From("directoryInfo", directoryInfo, directoryInfoExpression));
 

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.IO;
 using aweXpect.Core;
 using Testably.Abstractions.Testing;

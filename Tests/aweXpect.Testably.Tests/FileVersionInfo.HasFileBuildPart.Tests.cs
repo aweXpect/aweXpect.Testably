@@ -10,17 +10,19 @@ public sealed partial class FileVersionInfo
 		public sealed class Tests
 		{
 			[Fact]
-			public async Task WhenFileBuildPartMatches_ShouldSucceed()
+			public async Task ShouldSupportAndComposition()
 			{
 				MockFileSystem fileSystem = new();
-				fileSystem.WithFileVersionInfo("*.dll", v => v.SetFileVersion("1.2.3.4"));
+				fileSystem.WithFileVersionInfo("*.dll", v => v
+					.SetFileVersion("1.2.3.4")
+					.SetCompanyName("Acme"));
 				// ReSharper disable once MethodHasAsyncOverload
 				fileSystem.File.WriteAllText("Acme.dll", "");
 				IFileVersionInfo info = fileSystem.FileVersionInfo.GetVersionInfo("Acme.dll");
 
 				async Task Act()
 				{
-					await That(info).HasFileBuildPart(3);
+					await That(info).HasFileBuildPart(3).And.HasCompanyName("Acme");
 				}
 
 				await That(Act).DoesNotThrow();
@@ -49,19 +51,17 @@ public sealed partial class FileVersionInfo
 			}
 
 			[Fact]
-			public async Task ShouldSupportAndComposition()
+			public async Task WhenFileBuildPartMatches_ShouldSucceed()
 			{
 				MockFileSystem fileSystem = new();
-				fileSystem.WithFileVersionInfo("*.dll", v => v
-					.SetFileVersion("1.2.3.4")
-					.SetCompanyName("Acme"));
+				fileSystem.WithFileVersionInfo("*.dll", v => v.SetFileVersion("1.2.3.4"));
 				// ReSharper disable once MethodHasAsyncOverload
 				fileSystem.File.WriteAllText("Acme.dll", "");
 				IFileVersionInfo info = fileSystem.FileVersionInfo.GetVersionInfo("Acme.dll");
 
 				async Task Act()
 				{
-					await That(info).HasFileBuildPart(3).And.HasCompanyName("Acme");
+					await That(info).HasFileBuildPart(3);
 				}
 
 				await That(Act).DoesNotThrow();

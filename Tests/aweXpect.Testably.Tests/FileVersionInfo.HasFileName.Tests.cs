@@ -10,7 +10,7 @@ public sealed partial class FileVersionInfo
 		public sealed class Tests
 		{
 			[Fact]
-			public async Task WhenFileNameMatches_ShouldSucceed()
+			public async Task ShouldSupportAndComposition()
 			{
 				MockFileSystem fileSystem = new();
 				fileSystem.WithFileVersionInfo("*.dll", v => v.SetCompanyName("Acme"));
@@ -20,7 +20,7 @@ public sealed partial class FileVersionInfo
 
 				async Task Act()
 				{
-					await That(info).HasFileName(info.FileName);
+					await That(info).HasFileName(info.FileName).And.HasCompanyName("Acme");
 				}
 
 				await That(Act).DoesNotThrow();
@@ -45,7 +45,7 @@ public sealed partial class FileVersionInfo
 			}
 
 			[Fact]
-			public async Task ShouldSupportAndComposition()
+			public async Task WhenFileNameMatches_ShouldSucceed()
 			{
 				MockFileSystem fileSystem = new();
 				fileSystem.WithFileVersionInfo("*.dll", v => v.SetCompanyName("Acme"));
@@ -55,7 +55,7 @@ public sealed partial class FileVersionInfo
 
 				async Task Act()
 				{
-					await That(info).HasFileName(info.FileName).And.HasCompanyName("Acme");
+					await That(info).HasFileName(info.FileName);
 				}
 
 				await That(Act).DoesNotThrow();

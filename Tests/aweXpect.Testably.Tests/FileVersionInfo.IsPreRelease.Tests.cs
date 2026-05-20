@@ -10,17 +10,19 @@ public sealed partial class FileVersionInfo
 		public sealed class Tests
 		{
 			[Fact]
-			public async Task WhenInfoIsPreRelease_ShouldSucceed()
+			public async Task ShouldSupportAndComposition()
 			{
 				MockFileSystem fileSystem = new();
-				fileSystem.WithFileVersionInfo("*.dll", v => v.SetIsPreRelease(true));
+				fileSystem.WithFileVersionInfo("*.dll", v => v
+					.SetIsPreRelease(true)
+					.SetCompanyName("Acme"));
 				// ReSharper disable once MethodHasAsyncOverload
 				fileSystem.File.WriteAllText("Acme.dll", "");
 				IFileVersionInfo info = fileSystem.FileVersionInfo.GetVersionInfo("Acme.dll");
 
 				async Task Act()
 				{
-					await That(info).IsPreRelease();
+					await That(info).IsPreRelease().And.HasCompanyName("Acme");
 				}
 
 				await That(Act).DoesNotThrow();
@@ -49,19 +51,17 @@ public sealed partial class FileVersionInfo
 			}
 
 			[Fact]
-			public async Task ShouldSupportAndComposition()
+			public async Task WhenInfoIsPreRelease_ShouldSucceed()
 			{
 				MockFileSystem fileSystem = new();
-				fileSystem.WithFileVersionInfo("*.dll", v => v
-					.SetIsPreRelease(true)
-					.SetCompanyName("Acme"));
+				fileSystem.WithFileVersionInfo("*.dll", v => v.SetIsPreRelease(true));
 				// ReSharper disable once MethodHasAsyncOverload
 				fileSystem.File.WriteAllText("Acme.dll", "");
 				IFileVersionInfo info = fileSystem.FileVersionInfo.GetVersionInfo("Acme.dll");
 
 				async Task Act()
 				{
-					await That(info).IsPreRelease().And.HasCompanyName("Acme");
+					await That(info).IsPreRelease();
 				}
 
 				await That(Act).DoesNotThrow();
@@ -73,6 +73,25 @@ public sealed partial class FileVersionInfo
 	{
 		public sealed class Tests
 		{
+			[Fact]
+			public async Task ShouldSupportAndComposition()
+			{
+				MockFileSystem fileSystem = new();
+				fileSystem.WithFileVersionInfo("*.dll", v => v
+					.SetIsPreRelease(false)
+					.SetCompanyName("Acme"));
+				// ReSharper disable once MethodHasAsyncOverload
+				fileSystem.File.WriteAllText("Acme.dll", "");
+				IFileVersionInfo info = fileSystem.FileVersionInfo.GetVersionInfo("Acme.dll");
+
+				async Task Act()
+				{
+					await That(info).IsNotPreRelease().And.HasCompanyName("Acme");
+				}
+
+				await That(Act).DoesNotThrow();
+			}
+
 			[Fact]
 			public async Task WhenInfoIsNotPreRelease_ShouldSucceed()
 			{
@@ -110,25 +129,6 @@ public sealed partial class FileVersionInfo
 					             is not pre-release,
 					             but it was
 					             """);
-			}
-
-			[Fact]
-			public async Task ShouldSupportAndComposition()
-			{
-				MockFileSystem fileSystem = new();
-				fileSystem.WithFileVersionInfo("*.dll", v => v
-					.SetIsPreRelease(false)
-					.SetCompanyName("Acme"));
-				// ReSharper disable once MethodHasAsyncOverload
-				fileSystem.File.WriteAllText("Acme.dll", "");
-				IFileVersionInfo info = fileSystem.FileVersionInfo.GetVersionInfo("Acme.dll");
-
-				async Task Act()
-				{
-					await That(info).IsNotPreRelease().And.HasCompanyName("Acme");
-				}
-
-				await That(Act).DoesNotThrow();
 			}
 		}
 	}
